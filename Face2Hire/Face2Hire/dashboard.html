@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Interview Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .progress-ring { transform: rotate(-90deg); }
+        .progress-ring circle { transition: stroke-dashoffset 0.5s ease; }
+        .avatar-ring { border: 3px solid #3b82f6; }
+        .stat-card { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); }
+        .quick-action { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
+        .achievement-badge { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .interview-timeline { position: relative; }
+        .interview-timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: #e2e8f0; }
+        .timeline-item { position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: #3b82f6; border-radius: 50%; }
+        .scroll-reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+        .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform overflow-hidden">
+                        <img src="resources/logo.jpg" alt="Face2Hire Logo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xl font-bold text-slate-800 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Face2Hire</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="dashboard.html" class="text-blue-600 font-medium">Dashboard</a>
+                    <a href="interview-setup.html" class="text-slate-600 hover:text-blue-600 transition-colors">Interview</a>
+                    <a href="results.html" class="text-slate-600 hover:text-blue-600 transition-colors">Results</a>
+                    <a href="profile.html" class="text-slate-600 hover:text-blue-600 transition-colors">Profile</a>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                            <span class="text-blue-600 font-semibold text-sm">JD</span>
+                        </div>
+                        <span class="text-slate-700 font-medium">John Doe</span>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-slate-600 hover:text-blue-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-16">
+        <!-- Welcome Section -->
+        <section class="bg-gradient-to-r from-blue-600 to-purple-600 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between">
+                    <div class="text-white">
+                        <h1 class="text-3xl font-bold mb-2">Welcome back, John!</h1>
+                        <p class="text-blue-100 text-lg">Ready to practice and improve your interview skills?</p>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-4">
+                        <div class="text-center text-white">
+                            <div class="text-2xl font-bold">🔥 7</div>
+                            <div class="text-sm text-blue-100">Day Streak</div>
+                        </div>
+                        <div class="text-center text-white">
+                            <div class="text-2xl font-bold" id="interviews-completed">12</div>
+                            <div class="text-sm text-blue-100">Interviews</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Quick Actions -->
+            <section class="mb-12 scroll-reveal">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6">Quick Start</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="quick-action rounded-2xl p-6 text-white card-hover cursor-pointer" onclick="window.location.href='interview-setup.html'">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-sm bg-white/20 px-3 py-1 rounded-full">Popular</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Start Practice Interview</h3>
+                        <p class="text-blue-100 mb-4">Begin a new interview session with our AI avatar</p>
+                        <div class="flex items-center text-sm">
+                            <span>15-30 minutes</span>
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover cursor-pointer" onclick="window.location.href='interview-setup.html?mode=quick'">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-sm bg-green-100 text-green-600 px-3 py-1 rounded-full">Quick</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Quick Practice</h3>
+                        <p class="text-slate-600 mb-4">Short 5-minute practice session for busy schedules</p>
+                        <div class="flex items-center text-sm text-slate-600">
+                            <span>5 minutes</span>
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover cursor-pointer" onclick="window.location.href='interview-setup.html?mode=role'">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-sm bg-purple-100 text-purple-600 px-3 py-1 rounded-full">Targeted</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Role-Specific</h3>
+                        <p class="text-slate-600 mb-4">Practice interviews tailored to specific job roles</p>
+                        <div class="flex items-center text-sm text-slate-600">
+                            <span>20-45 minutes</span>
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Overview -->
+            <section class="mb-12 scroll-reveal">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6">Your Progress</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="stat-card rounded-2xl p-6 border border-slate-200 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-slate-800" id="average-score">85</div>
+                                <div class="text-sm text-slate-600">Average Score</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                                <div class="w-4/5 h-full bg-blue-500 rounded-full"></div>
+                            </div>
+                            <span class="ml-2 text-sm font-semibold text-blue-600">85%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card rounded-2xl p-6 border border-slate-200 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                </svg>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-slate-800" id="improvement">+15%</div>
+                                <div class="text-sm text-slate-600">Improvement</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-sm text-green-600 font-medium">↗ This month</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card rounded-2xl p-6 border border-slate-200 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-slate-800">24h</div>
+                                <div class="text-sm text-slate-600">Practice Time</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-sm text-purple-600 font-medium">This month</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card rounded-2xl p-6 border border-slate-200 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                                </svg>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-slate-800">3</div>
+                                <div class="text-sm text-slate-600">Achievements</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-sm text-orange-600 font-medium">This month</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Progress Chart and Recent Activity -->
+            <div class="grid lg:grid-cols-2 gap-8 mb-12">
+                <!-- Progress Chart -->
+                <section class="scroll-reveal">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6">Performance Trends</h2>
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200">
+                        <div id="progress-chart" style="height: 300px;"></div>
+                    </div>
+                </section>
+
+                <!-- Recent Activity -->
+                <section class="scroll-reveal">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6">Recent Activity</h2>
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200">
+                        <div id="recent-activity" class="space-y-4">
+                            <!-- Activity items will be populated by JavaScript -->
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-200">
+                            <button class="w-full text-blue-600 hover:text-blue-700 font-medium text-sm">
+                                View All Activity
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Achievements -->
+            <section class="mb-12 scroll-reveal">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-slate-800">Achievements</h2>
+                    <a href="profile.html" class="text-blue-600 hover:text-blue-700 font-medium text-sm">View All</a>
+                </div>
+                <div id="achievements" class="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <!-- Achievement badges will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Recommended Practice Areas -->
+            <section class="scroll-reveal">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6">Recommended Practice Areas</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-sm bg-red-100 text-red-600 px-3 py-1 rounded-full">Focus Area</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Technical Questions</h3>
+                        <p class="text-slate-600 mb-4">Your technical scores have room for improvement. Focus on system design and coding challenges.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-slate-600">
+                                <span class="font-semibold">Current: 72%</span> • Target: 85%
+                            </div>
+                            <button onclick="window.location.href='interview-setup.html?focus=technical'" class="text-red-600 hover:text-red-700 font-medium text-sm">
+                                Practice Now
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-sm bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full">Developing</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Communication Skills</h3>
+                        <p class="text-slate-600 mb-4">Great progress! Continue practicing to maintain your high communication scores.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-slate-600">
+                                <span class="font-semibold">Current: 88%</span> • Excellent!
+                            </div>
+                            <button onclick="window.location.href='interview-setup.html?focus=communication'" class="text-yellow-600 hover:text-yellow-700 font-medium text-sm">
+                                Keep It Up
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-sm bg-green-100 text-green-600 px-3 py-1 rounded-full">Strong</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Behavioral Questions</h3>
+                        <p class="text-slate-600 mb-4">You're excelling at behavioral questions! Your STAR method application is excellent.</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-slate-600">
+                                <span class="font-semibold">Current: 91%</span> • Outstanding!
+                            </div>
+                            <button onclick="window.location.href='interview-setup.html?focus=behavioral'" class="text-green-600 hover:text-green-700 font-medium text-sm">
+                                Maintain Level
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">AI</span>
+                    </div>
+                    <span class="text-xl font-bold">Face2Hire</span>
+                </div>
+                <p class="text-slate-400 mb-6">
+                    Empowering job seekers with AI-powered interview preparation
+                </p>
+                <div class="text-sm text-slate-500">
+                    © 2025 Face2Hire. All rights reserved. Built with cutting-edge AI technology.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

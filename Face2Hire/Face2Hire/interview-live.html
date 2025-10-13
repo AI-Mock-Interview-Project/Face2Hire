@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Interview - AI Interview Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .avatar-container { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); }
+        .chat-bubble { max-width: 80%; }
+        .chat-bubble.user { margin-left: auto; }
+        .voice-indicator { animation: pulse 2s infinite; }
+        .timer-circle { transform: rotate(-90deg); }
+        .score-ring { transform: rotate(-90deg); }
+        .feedback-meter { transition: width 0.5s ease; }
+        .avatar-speaking { animation: bounce 1s infinite; }
+        .waveform { display: flex; align-items: center; justify-content: center; height: 40px; }
+        .waveform-bar { width: 3px; margin: 0 1px; background: #3b82f6; border-radius: 2px; animation: waveform 1.5s ease-in-out infinite; }
+        @keyframes waveform { 0%, 100% { height: 10px; } 50% { height: 40px; } }
+        .waveform-bar:nth-child(2) { animation-delay: 0.1s; }
+        .waveform-bar:nth-child(3) { animation-delay: 0.2s; }
+        .waveform-bar:nth-child(4) { animation-delay: 0.3s; }
+        .waveform-bar:nth-child(5) { animation-delay: 0.4s; }
+        .scroll-reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+        .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+        .interview-ended { filter: blur(2px); pointer-events: none; }
+        .end-interview-modal { backdrop-filter: blur(10px); }
+        .webcam-container { position: relative; }
+        .webcam-container video { border-radius: 50%; }
+        .webcam-container #webcam-placeholder { border-radius: 50%; background: #334155; }
+        
+        /* Fix text overlapping issues */
+        .avatar-container { min-height: 500px; }
+        .chat-interface { max-height: 400px; overflow-y: auto; }
+        .chat-messages { max-height: 300px; overflow-y: auto; }
+        .response-input { resize: none; min-height: 120px; max-height: 200px; }
+        .input-area { display: flex; flex-direction: column; gap: 0.5rem; }
+        
+        @media (max-width: 1024px) {
+            .lg\\:grid-cols-2 { grid-template-columns: 1fr; }
+            .lg\\:col-span-2 { grid-column: span 1; }
+            .avatar-container { min-height: 400px; }
+        }
+        
+        @media (max-width: 768px) {
+            .avatar-container { min-height: 350px; }
+            .chat-interface { max-height: 300px; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform overflow-hidden">
+                        <img src="resources/logo.jpg" alt="Face2Hire Logo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xl font-bold text-slate-800 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Face2Hire</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="dashboard.html" class="text-slate-600 hover:text-blue-600 transition-colors">Dashboard</a>
+                    <a href="interview-setup.html" class="text-slate-600 hover:text-blue-600 transition-colors">Interview</a>
+                    <a href="results.html" class="text-slate-600 hover:text-blue-600 transition-colors">Results</a>
+                    <a href="profile.html" class="text-slate-600 hover:text-blue-600 transition-colors">Profile</a>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                            <span class="text-blue-600 font-semibold text-sm">JD</span>
+                        </div>
+                        <span class="text-slate-700 font-medium">John Doe</span>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-slate-600 hover:text-blue-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-16 min-h-screen">
+        <!-- Interview Interface -->
+        <div class="grid lg:grid-cols-4 gap-6 p-6 min-h-screen">
+            <!-- Avatar & Webcam Panel -->
+            <div class="lg:col-span-2">
+                <div class="avatar-container rounded-2xl h-[400px] flex flex-col justify-center items-center text-white relative overflow-hidden">
+                    <!-- Background Pattern -->
+                    <div class="absolute inset-0 opacity-10">
+                        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, #ffffff 2px, transparent 2px); background-size: 50px 50px;"></div>
+                    </div>
+                    
+                    <!-- Compact Dual Display: Avatar and User Webcam -->
+                    <div class="relative z-10 w-full max-w-2xl mx-auto">
+                        <div class="grid md:grid-cols-2 gap-6 items-center">
+                            <!-- AI Avatar -->
+                            <div class="text-center">
+                                <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white/20 bg-slate-700" id="avatar-display">
+                                    <img src="resources/avatar-female-1.png" alt="AI Interviewer" class="w-full h-full object-cover" id="avatar-image">
+                                </div>
+                                <h3 class="text-lg font-bold mb-1" id="interviewer-name">Sarah</h3>
+                                <p class="text-blue-100 text-sm mb-4">Your AI Interview Coach</p>
+                                
+                                <!-- Avatar Status -->
+                                <div class="flex items-center justify-center space-x-3 mb-4">
+                                    <div class="flex items-center space-x-1">
+                                        <div class="w-2 h-2 bg-green-400 rounded-full" id="status-indicator"></div>
+                                        <span class="text-xs" id="status-text">Ready</span>
+                                    </div>
+                                    <div class="text-xs text-blue-100">
+                                        Q<span id="current-question-num">1</span>/<span id="total-questions">10</span>
+                                    </div>
+                                </div>
+
+                                <!-- Voice Activity Indicator -->
+                                <div class="waveform hidden" id="voice-activity">
+                                    <div class="waveform-bar"></div>
+                                    <div class="waveform-bar"></div>
+                                    <div class="waveform-bar"></div>
+                                    <div class="waveform-bar"></div>
+                                    <div class="waveform-bar"></div>
+                                </div>
+                            </div>
+
+                            <!-- User Webcam -->
+                            <div class="text-center">
+                                <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-green-400 bg-slate-700 relative" id="webcam-container">
+                                    <video id="webcam-video" class="w-full h-full object-cover" autoplay muted></video>
+                                    <div id="webcam-placeholder" class="absolute inset-0 flex items-center justify-center">
+                                        <div class="text-center">
+                                            <div class="w-10 h-10 bg-slate-600 rounded-full flex items-center justify-center mx-auto mb-1">
+                                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                </svg>
+                                            </div>
+                                            <p class="text-xs text-slate-400 mb-1">Your Camera</p>
+                                            <button onclick="if (window.initWebcam) window.initWebcam();" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded">
+                                                Enable
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="text-sm font-bold mb-1 text-white">You</h4>
+                                <p class="text-blue-100 text-xs mb-4">Practice makes perfect</p>
+                                
+                                <!-- Webcam Status -->
+                                <div class="flex items-center justify-center space-x-1 mb-4">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full" id="webcam-status"></div>
+                                    <span class="text-xs" id="webcam-status-text">Ready</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interview Controls -->
+                    <div class="absolute bottom-6 left-6 right-6 z-10">
+                        <div class="flex items-center justify-between">
+                            <button onclick="pauseInterview()" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                ⏸️ Pause
+                            </button>
+                            <button onclick="skipQuestion()" class="bg-yellow-500/80 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                ⏭️ Skip
+                            </button>
+                            <button onclick="endInterview()" class="bg-red-500/80 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                ⏹️ End Interview
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat & Controls Panel -->
+            <div class="lg:col-span-2 flex flex-col gap-6">
+                <!-- Feedback Box -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-4">
+                    <h3 class="font-bold text-slate-800 mb-2">Real-time Suggestions</h3>
+                    <div id="feedback-message" class="text-sm text-slate-600">Suggestions will appear here while you speak.</div>
+
+                    <!-- Confidence Score Ring -->
+                    <div class="mt-4 flex items-center justify-center">
+                        <div class="w-16 h-16 relative">
+                            <svg class="score-circle w-16 h-16" viewBox="0 0 36 36">
+                                <path class="text-slate-200" stroke="currentColor" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                <path id="confidence-score" class="text-green-600" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="text-xs font-bold text-slate-800" id="confidence-text">--</span>
+                                <span class="text-xs text-slate-600">Conf</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Interface -->
+                <div class="bg-white rounded-2xl border border-slate-200 flex flex-col h-[700px]">
+                    <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+                        <h3 class="font-bold text-slate-800">Conversation</h3>
+                        <div class="flex items-center space-x-4 text-sm text-slate-600">
+                            <button
+                                id="replay-button"
+                                onclick="replayLastSpeech()"
+                                class="bg-blue-100 hover:bg-blue-200 text-blue-600 px-3 py-1 rounded-lg text-xs font-medium transition-colors flex items-center space-x-1"
+                                title="Replay last message"
+                            >
+                                <span>🔊</span>
+                                <span>Replay</span>
+                            </button>
+                            <div class="flex items-center space-x-1">
+                                <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                                <span>Listening</span>
+                            </div>
+                            <div class="w-20 h-6 relative bg-slate-100 rounded-full overflow-hidden">
+                                <div class="absolute inset-0 bg-blue-500 rounded-full transition-all duration-1000" style="width: 0%" id="chat-progress"></div>
+                            </div>
+                            <span id="chat-timer">60s</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4" id="chat-messages">
+                        <!-- Chat messages will be populated here -->
+                    </div>
+                    
+                    <!-- Input Area -->
+                    <div class="p-4 border-t border-slate-200">
+                        <div class="flex flex-col space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between space-y-2 sm:space-y-0">
+                                <div class="flex items-center space-x-4 text-sm text-slate-600 flex-wrap">
+                                    <span>Press Enter to send • Press Shift+Enter for new line</span>
+                                    <span>Word count: <span id="word-count">0</span></span>
+                                    <span>Time: <span id="response-time">0s</span></span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <button 
+                                        id="voice-button" 
+                                        onclick="toggleVoiceRecording()" 
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+                                    >
+                                        🎤
+                                    </button>
+                                    <button 
+                                        id="send-button" 
+                                        onclick="sendResponse()" 
+                                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-medium transition-colors"
+                                    >
+                                        Send
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="relative min-h-[180px]">
+                                <textarea
+                                    id="response-input"
+                                    rows="8"
+                                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none min-h-[150px] max-h-[300px] overflow-y-auto"
+                                    placeholder="Type your response here or use voice recording..."
+                                ></textarea>
+        <div id="transcript" class="absolute bottom-3 right-3 text-xs text-slate-500 max-w-[calc(100%-1rem)] bg-white px-2 rounded opacity-0 transition-opacity duration-300" style="max-height: 60px; overflow-y: auto;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+
+        <!-- Interview Ended Modal -->
+        <div id="end-interview-modal" class="fixed inset-0 bg-black/50 end-interview-modal hidden z-50 flex items-center justify-center">
+            <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Interview Completed!</h2>
+                <p class="text-slate-600 mb-6">Great job! You've completed the practice interview. Your detailed feedback and results are ready.</p>
+                <div class="space-y-3">
+                    <button onclick="viewResults()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors">
+                        View Results & Feedback
+                    </button>
+                    <button onclick="startNewInterview()" class="w-full border-2 border-slate-300 text-slate-700 hover:bg-slate-50 py-3 rounded-lg font-semibold transition-colors">
+                        Start New Interview
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">AI</span>
+                    </div>
+                    <span class="text-xl font-bold">Face2Hire</span>
+                </div>
+                <p class="text-slate-400 mb-6">
+                    Empowering job seekers with AI-powered interview preparation
+                </p>
+                <div class="text-sm text-slate-500">
+                    © 2025 Face2Hire. All rights reserved. Built with cutting-edge AI technology.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Interview state management
+        let interviewState = {
+            currentQuestion: 1,
+            totalQuestions: 10,
+            isRecording: false,
+            interviewStarted: false,
+            isPaused: false,
+            responses: [],
+            scores: {
+                communication: 75,
+                content: 80,
+                confidence: 70
+            },
+            startTime: null,
+            pausedTime: null,
+            totalPausedTime: 0
+        };
+
+        // Global variable for interview questions
+        let interviewQuestions = [];
+
+        // Remove duplicate DOMContentLoaded - handled by main.js
+
+        function initLiveInterview() {
+            // Load questions data
+            fetch('questions.json')
+                .then(res => res.json())
+                .then(data => {
+                    window.questionsData = data;
+
+                    // Load interview setup from session storage
+                    const setupData = sessionStorage.getItem('interviewSetup');
+                    if (setupData) {
+                        const setup = JSON.parse(setupData);
+                        initializeFromSetup(setup);
+                    }
+
+                    // Initialize UI components after setup
+                    updateQuestionDisplay();
+                    initChatInput();
+                    startInterview();
+                    // Initialize webcam
+                    if (window.initWebcam) window.initWebcam();
+                })
+                .catch(err => {
+                    console.error('Error loading questions:', err);
+                    // Fallback to default questions
+                    window.questionsData = {
+                        softwareengineer: softwareengineerQuestions,
+                        productmanager: productmanagerQuestions,
+                        datascientist: datascientistQuestions,
+                        designer: designerQuestions,
+                        marketingmanager: marketingmanagerQuestions
+                    };
+                    initializeFromSetup({}); // default
+                    updateQuestionDisplay();
+                    initChatInput();
+                    startInterview();
+                    if (window.initWebcam) window.initWebcam();
+                });
+        }
+
+        function initializeFromSetup(setup) {
+            // Update avatar
+            if (setup.selectedAvatar) {
+                const avatarImages = {
+                    'female-1': 'resources/avatar-female-1.png',
+                    'male-1': 'resources/avatar-male-1.png',
+                    'diverse-1': 'resources/avatar-diverse-1.png'
+                };
+                const avatarNames = {
+                    'female-1': 'Sarah',
+                    'male-1': 'Michael',
+                    'diverse-1': 'Alex'
+                };
+
+                document.getElementById('avatar-image').src = avatarImages[setup.selectedAvatar];
+                document.getElementById('interviewer-name').textContent = avatarNames[setup.selectedAvatar];
+            }
+
+            // Set total questions based on session length
+            interviewState.totalQuestions = setup.sessionLength || 5;
+
+            // Select role-specific questions and slice to totalQuestions
+            if (setup.selectedRole && window.questionsData) {
+                const roleKey = setup.selectedRole.toLowerCase().replace(/[\s-]+/g, '');
+                if (window.questionsData[roleKey]) {
+                    interviewQuestions = window.questionsData[roleKey].slice(0, interviewState.totalQuestions);
+                } else {
+                    // Fallback to default questions if role key doesn't match
+                    console.warn(`Role key "${roleKey}" not found in questions data. Using default questions.`);
+                }
+            }
+
+            // Ensure interviewQuestions is set, default to softwareengineer
+            if (!interviewQuestions.length && window.questionsData && window.questionsData.softwareengineer) {
+                interviewQuestions = window.questionsData.softwareengineer.slice(0, interviewState.totalQuestions);
+            }
+
+            // Set time per question based on session length (minutes) and total questions
+            if (setup.sessionLength && setup.timePerQuestion) {
+                interviewState.timePerQuestion = parseInt(setup.timePerQuestion);
+            } else {
+                interviewState.timePerQuestion = 60; // Default 1 minute
+            }
+            document.getElementById('total-questions').textContent = interviewState.totalQuestions;
+        }
+
+        function updateQuestionDisplay() {
+            // Update question number and total
+            document.getElementById('current-question-num').textContent = interviewState.currentQuestion;
+            document.getElementById('total-questions').textContent = interviewState.totalQuestions;
+        }
+        function startInterview() {
+            interviewState.interviewStarted = true;
+
+            // Get interviewer name
+            const interviewerName = document.getElementById('interviewer-name').textContent;
+
+            // Simulate avatar introduction
+            setTimeout(() => {
+                addChatMessage('interviewer', `Hello! I'm ${interviewerName}, your AI interview coach. I'll be conducting your practice interview today. Let's start with your first question.`);
+                // Wait for introduction to finish speaking before asking question
+                setTimeout(() => {
+                    askQuestion();
+                }, 5000); // Give time for the introduction to be spoken
+            }, 2000);
+        }
+
+        let responseTimer = null;
+        let elapsedTime = 0;
+
+        function startResponseTimer() {
+            elapsedTime = 0;
+            let timeLeft = interviewState.timePerQuestion;
+            
+            // Update displays
+            document.getElementById('response-time').textContent = `${elapsedTime}s`;
+            updateTimerDisplay(timeLeft);
+            
+            // Clear existing timer
+            if (responseTimer) {
+                clearInterval(responseTimer);
+            }
+            
+            responseTimer = setInterval(() => {
+                elapsedTime++;
+                timeLeft--;
+                
+                // Update elapsed time
+                document.getElementById('response-time').textContent = `${elapsedTime}s`;
+                
+                // Update remaining time
+                updateTimerDisplay(timeLeft);
+                
+                if (timeLeft <= 0) {
+                    clearInterval(responseTimer);
+                    responseTimer = null;
+                    
+                    // Auto-submit if response is empty, or move to next
+                    const input = document.getElementById('response-input');
+                    if (!input.value.trim()) {
+                        // Submit empty response
+                        input.value = '[Time expired - no response]';
+                        sendResponse();
+                    } else {
+                        // Submit current response
+                        sendResponse();
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            const timerElement = document.getElementById('chat-timer');
+            if (timerElement) {
+                if (minutes > 0) {
+                    timerElement.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+                } else {
+                    timerElement.textContent = `${secs}s`;
+                }
+            }
+        }
+
+        function askQuestion() {
+            if (interviewQuestions.length === 0) {
+                console.error('No questions available');
+                return;
+            }
+
+            const questionIndex = interviewState.currentQuestion - 1;
+            if (questionIndex >= interviewQuestions.length) {
+                endInterview();
+                return;
+            }
+
+            const question = interviewQuestions[questionIndex];
+            if (!question) {
+                console.error('Question not found at index', questionIndex);
+                return;
+            }
+
+            // Display question in chat
+            addChatMessage('interviewer', question.text);
+
+            // Update current question display if element exists
+            const currentQuestionEl = document.getElementById('current-question');
+            if (currentQuestionEl) {
+                currentQuestionEl.textContent = question.text;
+            }
+
+            // Update question type if element exists
+            const questionTypeEl = document.getElementById('question-type');
+            if (questionTypeEl) {
+                questionTypeEl.textContent = question.type || 'General';
+            }
+
+            // Update status
+            document.getElementById('status-text').textContent = 'Asking Question';
+
+            // Start response timer
+            startResponseTimer();
+
+            // Store current question for AI processing
+            AppState.currentQuestion = question;
+        }
+
+        function addChatMessage(sender, message) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-bubble';
+
+            if (sender === 'interviewer') {
+                const avatarSrc = document.getElementById('avatar-image').src;
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                            <img src="${avatarSrc}" alt="Interviewer" class="w-full h-full object-cover">
+                        </div>
+                        <div class="bg-blue-100 rounded-lg p-3">
+                            <p class="text-sm text-slate-800">${message}</p>
+                        </div>
+                    </div>
+                `;
+                // Speak the message only if it's not feedback (feedback messages start with 💡)
+                // But allow speaking AI interviewer responses that contain questions
+                if (window.speakText && (!message.startsWith('💡') || message.includes('?'))) {
+                    window.speakText(message);
+                }
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-3 justify-end">
+                        <div class="bg-green-100 rounded-lg p-3">
+                            <p class="text-sm text-slate-800">${message}</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-slate-600 flex items-center justify-center">
+                            <span class="text-white text-xs font-semibold">YOU</span>
+                        </div>
+                    </div>
+                `;
+                messageDiv.classList.add('user');
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendResponse() {
+            const input = document.getElementById('response-input');
+            const response = input.value.trim();
+
+            if (response && !AppState.isProcessingResponse) {
+                // Clear input
+                input.value = '';
+                updateWordCount();
+
+                // Store response with current scores
+                interviewState.responses.push({
+                    question: interviewState.currentQuestion,
+                    response: response,
+                    timestamp: new Date(),
+                    scores: {
+                        communication: interviewState.scores.communication,
+                        content: interviewState.scores.content,
+                        confidence: interviewState.scores.confidence
+                    }
+                });
+
+                // Process response using main.js function
+                if (window.processResponse) {
+                    await window.processResponse(response);
+                } else {
+                    // Fallback to old logic
+                    addChatMessage('user', response);
+                    provideFeedback(response);
+                    setTimeout(() => {
+                        nextQuestion();
+                    }, 3000);
+                }
+            }
+        }
+
+        function nextQuestion() {
+            // Only advance if not currently speaking (to avoid interrupting)
+            if (AppState.speechQueue && AppState.speechQueue.length > 0) {
+                // Wait for current speech to finish, then advance
+                setTimeout(() => {
+                    nextQuestion();
+                }, 500);
+                return;
+            }
+
+            interviewState.currentQuestion++;
+
+            if (interviewState.currentQuestion <= interviewState.totalQuestions) {
+                askQuestion();
+            } else {
+                endInterview();
+            }
+        }
+
+        // Remove mock feedback - real-time feedback is handled by main.js
+
+        function updateScores() {
+            // Simulate score improvements
+            const improvements = {
+                communication: Math.random() * 5 - 2.5,
+                content: Math.random() * 5 - 2.5,
+                confidence: Math.random() * 5 - 2.5
+            };
+            
+            Object.keys(improvements).forEach(skill => {
+                interviewState.scores[skill] = Math.max(0, Math.min(100, interviewState.scores[skill] + improvements[skill]));
+                
+                // Update UI
+                const scoreElement = document.getElementById(`${skill}-text`);
+                const scoreRing = document.getElementById(`${skill}-score`);
+                
+                if (scoreElement && scoreRing) {
+                    const score = Math.round(interviewState.scores[skill]);
+                    scoreElement.textContent = score;
+                    scoreRing.setAttribute('stroke-dasharray', `${score}, 100`);
+                }
+            });
+        }
+
+
+
+
+
+
+
+
+
+        function initChatInput() {
+            const input = document.getElementById('response-input');
+
+            input.addEventListener('input', updateWordCount);
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendResponse();
+                }
+            });
+
+            // Initialize transcript display
+            document.getElementById('transcript').textContent = 'Ready to record. Click the microphone to start voice recording and tone analysis.';
+        }
+
+        function updateWordCount() {
+            const input = document.getElementById('response-input');
+            const wordCount = input.value.trim().split(/\s+/).filter(word => word.length > 0).length;
+            document.getElementById('word-count').textContent = `${wordCount} words`;
+        }
+
+        function animateAvatarSpeaking() {
+            const avatar = document.getElementById('avatar-display');
+            avatar.classList.add('avatar-speaking');
+            
+            setTimeout(() => {
+                avatar.classList.remove('avatar-speaking');
+            }, 3000);
+        }
+
+        function skipQuestion() {
+            if (confirm('Are you sure you want to skip this question? You can come back to it later.')) {
+                // Mark as skipped in responses
+                interviewState.responses.push({
+                    question: interviewState.currentQuestion,
+                    response: '[SKIPPED]',
+                    timestamp: new Date(),
+                    skipped: true,
+                    scores: {
+                        communication: interviewState.scores.communication,
+                        content: interviewState.scores.content,
+                        confidence: interviewState.scores.confidence
+                    }
+                });
+
+                // Move to next question
+                nextQuestion();
+                showNotification('Question skipped. Moving to next question.', 'info');
+            }
+        }
+
+        function pauseInterview() {
+            if (interviewState.isPaused) {
+                // Resume interview
+                interviewState.isPaused = false;
+                if (interviewState.pausedTime) {
+                    interviewState.totalPausedTime += Date.now() - interviewState.pausedTime;
+                    interviewState.pausedTime = null;
+                }
+
+                // Resume speech if there was paused speech
+                if (interviewState.pausedSpeechText) {
+                    if (window.resumeSpeech) {
+                        window.resumeSpeech();
+                    }
+                    interviewState.pausedSpeechText = null;
+                }
+
+                showNotification('Interview resumed.', 'info');
+                // Update button text
+                const pauseBtn = document.querySelector('button[onclick="pauseInterview()"]');
+                if (pauseBtn) {
+                    pauseBtn.innerHTML = '⏸️ Pause';
+                }
+            } else {
+                // Pause interview
+                interviewState.isPaused = true;
+                interviewState.pausedTime = Date.now();
+
+                // Pause current speech
+                if (window.pauseSpeech) {
+                    window.pauseSpeech();
+                }
+
+                showNotification('Interview paused. Click pause again to resume.', 'info');
+                // Update button text
+                const pauseBtn = document.querySelector('button[onclick="pauseInterview()"]');
+                if (pauseBtn) {
+                    pauseBtn.innerHTML = '▶️ Resume';
+                }
+            }
+        }
+
+        function endInterview() {
+            // Calculate final scores based on responses
+            if (interviewState.responses.length > 0) {
+                // Calculate average scores from responses (if AI feedback was used)
+                const avgComm = interviewState.responses.reduce((sum, r) => sum + (r.scores?.communication || interviewState.scores.communication), 0) / interviewState.responses.length;
+                const avgContent = interviewState.responses.reduce((sum, r) => sum + (r.scores?.content || interviewState.scores.content), 0) / interviewState.responses.length;
+                const avgConfidence = interviewState.responses.reduce((sum, r) => sum + (r.scores?.confidence || interviewState.scores.confidence), 0) / interviewState.responses.length;
+
+                interviewState.scores.communication = Math.round(avgComm);
+                interviewState.scores.content = Math.round(avgContent);
+                interviewState.scores.confidence = Math.round(avgConfidence);
+            }
+
+            // Show completion modal
+            document.getElementById('end-interview-modal').classList.remove('hidden');
+
+            // Calculate actual duration (excluding paused time)
+            const actualDuration = Date.now() - interviewState.startTime - interviewState.totalPausedTime;
+
+            // Store interview results
+            const interviewResults = {
+                responses: interviewState.responses,
+                scores: interviewState.scores,
+                totalQuestions: interviewState.totalQuestions,
+                completedQuestions: interviewState.responses.filter(r => !r.skipped).length,
+                skippedQuestions: interviewState.responses.filter(r => r.skipped).length,
+                duration: actualDuration,
+                endTime: new Date()
+            };
+
+            sessionStorage.setItem('interviewResults', JSON.stringify(interviewResults));
+        }
+
+        function viewResults() {
+            window.location.href = 'results.html';
+        }
+
+        function startNewInterview() {
+            window.location.href = 'interview-setup.html';
+        }
+
+        // Initialize interview start time
+        interviewState.startTime = new Date();
+    </script>
+</body>
+</html>
