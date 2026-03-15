@@ -1,0 +1,19 @@
+{
+  "name": "face2hire",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "live-server --port=3000 --host=localhost --cors",
+    "dev": "live-server --port=3000 --host=localhost --cors --watch=. --ignore=node_modules"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+  
+
+}

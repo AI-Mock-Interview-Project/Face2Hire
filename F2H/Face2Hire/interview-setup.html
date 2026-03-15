@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Setup - AI Interview Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="AuthService.js"></script>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .role-card { cursor: pointer; border: 2px solid transparent; }
+        .role-card.selected { border-color: #3b82f6; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); }
+        .avatar-option { cursor: pointer; border: 3px solid transparent; }
+        .avatar-option.selected { border-color: #3b82f6; }
+        .upload-zone { border: 2px dashed #cbd5e1; transition: all 0.3s ease; }
+        .upload-zone.dragover { border-color: #3b82f6; background-color: #eff6ff; }
+        .step-indicator { position: relative; }
+        .step-indicator::after { content: ''; position: absolute; top: 50%; right: -20px; width: 40px; height: 2px; background: #e2e8f0; }
+        .step-indicator.active::after { background: #3b82f6; }
+        .step-indicator:last-child::after { display: none; }
+        .scroll-reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+        .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+        .preview-panel { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); }
+        .skill-tag { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform overflow-hidden">
+                        <img src="resources/logo.jpg" alt="Face2Hire Logo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xl font-bold text-slate-800 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Face2Hire</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="dashboard.html" class="text-slate-600 hover:text-blue-600 transition-colors">Dashboard</a>
+                    <a href="interview-setup.html" class="text-blue-600 font-medium">Interview</a>
+                    <a href="profile.html" class="text-slate-600 hover:text-blue-600 transition-colors">Profile</a>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                            <span class="text-blue-600 font-semibold text-sm" id="user-initials">U</span>
+                        </div>
+                        <span class="text-slate-700 font-medium" id="user-name">Loading...</span>
+                        <button onclick="AuthService.logout()" class="text-slate-500 hover:text-slate-700 transition-colors" title="Logout">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-slate-600 hover:text-blue-600" title="Open Menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-16">
+        <!-- Header -->
+        <section class="bg-gradient-to-r from-blue-600 to-purple-600 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-white">
+                    <h1 class="text-3xl font-bold mb-2">Setup Your Interview</h1>
+                    <p class="text-blue-100 text-lg">Configure your practice session and choose your preferences</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Setup Steps -->
+        <section class="py-8 bg-white border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-center space-x-8">
+                    <div class="step-indicator active flex items-center">
+                        <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                        <span class="ml-2 text-sm font-medium text-blue-600">Interview Type</span>
+                    </div>
+                    <div class="step-indicator flex items-center">
+                        <div class="w-8 h-8 bg-slate-300 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                        <span class="ml-2 text-sm font-medium text-slate-600">Role Selection</span>
+                    </div>
+                    <div class="step-indicator flex items-center">
+                        <div class="w-8 h-8 bg-slate-300 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                        <span class="ml-2 text-sm font-medium text-slate-600">Avatar & Settings</span>
+                    </div>
+                    <div class="step-indicator flex items-center">
+                        <div class="w-8 h-8 bg-slate-300 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                        <span class="ml-2 text-sm font-medium text-slate-600">Start Interview</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Setup Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Main Setup Panel -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Interview Type Selection -->
+                    <section class="bg-white rounded-2xl p-8 border border-slate-200 scroll-reveal">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6">Choose Interview Type</h2>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="role-card bg-white rounded-xl p-6 border border-slate-200 card-hover min-h-[280px] flex flex-col" data-interview-type="role-based">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-bold text-slate-800">Role-Based Interview</h3>
+                                        <p class="text-sm text-slate-600">Pre-defined roles</p>
+                                    </div>
+                                </div>
+                                <p class="text-slate-600 mb-3 text-sm">Choose from various job roles with tailored questions.</p>
+                                <ul class="space-y-1 text-sm text-slate-600 flex-grow">
+                                    <li class="flex items-center"><span class="w-2 h-2 bg-blue-600 rounded-full mr-2"></span>Tech & Business roles</li>
+                                    <li class="flex items-center"><span class="w-2 h-2 bg-blue-600 rounded-full mr-2"></span>All experience levels</li>
+                                </ul>
+                            </div>
+
+                            <div class="role-card bg-white rounded-xl p-6 border border-slate-200 card-hover min-h-[280px] flex flex-col" data-interview-type="jd-based">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-bold text-slate-800">Job Description Based</h3>
+                                        <p class="text-sm text-slate-600">Custom from JD</p>
+                                    </div>
+                                </div>
+                                <p class="text-slate-600 mb-3 text-sm">Upload JD for AI-customized interview questions.</p>
+                                <ul class="space-y-1 text-sm text-slate-600 flex-grow">
+                                    <li class="flex items-center"><span class="w-2 h-2 bg-purple-600 rounded-full mr-2"></span>PDF/text upload</li>
+                                    <li class="flex items-center"><span class="w-2 h-2 bg-purple-600 rounded-full mr-2"></span>AI analysis</li>
+                                </ul>
+                            </div>
+
+                            <div class="role-card bg-white rounded-xl p-6 border border-slate-200 card-hover min-h-[280px] flex flex-col" data-interview-type="resume-based">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-bold text-slate-800">Resume Based Interview</h3>
+                                        <p class="text-sm text-slate-600">Personalized</p>
+                                    </div>
+                                </div>
+                                <p class="text-slate-600 mb-3 text-sm">Upload resume for experience-based questions.</p>
+                                <ul class="space-y-1 text-sm text-slate-600 flex-grow">
+                                    <li class="flex items-center"><span class="w-2 h-2 bg-green-600 rounded-full mr-2"></span>PDF resume</li>
+                                    <li class="flex items-center"><span class="w-2 h-2 bg-green-600 rounded-full mr-2"></span>AI analysis</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Role Selection -->
+                    <section class="bg-white rounded-2xl p-8 border border-slate-200 scroll-reveal" id="role-selection" style="display: none;">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6">Select Your Role</h2>
+
+                        <!-- Search Bar -->
+                        <div class="mb-6">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                                <input type="text" id="role-search" placeholder="Search roles..." class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                        </div>
+
+                        <!-- Filter Buttons -->
+                        <div class="mb-6">
+                            <div class="flex flex-wrap gap-2">
+                                <button class="role-filter active px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium" data-filter="all">All Roles</button>
+                                <button class="role-filter px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-300" data-filter="tech">Technology</button>
+                                <button class="role-filter px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-300" data-filter="business">Business</button>
+                                <button class="role-filter px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-300" data-filter="design">Design</button>
+                                <button class="role-filter px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-300" data-filter="marketing">Marketing</button>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4" id="role-grid">
+                            <!-- Role cards will be populated by JavaScript -->
+                        </div>
+
+                        <!-- Show More/Less Buttons -->
+                        <div class="mt-6 text-center" id="show-more-container">
+                            <button id="show-more-btn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-lg font-medium transition-colors" style="display: none;">
+                                Show More Roles
+                                <svg class="w-4 h-4 inline ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <button id="show-less-btn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-lg font-medium transition-colors" style="display: none;">
+                                Show Less Roles
+                                <svg class="w-4 h-4 inline ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Job Description Upload -->
+                    <section class="bg-white rounded-2xl p-8 border border-slate-200 scroll-reveal" id="jd-upload" style="display: none;">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6">Upload Job Description</h2>
+                        <div class="upload-zone rounded-xl p-8 text-center cursor-pointer" id="drop-zone">
+                            <div class="mb-4">
+                                <svg class="w-12 h-12 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                                <h3 class="text-lg font-semibold text-slate-800 mb-2">Drop your job description here</h3>
+                                <p class="text-slate-600 mb-4">or click to browse files</p>
+                            </div>
+                            <div class="flex items-center justify-center space-x-4 text-sm text-slate-600">
+                                <span class="bg-slate-100 px-3 py-1 rounded">PDF</span>
+                                <span class="bg-slate-100 px-3 py-1 rounded">TXT</span>
+                                <span class="bg-slate-100 px-3 py-1 rounded">DOC</span>
+                            </div>
+                            <input type="file" id="file-input" class="hidden" accept=".pdf,.txt,.doc,.docx">
+                        </div>
+                        <div class="mt-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Or paste job description text:</label>
+                            <textarea id="jd-text" rows="8" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Paste the job description text here..."></textarea>
+                        </div>
+                        <div class="mt-6 flex justify-end">
+                            <button id="analyze-jd" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                                Analyze Job Description
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Resume Upload -->
+                    <section class="bg-white rounded-2xl p-8 border border-slate-200 scroll-reveal" id="resume-upload" style="display: none;">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6">Upload Your Resume</h2>
+                        <div class="upload-zone rounded-xl p-8 text-center cursor-pointer" id="resume-drop-zone">
+                            <div class="mb-4" id="upload-icon">
+                                <svg class="w-12 h-12 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <h3 class="text-lg font-semibold text-slate-800 mb-2" id="upload-title">Drop your resume here</h3>
+                                <p class="text-slate-600 mb-4" id="upload-subtitle">or click to browse files</p>
+                            </div>
+                            <div class="flex items-center justify-center space-x-4 text-sm text-slate-600" id="file-types">
+                                <span class="bg-slate-100 px-3 py-1 rounded">PDF</span>
+                            </div>
+                            <div class="mt-4" id="uploaded-file-info" style="display: none;">
+                                <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                                    <div class="flex items-center">
+                                        <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <div>
+                                            <p class="text-sm font-medium text-green-800" id="uploaded-file-name">Resume uploaded</p>
+                                            <p class="text-xs text-green-600">Ready for analysis</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="file" id="resume-file-input" class="hidden" accept=".pdf">
+                        </div>
+                        <div class="mt-6 flex justify-end">
+                            <button id="analyze-resume" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors" disabled>
+                                Analyze Resume
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Avatar & Settings -->
+                    <section class="bg-white rounded-2xl p-8 border border-slate-200 scroll-reveal" id="avatar-settings" style="display: none;">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-6">Choose Your Interviewer</h2>
+                        <div class="grid md:grid-cols-3 gap-6 mb-8">
+                            <div class="avatar-option rounded-xl p-4 text-center" data-avatar="Sarah">
+                                <div class="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
+                                    <img src="resources/Sarah.png" alt="Sarah" class="w-full h-full object-cover">
+                                </div>
+                                <h3 class="font-semibold text-slate-800">Sarah</h3>
+                                <p class="text-sm text-slate-600">Friendly & Supportive</p>
+                            </div>
+                            <div class="avatar-option rounded-xl p-4 text-center" data-avatar="Michael">
+                                <div class="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
+                                    <img src="resources/Michael.png" alt="Michael" class="w-full h-full object-cover">
+                                </div>
+                                <h3 class="font-semibold text-slate-800">Michael</h3>
+                                <p class="text-sm text-slate-600">Professional & Direct</p>
+                            </div>
+                            <div class="avatar-option rounded-xl p-4 text-center" data-avatar="Alex">
+                                <div class="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
+                                    <img src="resources/Alex.png" alt="Alex" class="w-full h-full object-cover">
+                                </div>
+                                <h3 class="font-semibold text-slate-800">Alex</h3>
+                                <p class="text-sm text-slate-600">Analytical & Thorough</p>
+                            </div>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-slate-800 mb-4">Interview Settings</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Interview Difficulty</label>
+                                <select title="Select your interview difficulty level" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="entry">Entry Level</option>
+                                    <option value="mid" selected>Mid Level</option>
+                                    <option value="senior">Senior Level</option>
+                                    <option value="executive">Executive Level</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Interview Mode</label>
+                                <select title="Select your interview mode" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="voice" selected>Voice Only</option>
+
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Years of Experience</label>
+                                <select id="experience-level" title="Select your years of experience" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="intern">0-1 Year (Intern Level)</option>
+                                    <option value="intermediate" selected>2-5 Years (Intermediate Level)</option>
+                                    <option value="senior">6+ Years (Senior Level)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Session Length</label>
+                                <select id="session-length" title="Select your session length" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="5">Quick (5 questions)</option>
+                                    <option value="10" selected>Standard (10 questions)</option>
+                                    <option value="15">Extended (15 questions)</option>
+                                    <option value="20">Comprehensive (20 questions)</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="mt-6">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" checked>
+                                <span class="ml-2 text-sm text-slate-700">Enable real-time feedback during interview</span>
+                            </label>
+                        </div>
+                        <div class="mt-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                                <span class="ml-2 text-sm text-slate-700">Record interview for later review</span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <!-- Start Interview -->
+                    <section class="bg-white rounded-2xl p-8 border border-slate-200 scroll-reveal" id="start-interview" style="display: none;">
+                        <div class="text-center">
+                            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h2 class="text-2xl font-bold text-slate-800 mb-4">Ready to Start?</h2>
+                            <p class="text-slate-600 mb-8 max-w-2xl mx-auto">
+                                Your interview is configured and ready. The AI interviewer will ask you questions based on your selections. 
+                                Remember to speak clearly and take your time to think before responding.
+                            </p>
+                            <div class="bg-slate-50 rounded-xl p-6 mb-8 max-w-2xl mx-auto">
+                                <h3 class="font-semibold text-slate-800 mb-4">Interview Summary</h3>
+                                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Type:</span>
+                                        <span class="font-medium" id="summary-type">Role-Based</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Role:</span>
+                                        <span class="font-medium" id="summary-role">Software Engineer</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Interviewer:</span>
+                                        <span class="font-medium" id="summary-avatar">Sarah</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Duration:</span>
+                                        <span class="font-medium" id="summary-duration">15-20 minutes</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <button onclick="startInterview()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors">
+                                    Start Interview
+                                </button>
+                                <button onclick="goBack()" class="border-2 border-slate-300 text-slate-700 hover:bg-slate-50 px-8 py-4 rounded-lg font-semibold text-lg transition-colors">
+                                    Go Back
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Preview Panel -->
+                <div class="lg:col-span-1">
+                    <div class="sticky top-24">
+                        <div class="preview-panel rounded-2xl p-6 border border-slate-200">
+                            <h3 class="text-lg font-bold text-slate-800 mb-4">Interview Preview</h3>
+                            
+                            <!-- Selected Avatar -->
+                            <div class="text-center mb-6" id="preview-avatar">
+                                <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden bg-slate-200 flex items-center justify-center">
+                                    <span class="text-slate-400 text-2xl">👤</span>
+                                </div>
+                                <p class="text-sm text-slate-600">Select an avatar</p>
+                            </div>
+
+                            <!-- Selected Role -->
+                            <div class="mb-6" id="preview-role">
+                                <h4 class="font-semibold text-slate-800 mb-2">No role selected</h4>
+                                <p class="text-sm text-slate-600">Choose an interview type and role to see preview</p>
+                            </div>
+
+                            <!-- Extracted Resume Details (for resume-based) -->
+                            <div class="mb-6" id="preview-resume-details" style="display: none;">
+                                <h4 class="font-semibold text-slate-800 mb-3">Resume Analysis</h4>
+                                <div class="space-y-4" id="resume-details-content">
+                                    <!-- Resume details will be populated here -->
+                                </div>
+                            </div>
+
+                            <!-- Extracted Skills (for JD-based) -->
+                            <div class="mb-6" id="preview-skills" style="display: none;">
+                                <h4 class="font-semibold text-slate-800 mb-3">Extracted Skills</h4>
+                                <div class="flex flex-wrap gap-2" id="skills-list">
+                                    <!-- Skill tags will be populated here -->
+                                </div>
+                            </div>
+
+                            <!-- Sample Questions -->
+                            <div class="mb-6" id="preview-questions" style="display: none;">
+                                <h4 class="font-semibold text-slate-800 mb-3">Sample Questions</h4>
+                                <div class="space-y-3" id="questions-list">
+                                    <!-- Sample questions will be populated here -->
+                                </div>
+                            </div>
+
+                            <!-- Progress Indicator -->
+                            <div class="border-t border-slate-200 pt-4">
+                                <div class="flex items-center justify-between text-sm text-slate-600 mb-2">
+                                    <span>Setup Progress</span>
+                                    <span id="progress-text">0/4</span>
+                                </div>
+                                <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                                    <div class="w-0 h-full bg-blue-600 rounded-full transition-all duration-300" id="progress-bar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">AI</span>
+                    </div>
+                    <span class="text-xl font-bold">Face2Hire</span>
+                </div>
+                <p class="text-slate-400 mb-6">
+                    Empowering job seekers with AI-powered interview preparation
+                </p>
+                <div class="text-sm text-slate-500">
+                    © 2025 Face2Hire. All rights reserved. Built with cutting-edge AI technology.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Interview setup specific functionality
+        let setupState = {
+            interviewType: null,
+            selectedRole: null,
+            selectedAvatar: null,
+            jdAnalyzed: false,
+            resumeAnalyzed: false
+        };
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Interview setup loading...');
+
+            // Check authentication first
+            const isAuthenticated = await AuthService.requireAuth();
+
+            if (!isAuthenticated) {
+                console.log('Not authenticated, redirecting to login');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            console.log('User authenticated, loading interview setup...');
+
+            // Load user profile data
+            await loadUserProfile();
+
+            // Initialize interview setup
+            initInterviewSetup();
+        });
+
+        async function loadUserProfile() {
+            try {
+                const user = AuthService.getUser();
+
+                if (user) {
+                    // Update navigation user profile
+                    const userNameElement = document.getElementById('user-name');
+                    const userInitialsElement = document.getElementById('user-initials');
+
+                    if (userNameElement && userInitialsElement) {
+                        const firstName = user.firstName || user.name || 'User';
+                        const lastName = user.lastName || '';
+                        const displayName = lastName ? `${firstName} ${lastName}` : firstName;
+                        const initial = lastName ? `${firstName[0]}${lastName[0]}`.toUpperCase() : firstName[0].toUpperCase();
+
+                        userNameElement.textContent = displayName;
+                        userInitialsElement.textContent = initial;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading user profile:', error);
+            }
+        }
+
+        function initInterviewSetup() {
+            // Initialize interview type selection
+            document.querySelectorAll('[data-interview-type]').forEach(card => {
+                card.addEventListener('click', function() {
+                    selectInterviewType(this.dataset.interviewType);
+                });
+            });
+
+            // Initialize role filters
+            document.querySelectorAll('.role-filter').forEach(button => {
+                button.addEventListener('click', function() {
+                    filterRoles(this.dataset.filter);
+                });
+            });
+
+            // Initialize role search
+            document.getElementById('role-search').addEventListener('input', function() {
+                filterRoles(document.querySelector('.role-filter.active').dataset.filter, this.value);
+            });
+
+            // Initialize show more/less buttons
+            document.getElementById('show-more-btn').addEventListener('click', function() {
+                showAllRoles = true;
+                renderRoles();
+            });
+            document.getElementById('show-less-btn').addEventListener('click', function() {
+                showAllRoles = false;
+                renderRoles();
+            });
+
+            // Initialize avatar selection
+            document.querySelectorAll('.avatar-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    selectAvatar(this.dataset.avatar);
+                });
+            });
+
+            // Initialize session length select
+            document.getElementById('session-length').addEventListener('change', updateSummary);
+
+            // Initialize file upload
+            initFileUpload();
+
+            // Initialize resume upload
+            initResumeUpload();
+
+            // Load role data
+            loadRoles();
+        }
+
+        function selectInterviewType(type) {
+            setupState.interviewType = type;
+
+            // Update UI
+            document.querySelectorAll('[data-interview-type]').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-interview-type="${type}"]`).classList.add('selected');
+
+            // Show next step
+            if (type === 'role-based') {
+                document.getElementById('role-selection').style.display = 'block';
+                document.getElementById('jd-upload').style.display = 'none';
+                document.getElementById('resume-upload').style.display = 'none';
+            } else if (type === 'jd-based') {
+                document.getElementById('role-selection').style.display = 'none';
+                document.getElementById('jd-upload').style.display = 'block';
+                document.getElementById('resume-upload').style.display = 'none';
+            } else if (type === 'resume-based') {
+                document.getElementById('role-selection').style.display = 'none';
+                document.getElementById('jd-upload').style.display = 'none';
+                document.getElementById('resume-upload').style.display = 'block';
+            }
+
+            updateProgress();
+            updatePreview();
+        }
+
+        let allRoles = [];
+        let filteredRoles = [];
+        let showAllRoles = false;
+
+        function loadRoles() {
+            allRoles = [
+                { id: 'software-engineer', title: 'Software Engineer', category: 'tech', description: 'Full-stack development role focusing on web applications and cloud services.' },
+                { id: 'frontend-developer', title: 'Frontend Developer', category: 'tech', description: 'Build responsive user interfaces with React, HTML, CSS, and JavaScript.' },
+                { id: 'backend-developer', title: 'Backend Developer', category: 'tech', description: 'Develop scalable server-side applications and APIs.' },
+                { id: 'full-stack-developer', title: 'Full Stack Developer', category: 'tech', description: 'End-to-end development covering both frontend and backend technologies.' },
+                { id: 'data-scientist', title: 'Data Scientist', category: 'tech', description: 'Analyze complex datasets and build machine learning models.' },
+                { id: 'product-manager', title: 'Product Manager', category: 'business', description: 'Lead product strategy and development for consumer-facing applications.' },
+                { id: 'ux-designer', title: 'UX Designer', category: 'design', description: 'Design user-centered experiences for web and mobile applications.' },
+                { id: 'marketing-manager', title: 'Marketing Manager', category: 'marketing', description: 'Develop and execute marketing strategies for B2B SaaS products.' },
+                { id: 'business-analyst', title: 'Business Analyst', category: 'business', description: 'Analyze business processes and recommend improvements.' },
+                { id: 'ai-engineer', title: 'AI Engineer', category: 'tech', description: 'Build AI-powered applications and machine learning solutions.' },
+                { id: 'devops-engineer', title: 'DevOps Engineer', category: 'tech', description: 'Manage infrastructure, CI/CD pipelines, and deployment processes.' },
+                { id: 'mobile-developer', title: 'Mobile App Developer', category: 'tech', description: 'Develop native and cross-platform mobile applications.' },
+                { id: 'qa-engineer', title: 'QA Engineer', category: 'tech', description: 'Ensure software quality through testing and automation.' },
+                { id: 'technical-writer', title: 'Technical Writer', category: 'business', description: 'Create clear documentation and technical content.' },
+                { id: 'graphic-designer', title: 'Graphic Designer', category: 'design', description: 'Create visual designs for digital and print marketing materials.' }
+            ];
+
+            filteredRoles = [...allRoles];
+            renderRoles();
+        }
+
+        function renderRoles() {
+            const rolesToShow = showAllRoles ? filteredRoles : filteredRoles.slice(0, 6);
+            const roleGrid = document.getElementById('role-grid');
+            const showMoreContainer = document.getElementById('show-more-container');
+
+            roleGrid.innerHTML = rolesToShow.map(role => `
+                <div class="role-card bg-white rounded-xl p-6 border border-slate-200 card-hover" data-role-id="${role.id}" data-category="${role.category}">
+                    <h3 class="font-bold text-slate-800 mb-3">${role.title}</h3>
+                    <p class="text-slate-600 mb-4">${role.description}</p>
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-medium transition-colors">Select Role</button>
+                </div>
+            `).join('');
+
+            // Add click handlers
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    selectRole(this.dataset.roleId, this);
+                });
+            });
+
+            // Preserve selected state after re-rendering
+            if (setupState.selectedRole) {
+                const selectedElement = document.querySelector(`[data-role-id="${setupState.selectedRole}"]`);
+                if (selectedElement) {
+                    selectedElement.classList.add('selected');
+                }
+            }
+
+            // Update show more/less buttons
+            const showMoreBtn = document.getElementById('show-more-btn');
+            const showLessBtn = document.getElementById('show-less-btn');
+
+            if (filteredRoles.length > 6) {
+                showMoreContainer.style.display = 'block';
+                if (showAllRoles) {
+                    showMoreBtn.style.display = 'none';
+                    showLessBtn.style.display = 'inline-block';
+                } else {
+                    showMoreBtn.style.display = 'inline-block';
+                    showLessBtn.style.display = 'none';
+                }
+            } else {
+                showMoreContainer.style.display = 'none';
+                showMoreBtn.style.display = 'none';
+                showLessBtn.style.display = 'none';
+            }
+        }
+
+        function selectRole(roleId, clickedElement = null) {
+            setupState.selectedRole = roleId;
+
+            // Update UI
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            // Use the clicked element if provided, otherwise find by roleId
+            const roleElement = clickedElement || document.querySelector(`[data-role-id="${roleId}"]`);
+            if (roleElement) {
+                roleElement.classList.add('selected');
+            }
+
+            // Show next step
+            document.getElementById('avatar-settings').style.display = 'block';
+
+            updateProgress();
+            updatePreview();
+        }
+
+        function selectAvatar(avatarId) {
+            setupState.selectedAvatar = avatarId;
+
+            // Store selected avatar in localStorage for voice selection
+            localStorage.setItem('selectedAvatar', avatarId);
+
+            // Update UI
+            document.querySelectorAll('.avatar-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-avatar="${avatarId}"]`).classList.add('selected');
+
+            // Show final step
+            document.getElementById('start-interview').style.display = 'block';
+
+            updateProgress();
+            updatePreview();
+        }
+
+        function filterRoles(filter, searchTerm = '') {
+            // Update filter buttons
+            document.querySelectorAll('.role-filter').forEach(button => {
+                button.classList.remove('active', 'bg-blue-600', 'text-white');
+                button.classList.add('bg-slate-200', 'text-slate-700');
+            });
+            document.querySelector(`[data-filter="${filter}"]`).classList.add('active', 'bg-blue-600', 'text-white');
+            document.querySelector(`[data-filter="${filter}"]`).classList.remove('bg-slate-200', 'text-slate-700');
+
+            // Filter roles based on category and search term
+            filteredRoles = allRoles.filter(role => {
+                const categoryMatch = filter === 'all' || role.category === filter;
+                const searchMatch = searchTerm === '' ||
+                    role.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    role.description.toLowerCase().includes(searchTerm.toLowerCase());
+                return categoryMatch && searchMatch;
+            });
+
+            // Reset pagination when filtering
+            showAllRoles = false;
+
+            renderRoles();
+        }
+
+        function updateProgress() {
+            let progress = 0;
+            if (setupState.interviewType) progress++;
+            if (setupState.selectedRole || setupState.jdAnalyzed || setupState.resumeAnalyzed) progress++;
+            if (setupState.selectedAvatar) progress++;
+            if (progress === 3) progress++; // All steps completed
+
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+
+            progressBar.style.width = `${(progress / 4) * 100}%`;
+            progressText.textContent = `${progress}/4`;
+        }
+
+        function updatePreview() {
+            // Update avatar preview
+            if (setupState.selectedAvatar) {
+                const avatarPreview = document.getElementById('preview-avatar');
+                const avatarData = {
+                    'Sarah': { name: 'Sarah', image: 'resources/Sarah.png' },
+                    'Alex': { name: 'Alex', image: 'resources/Alex.png' },
+                    'Michael': { name: 'Michael', image: 'resources/Michael.png' }
+                };
+                const avatar = avatarData[setupState.selectedAvatar];
+                avatarPreview.innerHTML = `
+                    <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden">
+                        <img src="${avatar.image}" alt="${avatar.name}" class="w-full h-full object-cover">
+                    </div>
+                    <p class="font-semibold text-slate-800">${avatar.name}</p>
+                `;
+            }
+
+            // Update role preview
+            if (setupState.selectedRole) {
+                const rolePreview = document.getElementById('preview-role');
+                const roleNames = {
+                    'software-engineer': 'Software Engineer',
+                    'product-manager': 'Product Manager',
+                    'data-scientist': 'Data Scientist',
+                    'ux-designer': 'UX Designer',
+                    'marketing-manager': 'Marketing Manager',
+                    'frontend-developer': 'Frontend Developer',
+                    'business-analyst': 'Business Analyst',
+                    'graphic-designer': 'Graphic Designer'
+                };
+                rolePreview.innerHTML = `
+                    <h4 class="font-semibold text-slate-800 mb-2">${roleNames[setupState.selectedRole]}</h4>
+                    <p class="text-sm text-slate-600">Role-based interview with tailored questions</p>
+                `;
+            } else if (setupState.resumeAnalyzed) {
+                const rolePreview = document.getElementById('preview-role');
+                rolePreview.innerHTML = `
+                    <h4 class="font-semibold text-slate-800 mb-2">Resume-Based Interview</h4>
+                    <p class="text-sm text-slate-600">Personalized questions based on your resume</p>
+                `;
+            }
+
+            // Update summary
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const summaryType = document.getElementById('summary-type');
+            const summaryRole = document.getElementById('summary-role');
+            const summaryAvatar = document.getElementById('summary-avatar');
+            const summaryDuration = document.getElementById('summary-duration');
+
+            if (setupState.interviewType === 'role-based') {
+                summaryType.textContent = 'Role-Based';
+                const roleNames = {
+                    'software-engineer': 'Software Engineer',
+                    'product-manager': 'Product Manager',
+                    'data-scientist': 'Data Scientist',
+                    'ux-designer': 'UX Designer',
+                    'marketing-manager': 'Marketing Manager',
+                    'frontend-developer': 'Frontend Developer',
+                    'business-analyst': 'Business Analyst',
+                    'graphic-designer': 'Graphic Designer'
+                };
+                summaryRole.textContent = setupState.selectedRole ? roleNames[setupState.selectedRole] : 'Not selected';
+            } else if (setupState.interviewType === 'jd-based') {
+                summaryType.textContent = 'JD-Based';
+                summaryRole.textContent = 'Custom Role';
+            } else if (setupState.interviewType === 'resume-based') {
+                summaryType.textContent = 'Resume-Based';
+                summaryRole.textContent = 'Personalized Interview';
+            }
+
+            const avatarNames = {
+                'Sarah': 'Sarah',
+                'Michael': 'Michael',
+                'Alex': 'Alex'
+            };
+            summaryAvatar.textContent = setupState.selectedAvatar ? avatarNames[setupState.selectedAvatar] : 'Not selected';
+
+            const sessionLength = document.getElementById('session-length').value;
+            summaryDuration.textContent = `${sessionLength} questions`;
+        }
+
+        function startInterview() {
+            // Set session length and experience level
+            setupState.sessionLength = document.getElementById('session-length').value;
+            setupState.experienceLevel = document.getElementById('experience-level').value;
+
+            // If JD-based, store the JD text
+            if (setupState.interviewType === 'jd-based') {
+                setupState.jdText = document.getElementById('jd-text').value;
+            }
+
+            // Store setup state in session storage
+            sessionStorage.setItem('interviewSetup', JSON.stringify(setupState));
+
+            // Pass the uploaded resume file to the window object so live interview can access it
+            if (setupState.uploadedResumeFile) {
+                window.uploadedResumeFile = setupState.uploadedResumeFile;
+            }
+
+            // Redirect to interview page
+            window.location.href = 'interview-live.html';
+        }
+
+        function goBack() {
+            // Simple back navigation
+            window.history.back();
+        }
+
+        function initFileUpload() {
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('file-input');
+            const analyzeButton = document.getElementById('analyze-jd');
+
+            if (dropZone && fileInput) {
+                dropZone.addEventListener('click', () => fileInput.click());
+                
+                dropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.add('dragover');
+                });
+                
+                dropZone.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('dragover');
+                });
+                
+                dropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        handleFileUpload(files[0]);
+                    }
+                });
+                
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        handleFileUpload(e.target.files[0]);
+                    }
+                });
+            }
+
+            if (analyzeButton) {
+                analyzeButton.addEventListener('click', analyzeJobDescription);
+            }
+        }
+
+        function handleFileUpload(file) {
+            if (file.type === 'application/pdf' || file.type.startsWith('text/') || file.type === 'application/msword' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                showNotification('File uploaded successfully! Click "Analyze Job Description" to continue.');
+                document.getElementById('analyze-jd').disabled = false;
+            } else {
+                showNotification('Please upload a PDF, Word document, or text file.', 'error');
+            }
+        }
+
+        function analyzeJobDescription() {
+            const jdText = document.getElementById('jd-text').value;
+            if (!jdText.trim()) {
+                showNotification('Please enter a job description or upload a file.', 'error');
+                return;
+            }
+
+            setupState.jdText = jdText;
+
+            // Determine role based on JD content
+            const jdLower = jdText.toLowerCase();
+            if ((jdLower.includes('ai') || jdLower.includes('llm') || jdLower.includes('large language model')) && jdLower.includes('software engineer')) {
+                setupState.selectedRole = 'software-engineer-ai';
+            } else if (jdLower.includes('java') && jdLower.includes('spring boot') && jdLower.includes('react') && jdLower.includes('microservices')) {
+                setupState.selectedRole = 'senior-java-fullstack-engineer';
+            } else if (jdLower.includes('java') && (jdLower.includes('spring') || jdLower.includes('rest') || jdLower.includes('api'))) {
+                setupState.selectedRole = 'java-developer';
+            } else if ((jdLower.includes('.net') || jdLower.includes('c#') || jdLower.includes('angular')) && (jdLower.includes('postgresql') || jdLower.includes('aws'))) {
+                setupState.selectedRole = 'senior-software-engineer';
+            } else if ((jdLower.includes('golang') || jdLower.includes('go ')) && (jdLower.includes('react') || jdLower.includes('next.js'))) {
+                setupState.selectedRole = 'senior-fullstack-developer';
+            } else if (jdLower.includes('data analyst') || jdLower.includes('data analysis')) {
+                setupState.selectedRole = 'data-analyst-intern';
+            } else if (jdLower.includes('business analyst')) {
+                setupState.selectedRole = 'business-analyst-intern';
+            } else if (jdLower.includes('azure') && (jdLower.includes('storage') || jdLower.includes('distributed') || jdLower.includes('billing') || jdLower.includes('monitoring') || jdLower.includes('observability'))) {
+                setupState.selectedRole = 'senior-software-engineer-azure';
+            } else if ((jdLower.includes('python') || jdLower.includes('backend')) && (jdLower.includes('mysql') || jdLower.includes('aws') || jdLower.includes('ml') || jdLower.includes('machine learning'))) {
+                setupState.selectedRole = 'senior-backend-python-developer';
+            } else if ((jdLower.includes('java') && jdLower.includes('python')) || (jdLower.includes('microservices') && (jdLower.includes('docker') || jdLower.includes('kubernetes') || jdLower.includes('cloud')))) {
+                setupState.selectedRole = 'backend-engineer-java-python';
+            } else if (jdLower.includes('python') && jdLower.includes('backend') && (jdLower.includes('azure') || jdLower.includes('api') || jdLower.includes('oauth'))) {
+                setupState.selectedRole = 'python-backend-developer';
+            } else if ((jdLower.includes('full stack') || jdLower.includes('full-stack')) && (jdLower.includes('ai') || jdLower.includes('llm') || jdLower.includes('node.js') || jdLower.includes('nest.js') || jdLower.includes('react') || jdLower.includes('angular') || jdLower.includes('vue'))) {
+                setupState.selectedRole = 'full-stack-developer-ai';
+            } else if (jdLower.includes('front-end') || jdLower.includes('frontend') || (jdLower.includes('react') && (jdLower.includes('html') || jdLower.includes('css') || jdLower.includes('javascript') || jdLower.includes('aws') || jdLower.includes('ux')))) {
+                setupState.selectedRole = 'front-end-developer';
+            } else if ((jdLower.includes('mern') || jdLower.includes('mean')) || (jdLower.includes('react') && jdLower.includes('node.js') && (jdLower.includes('mongodb') || jdLower.includes('express') || jdLower.includes('redux')))) {
+                setupState.selectedRole = 'mern-stack-developer';
+            } else if (jdLower.includes('react') && (jdLower.includes('typescript') || jdLower.includes('redux') || jdLower.includes('spa') || jdLower.includes('next.js') || jdLower.includes('graphql'))) {
+                setupState.selectedRole = 'react-developer';
+            } else if ((jdLower.includes('machine learning') || jdLower.includes('ml')) && (jdLower.includes('nlp') || jdLower.includes('llm') || jdLower.includes('pytorch') || jdLower.includes('tensorflow'))) {
+                setupState.selectedRole = 'machine-learning-engineer';
+            } else if ((jdLower.includes('ai') || jdLower.includes('artificial intelligence')) && (jdLower.includes('agents') || jdLower.includes('llm') || jdLower.includes('langchain') || jdLower.includes('rag') || jdLower.includes('rnn') || jdLower.includes('lstm') || jdLower.includes('transformers'))) {
+                setupState.selectedRole = 'ai-engineer';
+            } else if ((jdLower.includes('data scientist') || jdLower.includes('data analyst')) && (jdLower.includes('ai') || jdLower.includes('llm') || jdLower.includes('python') || jdLower.includes('ml') || jdLower.includes('sft') || jdLower.includes('rlhf'))) {
+                setupState.selectedRole = 'data-scientist-ai';
+            } else if (jdLower.includes('machine learning') && (jdLower.includes('tensorflow') || jdLower.includes('pytorch') || jdLower.includes('nlp') || jdLower.includes('llm') || jdLower.includes('docker') || jdLower.includes('kubernetes'))) {
+                setupState.selectedRole = 'ml-engineer';
+            } else if ((jdLower.includes('ai') || jdLower.includes('data engineer')) && (jdLower.includes('python') || jdLower.includes('llm') || jdLower.includes('rlhf') || jdLower.includes('sft') || jdLower.includes('data evaluation'))) {
+                setupState.selectedRole = 'ai-data-engineer';
+            } else if ((jdLower.includes('azure') || jdLower.includes('data scientist')) && (jdLower.includes('dp-100') || jdLower.includes('ml') || jdLower.includes('python') || jdLower.includes('azure ml'))) {
+                setupState.selectedRole = 'azure-data-scientist';
+            } else if (jdLower.includes('mlops') && (jdLower.includes('databricks') || jdLower.includes('mlflow') || jdLower.includes('pyspark') || jdLower.includes('delta lake') || jdLower.includes('ci/cd'))) {
+                setupState.selectedRole = 'mlops-engineer-databricks';
+            } else if (jdLower.includes('software engineer') || jdLower.includes('developer')) {
+                setupState.selectedRole = 'software-engineer';
+            } else if (jdLower.includes('product manager')) {
+                setupState.selectedRole = 'product-manager';
+            } else if (jdLower.includes('data scientist')) {
+                selectedRole = 'data-scientist';
+            } else if (jdLower.includes('ux designer') || jdLower.includes('ui designer')) {
+                setupState.selectedRole = 'ux-designer';
+            } else if (jdLower.includes('marketing manager')) {
+                setupState.selectedRole = 'marketing-manager';
+            } else if (jdLower.includes('frontend developer')) {
+                setupState.selectedRole = 'frontend-developer';
+            } else if (jdLower.includes('graphic designer')) {
+                setupState.selectedRole = 'graphic-designer';
+            } else {
+                setupState.selectedRole = 'software-engineer'; // default
+            }
+
+            // Simulate AI analysis
+            showNotification('Analyzing job description... This may take a moment.');
+
+            setTimeout(() => {
+                setupState.jdAnalyzed = true;
+
+                // Show extracted skills
+                const skillsPreview = document.getElementById('preview-skills');
+                const skillsList = document.getElementById('skills-list');
+
+                const mockSkills = ['JavaScript', 'React', 'Node.js', 'SQL', 'AWS', 'Agile'];
+                skillsList.innerHTML = mockSkills.map(skill =>
+                    `<span class="skill-tag text-white text-xs px-2 py-1 rounded-full">${skill}</span>`
+                ).join('');
+
+                skillsPreview.style.display = 'block';
+
+                // Show sample questions
+                const questionsPreview = document.getElementById('preview-questions');
+                const questionsList = document.getElementById('questions-list');
+
+                const mockQuestions = [
+                    "Tell me about your experience with React and modern JavaScript frameworks.",
+                    "How do you approach building scalable Node.js applications?",
+                    "Describe a challenging bug you fixed in a production environment."
+                ];
+
+                questionsList.innerHTML = mockQuestions.map((question, index) => `
+                    <div class="text-sm text-slate-600 p-3 bg-white rounded-lg border border-slate-200">
+                        <span class="font-medium text-slate-800">Q${index + 1}:</span> ${question}
+                    </div>
+                `).join('');
+
+                questionsPreview.style.display = 'block';
+
+                // Show next step
+                document.getElementById('avatar-settings').style.display = 'block';
+
+                updateProgress();
+                updatePreview();
+
+                showNotification('Job description analyzed successfully! Continue to avatar selection.', 'success');
+            }, 3000);
+        }
+
+        function initResumeUpload() {
+            const resumeDropZone = document.getElementById('resume-drop-zone');
+            const resumeFileInput = document.getElementById('resume-file-input');
+            const analyzeResumeButton = document.getElementById('analyze-resume');
+
+            if (resumeDropZone && resumeFileInput) {
+                resumeDropZone.addEventListener('click', () => resumeFileInput.click());
+
+                resumeDropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    resumeDropZone.classList.add('dragover');
+                });
+
+                resumeDropZone.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    resumeDropZone.classList.remove('dragover');
+                });
+
+                resumeDropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    resumeDropZone.classList.remove('dragover');
+
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        handleResumeUpload(files[0]);
+                    }
+                });
+
+                resumeFileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        handleResumeUpload(e.target.files[0]);
+                    }
+                });
+            }
+
+            if (analyzeResumeButton) {
+                analyzeResumeButton.addEventListener('click', analyzeResume);
+            }
+        }
+
+        function handleResumeUpload(file) {
+            if (file.type === 'application/pdf') {
+                // Store the uploaded file
+                setupState.uploadedResumeFile = file;
+
+                // Update UI to show uploaded file
+                document.getElementById('upload-icon').style.display = 'none';
+                document.getElementById('upload-title').style.display = 'none';
+                document.getElementById('upload-subtitle').style.display = 'none';
+                document.getElementById('file-types').style.display = 'none';
+
+                const uploadedFileInfo = document.getElementById('uploaded-file-info');
+                const uploadedFileName = document.getElementById('uploaded-file-name');
+                uploadedFileName.textContent = file.name;
+                uploadedFileInfo.style.display = 'block';
+
+                // Enable analyze button
+                document.getElementById('analyze-resume').disabled = false;
+
+                showNotification('Resume uploaded successfully! Click "Analyze Resume" to continue.');
+            } else {
+                showNotification('Please upload a PDF resume file.', 'error');
+            }
+        }
+
+        function analyzeResume() {
+            if (!setupState.uploadedResumeFile) {
+                showNotification('Please upload a resume first.', 'error');
+                return;
+            }
+
+            // Simulate AI analysis
+            showNotification('Analyzing resume... This may take a moment.');
+
+            setTimeout(() => {
+                setupState.resumeAnalyzed = true;
+
+                // In a real implementation, this would extract data from the actual PDF
+                // For now, we'll use sample data that represents what would be extracted
+                // Note: Real PDF extraction would require a backend service or PDF.js library
+
+                // Mock extracted resume data - in production, this would be replaced with actual extraction
+                const extractedData = {
+                    name: "Sarah Chen", // Would be extracted from PDF
+                    email: "sarah.chen.dev@gmail.com", // Would be extracted from PDF
+                    phone: "+1 (415) 555-0123", // Would be extracted from PDF
+                    skills: ['JavaScript', 'TypeScript', 'React', 'Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'AWS', 'Docker', 'Kubernetes', 'GraphQL', 'REST APIs', 'Git', 'CI/CD', 'Agile/Scrum'], // Would be extracted from PDF
+                    experience: [
+                        { company: 'TechFlow Solutions', role: 'Senior Full-Stack Developer', duration: '2.5 years', description: 'Led a team of 4 developers in building microservices architecture, improved application performance by 40%, mentored junior developers' },
+                        { company: 'InnovateLabs Inc', role: 'Full-Stack Developer', duration: '1.8 years', description: 'Developed and maintained React-based SPAs, implemented RESTful APIs with Node.js/Express, collaborated with design team on UX improvements' },
+                        { company: 'StartupXYZ', role: 'Frontend Developer', duration: '1 year', description: 'Built responsive web applications using React and TypeScript, integrated third-party APIs, optimized frontend performance' }
+                    ], // Would be extracted from PDF
+                    projects: ['Real-time Chat Application', 'E-commerce Dashboard', 'Task Management System', 'Data Visualization Platform', 'API Gateway Service'], // Would be extracted from PDF
+                    education: 'Master of Science in Computer Science, Stanford University (2020)', // Would be extracted from PDF
+                    achievements: ['AWS Certified Developer - Associate', 'Google Cloud Professional Developer', 'Published 5 technical articles on Medium', 'Won "Best Innovation Award" at TechCrunch Hackathon 2023', 'Led cross-functional team of 8 members'] // Would be extracted from PDF
+                };
+
+                // Store extracted data for later use in interview
+                setupState.extractedResumeData = extractedData;
+
+                // Show extracted resume details
+                const resumeDetailsPreview = document.getElementById('preview-resume-details');
+                const resumeDetailsContent = document.getElementById('resume-details-content');
+
+                resumeDetailsContent.innerHTML = `
+                    <div class="text-sm">
+                        <div class="mb-3">
+                            <span class="font-medium text-slate-800">Name:</span>
+                            <span class="text-slate-600 ml-2">${extractedData.name}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="font-medium text-slate-800">Email:</span>
+                            <span class="text-slate-600 ml-2">${extractedData.email}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="font-medium text-slate-800">Phone:</span>
+                            <span class="text-slate-600 ml-2">${extractedData.phone}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="font-medium text-slate-800">Education:</span>
+                            <span class="text-slate-600 ml-2">${extractedData.education}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="font-medium text-slate-800">Skills:</span>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                ${extractedData.skills.map(skill => `<span class="skill-tag text-white text-xs px-2 py-1 rounded-full">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <span class="font-medium text-slate-800">Experience:</span>
+                            <div class="mt-1 space-y-2">
+                                ${extractedData.experience.map(exp => `
+                                    <div class="bg-slate-50 p-2 rounded text-xs">
+                                        <div class="font-medium">${exp.role} at ${exp.company}</div>
+                                        <div class="text-slate-600">${exp.duration} • ${exp.description}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <span class="font-medium text-slate-800">Projects:</span>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                ${extractedData.projects.map(project => `<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">${project}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <span class="font-medium text-slate-800">Achievements:</span>
+                            <div class="mt-1 space-y-1">
+                                ${extractedData.achievements.map(achievement => `<div class="text-slate-600 text-xs">• ${achievement}</div>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                resumeDetailsPreview.style.display = 'block';
+
+                // Hide sample questions for resume-based interviews
+                document.getElementById('preview-questions').style.display = 'none';
+
+                // Show next step
+                document.getElementById('avatar-settings').style.display = 'block';
+
+                updateProgress();
+                updatePreview();
+
+                showNotification('Resume analyzed successfully! All details extracted from your uploaded resume.', 'success');
+            }, 3000);
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transition-all duration-300 transform translate-x-full`;
+
+            // Set notification style based on type
+            switch(type) {
+                case 'success':
+                    notification.classList.add('bg-green-500', 'text-white');
+                    break;
+                case 'error':
+                    notification.classList.add('bg-red-500', 'text-white');
+                    break;
+                case 'warning':
+                    notification.classList.add('bg-yellow-500', 'text-white');
+                    break;
+                default:
+                    notification.classList.add('bg-blue-500', 'text-white');
+            }
+
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span class="mr-4">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-white hover:text-gray-200">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+
+            // Add to page
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

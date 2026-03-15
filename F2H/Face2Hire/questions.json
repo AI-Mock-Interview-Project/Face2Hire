@@ -1,0 +1,4404 @@
+{
+  "software-engineer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your background in software engineering.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Tell me about a challenging technical problem you solved recently. What was your approach and what technologies did you use?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 2,
+      "text": "How do you stay updated with the latest technologies and trends in software development?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Professional Development"
+    },
+    {
+      "id": 3,
+      "text": "Describe your experience with version control systems. How do you handle merge conflicts?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Tools & Practices"
+    },
+    {
+      "id": 4,
+      "text": "How do you approach debugging a complex issue in a production environment?",
+      "type": "Problem Solving",
+      "difficulty": "Hard",
+      "category": "Debugging"
+    },
+    {
+      "id": 5,
+      "text": "What are your thoughts on code reviews? How do you give and receive feedback?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Team Work"
+    },
+    {
+      "id": 6,
+      "text": "Explain your design for a scalable web application architecture.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Architecture"
+    },
+    {
+      "id": 7,
+      "text": "How do you ensure code quality and maintainability in a team environment?",
+      "type": "Best Practices",
+      "difficulty": "Medium",
+      "category": "Quality Assurance"
+    },
+    {
+      "id": 8,
+      "text": "Tell me about your experience with testing frameworks and methodologies.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Testing"
+    },
+    {
+      "id": 9,
+      "text": "How do you handle performance optimization in your applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Performance"
+    },
+    {
+      "id": 10,
+      "text": "What are your thoughts on microservices vs monolithic architectures?",
+      "type": "Architecture",
+      "difficulty": "Hard",
+      "category": "Design Patterns"
+    },
+    {
+      "id": 11,
+      "text": "Describe your experience with cloud platforms and deployment strategies.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "DevOps"
+    },
+    {
+      "id": 12,
+      "text": "How do you approach API design and documentation?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "API Development"
+    },
+    {
+      "id": 13,
+      "text": "Tell me about a time when you had to learn a new technology quickly.",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Adaptability"
+    },
+    {
+      "id": 14,
+      "text": "How do you handle technical debt in a project?",
+      "type": "Best Practices",
+      "difficulty": "Medium",
+      "category": "Maintenance"
+    },
+    {
+      "id": 15,
+      "text": "What are your security considerations when developing applications?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Security"
+    },
+    {
+      "id": 16,
+      "text": "How do you approach database design and optimization?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Database"
+    },
+    {
+      "id": 17,
+      "text": "Describe your experience with agile development methodologies.",
+      "type": "Process",
+      "difficulty": "Medium",
+      "category": "Methodology"
+    },
+    {
+      "id": 18,
+      "text": "How do you handle cross-browser compatibility issues?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Frontend"
+    },
+    {
+      "id": 19,
+      "text": "What are your thoughts on open source contributions?",
+      "type": "Community",
+      "difficulty": "Easy",
+      "category": "Open Source"
+    },
+    {
+      "id": 20,
+      "text": "How do you mentor junior developers in your team?",
+      "type": "Leadership",
+      "difficulty": "Medium",
+      "category": "Mentoring"
+    }
+  ],
+  "software-engineer-intern": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and why you're interested in software engineering.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "What programming languages have you learned so far, and which one is your favorite?",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Languages"
+    },
+    {
+      "id": 2,
+      "text": "Describe a personal project you've worked on. What challenges did you face?",
+      "type": "Experience",
+      "difficulty": "Medium",
+      "category": "Projects"
+    },
+    {
+      "id": 3,
+      "text": "How do you approach learning a new programming concept or technology?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Learning Style"
+    },
+    {
+      "id": 4,
+      "text": "Tell me about your experience with version control, like Git.",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Tools"
+    },
+    {
+      "id": 5,
+      "text": "How do you debug a program when it doesn't work as expected?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Debugging"
+    },
+    {
+      "id": 6,
+      "text": "What are your thoughts on working in a team vs working independently?",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Team Work"
+    },
+    {
+      "id": 7,
+      "text": "How do you stay motivated when working on challenging coding problems?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Motivation"
+    },
+    {
+      "id": 8,
+      "text": "Tell me about a time when you received feedback on your code. How did you respond?",
+      "type": "Learning",
+      "difficulty": "Medium",
+      "category": "Feedback"
+    },
+    {
+      "id": 9,
+      "text": "What interests you most about our company's technology stack?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Company Interest"
+    },
+    {
+      "id": 10,
+      "text": "How do you balance learning new technologies with completing assignments?",
+      "type": "Time Management",
+      "difficulty": "Medium",
+      "category": "Organization"
+    },
+    {
+      "id": 11,
+      "text": "Describe your experience with algorithms and data structures.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Computer Science"
+    },
+    {
+      "id": 12,
+      "text": "How do you approach writing clean, readable code?",
+      "type": "Best Practices",
+      "difficulty": "Easy",
+      "category": "Code Quality"
+    },
+    {
+      "id": 13,
+      "text": "What are your career goals in software engineering?",
+      "type": "Future Goals",
+      "difficulty": "Easy",
+      "category": "Career"
+    },
+    {
+      "id": 14,
+      "text": "Tell me about a coding challenge or competition you've participated in.",
+      "type": "Experience",
+      "difficulty": "Medium",
+      "category": "Competitions"
+    },
+    {
+      "id": 15,
+      "text": "How do you handle working on multiple projects or assignments at once?",
+      "type": "Time Management",
+      "difficulty": "Medium",
+      "category": "Multitasking"
+    },
+    {
+      "id": 16,
+      "text": "What role do you see yourself taking in a software development team?",
+      "type": "Future Goals",
+      "difficulty": "Easy",
+      "category": "Team Role"
+    },
+    {
+      "id": 17,
+      "text": "How do you stay current with technology trends and new developments?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Industry Knowledge"
+    },
+    {
+      "id": 18,
+      "text": "Describe a situation where you had to solve a problem creatively.",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Creativity"
+    },
+    {
+      "id": 19,
+      "text": "What are your strengths and areas you'd like to improve as a developer?",
+      "type": "Self Assessment",
+      "difficulty": "Medium",
+      "category": "Self Awareness"
+    },
+    {
+      "id": 20,
+      "text": "How do you approach learning from mistakes in your code?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Growth Mindset"
+    }
+  ],
+  "product-manager": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your background in product management.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "How do you prioritize features for a new product release? Walk me through your process.",
+      "type": "Strategy",
+      "difficulty": "Medium",
+      "category": "Product Planning"
+    },
+    {
+      "id": 2,
+      "text": "Tell me about a time when you had to say no to a feature request. How did you handle it?",
+      "type": "Decision Making",
+      "difficulty": "Medium",
+      "category": "Stakeholder Management"
+    },
+    {
+      "id": 3,
+      "text": "How do you measure the success of a product feature after launch?",
+      "type": "Analytics",
+      "difficulty": "Medium",
+      "category": "Metrics"
+    },
+    {
+      "id": 4,
+      "text": "Describe your experience working with cross-functional teams. What challenges have you faced?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Team Leadership"
+    },
+    {
+      "id": 5,
+      "text": "How do you balance short-term business goals with long-term product vision?",
+      "type": "Strategy",
+      "difficulty": "Hard",
+      "category": "Vision"
+    },
+    {
+      "id": 6,
+      "text": "How do you conduct user research and incorporate findings into product decisions?",
+      "type": "Research",
+      "difficulty": "Medium",
+      "category": "User Experience"
+    },
+    {
+      "id": 7,
+      "text": "Tell me about your product roadmap planning process.",
+      "type": "Planning",
+      "difficulty": "Medium",
+      "category": "Roadmapping"
+    },
+    {
+      "id": 8,
+      "text": "How do you handle competing priorities from different stakeholders?",
+      "type": "Decision Making",
+      "difficulty": "Hard",
+      "category": "Conflict Resolution"
+    },
+    {
+      "id": 9,
+      "text": "What metrics do you use to track product performance?",
+      "type": "Analytics",
+      "difficulty": "Medium",
+      "category": "KPIs"
+    },
+    {
+      "id": 10,
+      "text": "How do you approach A/B testing for product features?",
+      "type": "Experimentation",
+      "difficulty": "Medium",
+      "category": "Testing"
+    },
+    {
+      "id": 11,
+      "text": "Describe your experience with product launches and go-to-market strategies.",
+      "type": "Strategy",
+      "difficulty": "Medium",
+      "category": "Launch"
+    },
+    {
+      "id": 12,
+      "text": "How do you gather and analyze customer feedback?",
+      "type": "Research",
+      "difficulty": "Easy",
+      "category": "Customer Insights"
+    },
+    {
+      "id": 13,
+      "text": "Tell me about a product pivot you were involved in. What led to the decision?",
+      "type": "Strategy",
+      "difficulty": "Hard",
+      "category": "Pivoting"
+    },
+    {
+      "id": 14,
+      "text": "How do you work with engineering teams to ensure product quality?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Engineering Partnership"
+    },
+    {
+      "id": 15,
+      "text": "What is your approach to competitive analysis?",
+      "type": "Strategy",
+      "difficulty": "Medium",
+      "category": "Market Research"
+    },
+    {
+      "id": 16,
+      "text": "How do you define and track OKRs for your product team?",
+      "type": "Planning",
+      "difficulty": "Medium",
+      "category": "Goal Setting"
+    },
+    {
+      "id": 17,
+      "text": "Describe your experience with pricing strategy and monetization.",
+      "type": "Business",
+      "difficulty": "Medium",
+      "category": "Revenue"
+    },
+    {
+      "id": 18,
+      "text": "How do you handle product support and customer success?",
+      "type": "Operations",
+      "difficulty": "Easy",
+      "category": "Support"
+    },
+    {
+      "id": 19,
+      "text": "What are your thoughts on product-market fit and how do you measure it?",
+      "type": "Strategy",
+      "difficulty": "Hard",
+      "category": "Product-Market Fit"
+    },
+    {
+      "id": 20,
+      "text": "How do you stay updated with industry trends and emerging technologies?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Industry Knowledge"
+    }
+  ],
+  "data-scientist": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your background in data science.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Walk me through your approach to solving a data science problem from start to finish.",
+      "type": "Methodology",
+      "difficulty": "Medium",
+      "category": "Process"
+    },
+    {
+      "id": 2,
+      "text": "How do you handle missing or noisy data in your analysis?",
+      "type": "Data Cleaning",
+      "difficulty": "Medium",
+      "category": "Data Quality"
+    },
+    {
+      "id": 3,
+      "text": "Explain a complex machine learning concept to a non-technical stakeholder.",
+      "type": "Communication",
+      "difficulty": "Hard",
+      "category": "Explanation"
+    },
+    {
+      "id": 4,
+      "text": "How do you validate the performance of your models?",
+      "type": "Evaluation",
+      "difficulty": "Medium",
+      "category": "Model Validation"
+    },
+    {
+      "id": 5,
+      "text": "What are your thoughts on the ethical implications of data science?",
+      "type": "Ethics",
+      "difficulty": "Medium",
+      "category": "Responsible AI"
+    },
+    {
+      "id": 6,
+      "text": "How do you approach feature engineering for machine learning models?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Feature Engineering"
+    },
+    {
+      "id": 7,
+      "text": "Describe your experience with different machine learning algorithms and when to use them.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Algorithms"
+    },
+    {
+      "id": 8,
+      "text": "How do you handle imbalanced datasets in classification problems?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Imbalanced Data"
+    },
+    {
+      "id": 9,
+      "text": "What are your strategies for model deployment and monitoring in production?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "MLOps"
+    },
+    {
+      "id": 10,
+      "text": "How do you approach A/B testing and statistical significance testing?",
+      "type": "Statistics",
+      "difficulty": "Medium",
+      "category": "Experimentation"
+    },
+    {
+      "id": 11,
+      "text": "Describe your experience with big data technologies and distributed computing.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Big Data"
+    },
+    {
+      "id": 12,
+      "text": "How do you communicate data insights to different audiences?",
+      "type": "Communication",
+      "difficulty": "Medium",
+      "category": "Data Storytelling"
+    },
+    {
+      "id": 13,
+      "text": "What are your thoughts on automated machine learning (AutoML) tools?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "AutoML"
+    },
+    {
+      "id": 14,
+      "text": "How do you handle data privacy and GDPR compliance in your work?",
+      "type": "Ethics",
+      "difficulty": "Medium",
+      "category": "Privacy"
+    },
+    {
+      "id": 15,
+      "text": "Describe your approach to time series analysis and forecasting.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Time Series"
+    },
+    {
+      "id": 16,
+      "text": "How do you evaluate and compare different machine learning models?",
+      "type": "Evaluation",
+      "difficulty": "Medium",
+      "category": "Model Comparison"
+    },
+    {
+      "id": 17,
+      "text": "What are your experiences with natural language processing tasks?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "NLP"
+    },
+    {
+      "id": 18,
+      "text": "How do you approach unsupervised learning problems?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Unsupervised Learning"
+    },
+    {
+      "id": 19,
+      "text": "Describe your data visualization and dashboard creation process.",
+      "type": "Communication",
+      "difficulty": "Easy",
+      "category": "Visualization"
+    },
+    {
+      "id": 20,
+      "text": "How do you stay current with developments in data science and AI?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Continuous Learning"
+    }
+  ],
+  "ux-designer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your background in UX design.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "How do you approach user research for a new product or feature?",
+      "type": "Research",
+      "difficulty": "Medium",
+      "category": "User Centered Design"
+    },
+    {
+      "id": 2,
+      "text": "Tell me about a time when you had to defend your design decisions to stakeholders.",
+      "type": "Communication",
+      "difficulty": "Medium",
+      "category": "Presentation"
+    },
+    {
+      "id": 3,
+      "text": "How do you balance aesthetics with functionality in your designs?",
+      "type": "Design Principles",
+      "difficulty": "Medium",
+      "category": "Balance"
+    },
+    {
+      "id": 4,
+      "text": "Describe your process for creating wireframes and prototypes.",
+      "type": "Process",
+      "difficulty": "Easy",
+      "category": "Tools & Workflow"
+    },
+    {
+      "id": 5,
+      "text": "How do you stay inspired and keep up with design trends?",
+      "type": "Inspiration",
+      "difficulty": "Easy",
+      "category": "Professional Development"
+    },
+    {
+      "id": 6,
+      "text": "How do you conduct usability testing and iterate on designs?",
+      "type": "Research",
+      "difficulty": "Medium",
+      "category": "Usability Testing"
+    },
+    {
+      "id": 7,
+      "text": "Tell me about your experience with design systems and component libraries.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Design Systems"
+    },
+    {
+      "id": 8,
+      "text": "How do you collaborate with developers during the implementation phase?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Developer Handoff"
+    },
+    {
+      "id": 9,
+      "text": "Describe your approach to accessibility in design.",
+      "type": "Inclusive Design",
+      "difficulty": "Medium",
+      "category": "Accessibility"
+    },
+    {
+      "id": 10,
+      "text": "How do you handle design feedback and incorporate it into your work?",
+      "type": "Process",
+      "difficulty": "Easy",
+      "category": "Feedback Integration"
+    },
+    {
+      "id": 11,
+      "text": "What are your thoughts on minimalism vs complex design approaches?",
+      "type": "Design Philosophy",
+      "difficulty": "Medium",
+      "category": "Philosophy"
+    },
+    {
+      "id": 12,
+      "text": "How do you approach mobile-first design?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Responsive Design"
+    },
+    {
+      "id": 13,
+      "text": "Tell me about a design project that didn't go as planned. What did you learn?",
+      "type": "Learning",
+      "difficulty": "Medium",
+      "category": "Failure Analysis"
+    },
+    {
+      "id": 14,
+      "text": "How do you measure the success of your design work?",
+      "type": "Analytics",
+      "difficulty": "Medium",
+      "category": "Design Metrics"
+    },
+    {
+      "id": 15,
+      "text": "Describe your experience with motion design and micro-interactions.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Animation"
+    },
+    {
+      "id": 16,
+      "text": "How do you approach branding and visual identity design?",
+      "type": "Creative",
+      "difficulty": "Medium",
+      "category": "Branding"
+    },
+    {
+      "id": 17,
+      "text": "What are your strategies for managing design projects and timelines?",
+      "type": "Process",
+      "difficulty": "Easy",
+      "category": "Project Management"
+    },
+    {
+      "id": 18,
+      "text": "How do you stay updated with emerging design technologies and tools?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Technology"
+    },
+    {
+      "id": 19,
+      "text": "Describe your experience with user interface design for different platforms.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cross-Platform"
+    },
+    {
+      "id": 20,
+      "text": "How do you advocate for user needs in a business-driven environment?",
+      "type": "Advocacy",
+      "difficulty": "Hard",
+      "category": "User Advocacy"
+    }
+  ],
+  "frontend-developer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your background in frontend development.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "What are your favorite JavaScript frameworks and why?",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Frameworks"
+    },
+    {
+      "id": 2,
+      "text": "How do you approach responsive web design?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Responsive Design"
+    },
+    {
+      "id": 3,
+      "text": "Describe your experience with CSS preprocessors like Sass or Less.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "CSS"
+    },
+    {
+      "id": 4,
+      "text": "How do you optimize website performance?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Performance"
+    },
+    {
+      "id": 5,
+      "text": "Tell me about your experience with version control and Git workflows.",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Version Control"
+    },
+    {
+      "id": 6,
+      "text": "How do you handle browser compatibility issues?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cross-Browser"
+    },
+    {
+      "id": 7,
+      "text": "Describe your approach to writing clean, maintainable CSS.",
+      "type": "Best Practices",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 8,
+      "text": "How do you approach accessibility in web development?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Accessibility"
+    },
+    {
+      "id": 9,
+      "text": "Tell me about your experience with JavaScript testing frameworks.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Testing"
+    },
+    {
+      "id": 10,
+      "text": "How do you manage state in complex web applications?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "State Management"
+    },
+    {
+      "id": 11,
+      "text": "Describe your experience with build tools and bundlers.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Build Tools"
+    },
+    {
+      "id": 12,
+      "text": "How do you approach component-based architecture?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Architecture"
+    },
+    {
+      "id": 13,
+      "text": "Tell me about your experience with API integration.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "APIs"
+    },
+    {
+      "id": 14,
+      "text": "How do you handle asynchronous operations in JavaScript?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Async Programming"
+    },
+    {
+      "id": 15,
+      "text": "Describe your approach to debugging frontend issues.",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Debugging"
+    },
+    {
+      "id": 16,
+      "text": "How do you stay updated with frontend technologies and trends?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Professional Development"
+    },
+    {
+      "id": 17,
+      "text": "Tell me about your experience with design systems.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Design Systems"
+    },
+    {
+      "id": 18,
+      "text": "How do you approach code reviews for frontend code?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Code Review"
+    },
+    {
+      "id": 19,
+      "text": "Describe your experience with web security best practices.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Security"
+    },
+    {
+      "id": 20,
+      "text": "How do you balance technical debt with feature development?",
+      "type": "Best Practices",
+      "difficulty": "Medium",
+      "category": "Technical Debt"
+    }
+  ],
+  "business-analyst": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your background in business analysis.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "How do you approach gathering and documenting business requirements?",
+      "type": "Requirements",
+      "difficulty": "Medium",
+      "category": "Requirements Gathering"
+    },
+    {
+      "id": 2,
+      "text": "Describe your experience with creating use cases and user stories.",
+      "type": "Documentation",
+      "difficulty": "Medium",
+      "category": "Use Cases"
+    },
+    {
+      "id": 3,
+      "text": "How do you identify and analyze business processes?",
+      "type": "Analysis",
+      "difficulty": "Medium",
+      "category": "Process Analysis"
+    },
+    {
+      "id": 4,
+      "text": "Tell me about your experience with data analysis and reporting.",
+      "type": "Analytics",
+      "difficulty": "Medium",
+      "category": "Data Analysis"
+    },
+    {
+      "id": 5,
+      "text": "How do you facilitate stakeholder meetings and workshops?",
+      "type": "Communication",
+      "difficulty": "Medium",
+      "category": "Facilitation"
+    },
+    {
+      "id": 6,
+      "text": "Describe your approach to managing project scope and requirements.",
+      "type": "Planning",
+      "difficulty": "Medium",
+      "category": "Scope Management"
+    },
+    {
+      "id": 7,
+      "text": "How do you handle conflicting requirements from different stakeholders?",
+      "type": "Conflict Resolution",
+      "difficulty": "Hard",
+      "category": "Stakeholder Management"
+    },
+    {
+      "id": 8,
+      "text": "Tell me about your experience with business process modeling.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "BPM"
+    },
+    {
+      "id": 9,
+      "text": "How do you validate requirements with end users?",
+      "type": "Validation",
+      "difficulty": "Medium",
+      "category": "Requirements Validation"
+    },
+    {
+      "id": 10,
+      "text": "Describe your experience with change management and impact analysis.",
+      "type": "Change Management",
+      "difficulty": "Medium",
+      "category": "Change Management"
+    },
+    {
+      "id": 11,
+      "text": "How do you approach risk assessment and mitigation in projects?",
+      "type": "Risk Management",
+      "difficulty": "Medium",
+      "category": "Risk Assessment"
+    },
+    {
+      "id": 12,
+      "text": "Tell me about your experience with agile methodologies.",
+      "type": "Methodology",
+      "difficulty": "Medium",
+      "category": "Agile"
+    },
+    {
+      "id": 13,
+      "text": "How do you create and maintain requirements traceability?",
+      "type": "Documentation",
+      "difficulty": "Medium",
+      "category": "Traceability"
+    },
+    {
+      "id": 14,
+      "text": "Describe your approach to user acceptance testing coordination.",
+      "type": "Testing",
+      "difficulty": "Medium",
+      "category": "UAT"
+    },
+    {
+      "id": 15,
+      "text": "How do you measure the success of business analysis deliverables?",
+      "type": "Metrics",
+      "difficulty": "Medium",
+      "category": "Success Metrics"
+    },
+    {
+      "id": 16,
+      "text": "Tell me about your experience with business intelligence tools.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "BI Tools"
+    },
+    {
+      "id": 17,
+      "text": "How do you handle requirements changes during project execution?",
+      "type": "Change Management",
+      "difficulty": "Hard",
+      "category": "Change Control"
+    },
+    {
+      "id": 18,
+      "text": "Describe your communication style when working with technical and non-technical teams.",
+      "type": "Communication",
+      "difficulty": "Medium",
+      "category": "Communication Skills"
+    },
+    {
+      "id": 19,
+      "text": "How do you stay updated with industry trends and best practices?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Professional Development"
+    },
+    {
+      "id": 20,
+      "text": "Tell me about a challenging business analysis project and what you learned.",
+      "type": "Experience",
+      "difficulty": "Hard",
+      "category": "Project Experience"
+    }
+  ],
+  "graphic-designer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your background in graphic design.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "What design software are you most proficient with?",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Software Skills"
+    },
+    {
+      "id": 2,
+      "text": "How do you approach creating a brand identity from scratch?",
+      "type": "Creative",
+      "difficulty": "Medium",
+      "category": "Branding"
+    },
+    {
+      "id": 3,
+      "text": "Describe your process for creating a logo design.",
+      "type": "Process",
+      "difficulty": "Medium",
+      "category": "Logo Design"
+    },
+    {
+      "id": 4,
+      "text": "How do you ensure your designs are accessible and inclusive?",
+      "type": "Design Principles",
+      "difficulty": "Medium",
+      "category": "Accessibility"
+    },
+    {
+      "id": 5,
+      "text": "Tell me about your experience with print design vs digital design.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Print vs Digital"
+    },
+    {
+      "id": 6,
+      "text": "How do you handle client feedback and revisions?",
+      "type": "Communication",
+      "difficulty": "Medium",
+      "category": "Client Relations"
+    },
+    {
+      "id": 7,
+      "text": "Describe your approach to typography in design projects.",
+      "type": "Design Principles",
+      "difficulty": "Medium",
+      "category": "Typography"
+    },
+    {
+      "id": 8,
+      "text": "How do you stay inspired and keep up with design trends?",
+      "type": "Inspiration",
+      "difficulty": "Easy",
+      "category": "Trends"
+    },
+    {
+      "id": 9,
+      "text": "Tell me about your experience with motion graphics and animation.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Motion Graphics"
+    },
+    {
+      "id": 10,
+      "text": "How do you approach color theory in your designs?",
+      "type": "Design Principles",
+      "difficulty": "Medium",
+      "category": "Color Theory"
+    },
+    {
+      "id": 11,
+      "text": "Describe your portfolio and the projects you're most proud of.",
+      "type": "Experience",
+      "difficulty": "Easy",
+      "category": "Portfolio"
+    },
+    {
+      "id": 12,
+      "text": "How do you balance creativity with meeting client requirements?",
+      "type": "Creative",
+      "difficulty": "Medium",
+      "category": "Creativity vs Requirements"
+    },
+    {
+      "id": 13,
+      "text": "Tell me about your experience with user interface design.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "UI Design"
+    },
+    {
+      "id": 14,
+      "text": "How do you approach designing for different mediums and formats?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Multi-Platform Design"
+    },
+    {
+      "id": 15,
+      "text": "Describe your process for presenting designs to clients.",
+      "type": "Communication",
+      "difficulty": "Medium",
+      "category": "Presentation Skills"
+    },
+    {
+      "id": 16,
+      "text": "How do you handle tight deadlines and multiple projects?",
+      "type": "Time Management",
+      "difficulty": "Medium",
+      "category": "Project Management"
+    },
+    {
+      "id": 17,
+      "text": "Tell me about your experience with design systems and style guides.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Design Systems"
+    },
+    {
+      "id": 18,
+      "text": "How do you approach designing for international audiences?",
+      "type": "Cultural",
+      "difficulty": "Hard",
+      "category": "International Design"
+    },
+    {
+      "id": 19,
+      "text": "What are your thoughts on the impact of AI on graphic design?",
+      "type": "Technology",
+      "difficulty": "Medium",
+      "category": "AI in Design"
+    },
+    {
+      "id": 20,
+      "text": "How do you measure the success of your design work?",
+      "type": "Analytics",
+      "difficulty": "Medium",
+      "category": "Design Metrics"
+    }
+  ],
+  "marketing-manager": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your background in marketing.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "How do you develop a marketing strategy for a new product launch?",
+      "type": "Strategy",
+      "difficulty": "Medium",
+      "category": "Planning"
+    },
+    {
+      "id": 2,
+      "text": "Tell me about your experience with digital marketing campaigns. What metrics do you track?",
+      "type": "Digital Marketing",
+      "difficulty": "Medium",
+      "category": "Performance"
+    },
+    {
+      "id": 3,
+      "text": "How do you measure ROI on marketing spend?",
+      "type": "Analytics",
+      "difficulty": "Medium",
+      "category": "Measurement"
+    },
+    {
+      "id": 4,
+      "text": "Describe a time when you had to pivot a marketing campaign. What did you learn?",
+      "type": "Adaptability",
+      "difficulty": "Medium",
+      "category": "Flexibility"
+    },
+    {
+      "id": 5,
+      "text": "How do you stay updated with marketing trends and consumer behavior?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Industry Knowledge"
+    },
+    {
+      "id": 6,
+      "text": "How do you approach content marketing and storytelling?",
+      "type": "Content",
+      "difficulty": "Medium",
+      "category": "Content Strategy"
+    },
+    {
+      "id": 7,
+      "text": "Tell me about your experience with social media marketing and community building.",
+      "type": "Digital Marketing",
+      "difficulty": "Easy",
+      "category": "Social Media"
+    },
+    {
+      "id": 8,
+      "text": "How do you segment audiences and personalize marketing messages?",
+      "type": "Strategy",
+      "difficulty": "Medium",
+      "category": "Audience Segmentation"
+    },
+    {
+      "id": 9,
+      "text": "Describe your approach to brand management and reputation building.",
+      "type": "Branding",
+      "difficulty": "Medium",
+      "category": "Brand Management"
+    },
+    {
+      "id": 10,
+      "text": "How do you handle crisis communication and reputation management?",
+      "type": "Communication",
+      "difficulty": "Hard",
+      "category": "Crisis Management"
+    },
+    {
+      "id": 11,
+      "text": "What are your strategies for lead generation and conversion optimization?",
+      "type": "Sales",
+      "difficulty": "Medium",
+      "category": "Lead Generation"
+    },
+    {
+      "id": 12,
+      "text": "How do you collaborate with sales teams to align marketing and sales efforts?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Sales Alignment"
+    },
+    {
+      "id": 13,
+      "text": "Describe your experience with influencer marketing and partnerships.",
+      "type": "Partnerships",
+      "difficulty": "Medium",
+      "category": "Influencer Marketing"
+    },
+    {
+      "id": 14,
+      "text": "How do you approach SEO and content optimization?",
+      "type": "Digital Marketing",
+      "difficulty": "Medium",
+      "category": "SEO"
+    },
+    {
+      "id": 15,
+      "text": "What are your thoughts on the role of AI and automation in marketing?",
+      "type": "Technology",
+      "difficulty": "Medium",
+      "category": "Marketing Technology"
+    },
+    {
+      "id": 16,
+      "text": "How do you create and manage marketing budgets effectively?",
+      "type": "Finance",
+      "difficulty": "Medium",
+      "category": "Budget Management"
+    },
+    {
+      "id": 17,
+      "text": "Describe your experience with event marketing and experiential campaigns.",
+      "type": "Events",
+      "difficulty": "Easy",
+      "category": "Event Marketing"
+    },
+    {
+      "id": 18,
+      "text": "How do you measure and report on marketing campaign effectiveness?",
+      "type": "Analytics",
+      "difficulty": "Medium",
+      "category": "Reporting"
+    },
+    {
+      "id": 19,
+      "text": "What are your strategies for customer retention and loyalty programs?",
+      "type": "Customer",
+      "difficulty": "Medium",
+      "category": "Retention"
+    },
+    {
+      "id": 20,
+      "text": "How do you adapt marketing strategies for different markets and cultures?",
+      "type": "Global",
+      "difficulty": "Hard",
+      "category": "International Marketing"
+    }
+  ],
+  "resume-based": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your professional background.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Can you walk me through your most recent role and what you accomplished there?",
+      "type": "Experience",
+      "difficulty": "Medium",
+      "category": "Professional Experience"
+    },
+    {
+      "id": 2,
+      "text": "What motivated you to pursue a career in [extracted field from resume]?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Motivation"
+    },
+    {
+      "id": 3,
+      "text": "Tell me about a challenging project you worked on. What was your role and how did you overcome obstacles?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Project Experience"
+    },
+    {
+      "id": 4,
+      "text": "How do you stay current with developments in your field?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Professional Development"
+    },
+    {
+      "id": 5,
+      "text": "Describe your experience with [extracted technology/skill from resume].",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Technical Skills"
+    },
+    {
+      "id": 6,
+      "text": "What are you most proud of in your career so far?",
+      "type": "Achievement",
+      "difficulty": "Medium",
+      "category": "Accomplishments"
+    },
+    {
+      "id": 7,
+      "text": "How do you approach collaboration and teamwork in your projects?",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Team Work"
+    },
+    {
+      "id": 8,
+      "text": "Tell me about a time when you had to learn something new quickly.",
+      "type": "Learning",
+      "difficulty": "Medium",
+      "category": "Adaptability"
+    },
+    {
+      "id": 9,
+      "text": "What are your career goals and how does this role fit into them?",
+      "type": "Future Goals",
+      "difficulty": "Medium",
+      "category": "Career Planning"
+    },
+    {
+      "id": 10,
+      "text": "How do you handle feedback and continuous improvement?",
+      "type": "Growth",
+      "difficulty": "Easy",
+      "category": "Professional Growth"
+    },
+    {
+      "id": 11,
+      "text": "Describe your experience with [extracted tool/methodology from resume].",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Tools & Methodologies"
+    },
+    {
+      "id": 12,
+      "text": "What challenges have you faced in your career and how did you overcome them?",
+      "type": "Problem Solving",
+      "difficulty": "Hard",
+      "category": "Career Challenges"
+    },
+    {
+      "id": 13,
+      "text": "How do you balance multiple projects and priorities?",
+      "type": "Time Management",
+      "difficulty": "Medium",
+      "category": "Organization"
+    },
+    {
+      "id": 14,
+      "text": "Tell me about your educational background and how it prepared you for your career.",
+      "type": "Education",
+      "difficulty": "Easy",
+      "category": "Academic Background"
+    },
+    {
+      "id": 15,
+      "text": "What are your strengths and how do they benefit your work?",
+      "type": "Self Assessment",
+      "difficulty": "Medium",
+      "category": "Personal Strengths"
+    },
+    {
+      "id": 16,
+      "text": "How do you approach problem-solving in your work?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Problem Solving Approach"
+    },
+    {
+      "id": 17,
+      "text": "Describe your experience with [extracted industry/domain from resume].",
+      "type": "Industry",
+      "difficulty": "Medium",
+      "category": "Industry Experience"
+    },
+    {
+      "id": 18,
+      "text": "What are your thoughts on leadership and mentoring others?",
+      "type": "Leadership",
+      "difficulty": "Medium",
+      "category": "Leadership"
+    },
+    {
+      "id": 19,
+      "text": "How do you measure success in your role?",
+      "type": "Metrics",
+      "difficulty": "Medium",
+      "category": "Success Metrics"
+    },
+    {
+      "id": 20,
+      "text": "What interests you most about opportunities in this field?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Field Interest"
+    }
+  ],
+  "data-analyst-intern": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your background in data analysis.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience with data cleaning and preprocessing. What tools or techniques do you use?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Data Preparation"
+    },
+    {
+      "id": 2,
+      "text": "How do you approach Exploratory Data Analysis (EDA) on a new dataset? Walk me through your process.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Analysis Techniques"
+    },
+    {
+      "id": 3,
+      "text": "Explain your proficiency with Python libraries like Pandas, NumPy, and Matplotlib. Give an example of how you've used them.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Programming Skills"
+    },
+    {
+      "id": 4,
+      "text": "Tell me about a time you created a data visualization. What tool did you use and what was the outcome?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Visualization"
+    },
+    {
+      "id": 5,
+      "text": "How do you handle missing or inconsistent data in a dataset?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Data Quality"
+    },
+    {
+      "id": 6,
+      "text": "Write a simple SQL query to retrieve specific data from a table. For example, find the average salary by department.",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "SQL Skills"
+    },
+    {
+      "id": 7,
+      "text": "What insights can you derive from a dataset showing sales trends over time? How would you present them?",
+      "type": "Analytical",
+      "difficulty": "Medium",
+      "category": "Insight Generation"
+    },
+    {
+      "id": 8,
+      "text": "How do you stay updated with the latest trends and tools in data analysis?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Professional Development"
+    },
+    {
+      "id": 9,
+      "text": "Describe a personal project or coursework where you analyzed data. What challenges did you face and how did you overcome them?",
+      "type": "Project",
+      "difficulty": "Medium",
+      "category": "Experience"
+    },
+    {
+      "id": 10,
+      "text": "Compare Power BI and Tableau for creating interactive dashboards. When would you choose one over the other?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Tools Comparison"
+    },
+    {
+      "id": 11,
+      "text": "How do you optimize the performance of a slow-running data query or analysis script?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Performance Optimization"
+    },
+    {
+      "id": 12,
+      "text": "How do you communicate data insights to non-technical stakeholders? Give an example.",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Communication"
+    },
+    {
+      "id": 13,
+      "text": "What ethical considerations do you take into account when handling sensitive data?",
+      "type": "Ethics",
+      "difficulty": "Medium",
+      "category": "Data Ethics"
+    },
+    {
+      "id": 14,
+      "text": "Why are you interested in the Data Analyst Intern role at Skoollage? What do you hope to learn?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "business-analyst-intern": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your background in business analysis or related fields.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience with market research and competitor analysis. What methods have you used?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Research Skills"
+    },
+    {
+      "id": 2,
+      "text": "How do you approach requirement gathering from stakeholders? Walk me through your process.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Requirement Analysis"
+    },
+    {
+      "id": 3,
+      "text": "Explain what a Business Requirement Document (BRD) is and how you would create one.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Documentation"
+    },
+    {
+      "id": 4,
+      "text": "Tell me about a time you created user stories or workflow diagrams. What tools did you use?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Process Modeling"
+    },
+    {
+      "id": 5,
+      "text": "How do you identify improvement opportunities in existing business processes?",
+      "type": "Analytical",
+      "difficulty": "Medium",
+      "category": "Process Improvement"
+    },
+    {
+      "id": 6,
+      "text": "Describe your proficiency with documentation tools like Excel, Word, and PowerPoint. Give an example of how you've used them.",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Tools Proficiency"
+    },
+    {
+      "id": 7,
+      "text": "How do you break down complex business problems into manageable components?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Analytical Thinking"
+    },
+    {
+      "id": 8,
+      "text": "What steps would you take to validate data collected for a business analysis project?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Data Validation"
+    },
+    {
+      "id": 9,
+      "text": "How do you prepare and present business insights to non-technical stakeholders?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Communication"
+    },
+    {
+      "id": 10,
+      "text": "Tell me about a project where you conducted research and provided recommendations. What was the outcome?",
+      "type": "Project",
+      "difficulty": "Medium",
+      "category": "Experience"
+    },
+    {
+      "id": 11,
+      "text": "How do you ensure accuracy and completeness in your business analysis reports?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Quality Assurance"
+    },
+    {
+      "id": 12,
+      "text": "What research methods are you familiar with for gathering business intelligence?",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Research Methods"
+    },
+    {
+      "id": 13,
+      "text": "How do you handle conflicting requirements from different stakeholders?",
+      "type": "Problem Solving",
+      "difficulty": "Hard",
+      "category": "Stakeholder Management"
+    },
+    {
+      "id": 14,
+      "text": "Why are you interested in the Business Analyst Intern role at Wake Up Whistle? What do you hope to learn?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "software-engineer-ai": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a software engineer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Which programming languages are you most proficient in? Describe a project where you used one of them extensively.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Programming Skills"
+    },
+    {
+      "id": 2,
+      "text": "How do you approach triaging issues in a complex codebase? Walk me through your process.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Debugging"
+    },
+    {
+      "id": 3,
+      "text": "Describe your experience with setting up development environments, including Docker. What challenges have you faced?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "DevOps"
+    },
+    {
+      "id": 4,
+      "text": "How do you assess and extend unit-test coverage in a project? Give an example.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Testing"
+    },
+    {
+      "id": 5,
+      "text": "Tell me about a time you contributed to an open-source repository. What was your contribution?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Open Source"
+    },
+    {
+      "id": 6,
+      "text": "How do you design software engineering tasks for AI evaluation? What makes a good benchmark?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "AI Evaluation"
+    },
+    {
+      "id": 7,
+      "text": "Describe your experience with Git and version control in collaborative environments.",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Version Control"
+    },
+    {
+      "id": 8,
+      "text": "How do you handle CI/CD pipelines and ensure reliable builds?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "CI/CD"
+    },
+    {
+      "id": 9,
+      "text": "What debugging techniques do you use when dealing with complex issues in large codebases?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Debugging"
+    },
+    {
+      "id": 10,
+      "text": "Have you worked with LLM evaluation or AI model benchmarking? Describe your experience.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "AI Experience"
+    },
+    {
+      "id": 11,
+      "text": "How do you ensure code quality and maintainability in your projects?",
+      "type": "Best Practices",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 12,
+      "text": "Describe a challenging software design problem you solved. What was your approach?",
+      "type": "Problem Solving",
+      "difficulty": "Hard",
+      "category": "Design"
+    },
+    {
+      "id": 13,
+      "text": "How do you communicate technical feedback precisely in writing?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Communication"
+    },
+    {
+      "id": 14,
+      "text": "What experience do you have leading or mentoring junior engineers?",
+      "type": "Leadership",
+      "difficulty": "Medium",
+      "category": "Leadership"
+    },
+    {
+      "id": 15,
+      "text": "How do you stay updated with the latest developments in software engineering and AI?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Professional Development"
+    },
+    {
+      "id": 16,
+      "text": "Describe your experience with Docker and containerization in development workflows.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Containerization"
+    },
+    {
+      "id": 17,
+      "text": "How do you approach evaluating AI models for software engineering tasks?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "AI Evaluation"
+    },
+    {
+      "id": 18,
+      "text": "What motivates you to work on AI validation and benchmarking projects?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    },
+    {
+      "id": 19,
+      "text": "How do you balance flexibility and productivity in a remote work environment?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Remote Work"
+    }
+  ],
+  "java-developer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience with Java development.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Explain your understanding of Object-Oriented Programming principles in Java. Give examples.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "OOP"
+    },
+    {
+      "id": 2,
+      "text": "Describe your experience with the Spring framework. What modules have you used?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Spring Framework"
+    },
+    {
+      "id": 3,
+      "text": "How do you design and implement REST APIs using Spring Boot?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "REST APIs"
+    },
+    {
+      "id": 4,
+      "text": "What challenges have you faced when building scalable, distributed applications?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Scalability"
+    },
+    {
+      "id": 5,
+      "text": "How do you approach troubleshooting and debugging in Java applications?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Debugging"
+    },
+    {
+      "id": 6,
+      "text": "Describe your experience with code reviews. What do you look for?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Code Reviews"
+    },
+    {
+      "id": 7,
+      "text": "How do you ensure high quality standards in your deliverables?",
+      "type": "Best Practices",
+      "difficulty": "Medium",
+      "category": "Quality Assurance"
+    },
+    {
+      "id": 8,
+      "text": "Tell me about a time you mentored junior developers. What was your approach?",
+      "type": "Leadership",
+      "difficulty": "Medium",
+      "category": "Mentoring"
+    },
+    {
+      "id": 9,
+      "text": "How do you handle requirements analysis and documentation?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Requirements"
+    },
+    {
+      "id": 10,
+      "text": "What experience do you have with Kafka or message queuing systems?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Messaging"
+    },
+    {
+      "id": 11,
+      "text": "Describe your knowledge of containerization with Docker.",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Containerization"
+    },
+    {
+      "id": 12,
+      "text": "How do you apply Design Patterns in system design? Give examples.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Design Patterns"
+    },
+    {
+      "id": 13,
+      "text": "What is your experience with DevOps tools like Git, CI/CD, and Jenkins?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "DevOps"
+    },
+    {
+      "id": 14,
+      "text": "How do you implement Test Driven Development (TDD) or Behavior Driven Development (BDD)?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Testing"
+    },
+    {
+      "id": 15,
+      "text": "Describe your experience working in Agile Scrum or Kanban methodologies.",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Agile"
+    },
+    {
+      "id": 16,
+      "text": "What is your understanding of cloud environments like AWS or Azure?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cloud"
+    },
+    {
+      "id": 17,
+      "text": "How do you ensure security in your Java applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Security"
+    },
+    {
+      "id": 18,
+      "text": "What motivates you to work on telecom products and large-scale applications?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    },
+    {
+      "id": 19,
+      "text": "How do you stay updated with the latest Java and Spring developments?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Professional Development"
+    }
+  ],
+  "senior-software-engineer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a senior software engineer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience with .NET and .NET Core development. What projects have you worked on?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": ".NET Development"
+    },
+    {
+      "id": 2,
+      "text": "How proficient are you in C#? Explain some advanced features you've used.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "C# Programming"
+    },
+    {
+      "id": 3,
+      "text": "Tell me about your experience with Angular and JavaScript frameworks.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Frontend Development"
+    },
+    {
+      "id": 4,
+      "text": "How do you work with PostgreSQL databases? Describe your experience with queries and optimization.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Database Management"
+    },
+    {
+      "id": 5,
+      "text": "Explain the Singleton, Factory, and Repository design patterns. When would you use each?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Design Patterns"
+    },
+    {
+      "id": 6,
+      "text": "How do you apply SOLID principles in your software design? Give examples.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Software Design"
+    },
+    {
+      "id": 7,
+      "text": "Describe your experience with version control systems like Git and Bitbucket.",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Version Control"
+    },
+    {
+      "id": 8,
+      "text": "What is your experience with Amazon Web Services (AWS)? Which services have you used?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cloud Services"
+    },
+    {
+      "id": 9,
+      "text": "How do you define technical vision and strategy for software projects?",
+      "type": "Leadership",
+      "difficulty": "Hard",
+      "category": "Technical Leadership"
+    },
+    {
+      "id": 10,
+      "text": "Describe a complex technical challenge you solved creatively. What was your approach?",
+      "type": "Problem Solving",
+      "difficulty": "Hard",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 11,
+      "text": "How do you mentor and guide junior developers on your team?",
+      "type": "Leadership",
+      "difficulty": "Medium",
+      "category": "Mentoring"
+    },
+    {
+      "id": 12,
+      "text": "How do you stay updated with emerging technologies and industry trends?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Professional Development"
+    },
+    {
+      "id": 13,
+      "text": "What experience do you have with full-stack development? How do you ensure integration between frontend and backend?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Full-Stack Development"
+    },
+    {
+      "id": 14,
+      "text": "How do you ensure code quality and maintainability in large-scale applications?",
+      "type": "Best Practices",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 15,
+      "text": "Describe your experience with agile development methodologies.",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Agile Development"
+    },
+    {
+      "id": 16,
+      "text": "How do you handle performance optimization in .NET applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Performance"
+    },
+    {
+      "id": 17,
+      "text": "What security practices do you implement in your software development?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Security"
+    },
+    {
+      "id": 18,
+      "text": "Why are you interested in a senior/lead software engineering role at CSG?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    },
+    {
+      "id": 19,
+      "text": "How do you balance technical leadership with hands-on development work?",
+      "type": "Leadership",
+      "difficulty": "Medium",
+      "category": "Leadership Balance"
+    }
+  ],
+  "senior-fullstack-developer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a senior full-stack developer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience with Golang (Go) for backend development. What projects have you built with it?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Backend Development"
+    },
+    {
+      "id": 2,
+      "text": "How proficient are you with React.js and Next.js? Explain the differences and when you'd choose one over the other.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Frontend Development"
+    },
+    {
+      "id": 3,
+      "text": "Tell me about your experience with TypeScript. How does it improve JavaScript development?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Programming Languages"
+    },
+    {
+      "id": 4,
+      "text": "How do you implement RESTful APIs and manage application state in React applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "API Integration"
+    },
+    {
+      "id": 5,
+      "text": "Describe your experience with PostgreSQL and MongoDB. When would you choose one over the other?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Databases"
+    },
+    {
+      "id": 6,
+      "text": "How do you ensure cross-browser compatibility and accessibility in your web applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Frontend Best Practices"
+    },
+    {
+      "id": 7,
+      "text": "Explain your experience with Docker and Kubernetes for containerization and orchestration.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "DevOps"
+    },
+    {
+      "id": 8,
+      "text": "How do you manage CI/CD pipelines and deployments in a full-stack environment?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "CI/CD"
+    },
+    {
+      "id": 9,
+      "text": "Describe your experience with infrastructure as code using Terraform or CloudFormation.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Infrastructure"
+    },
+    {
+      "id": 10,
+      "text": "How do you optimize performance across the full stack? Give examples of optimizations you've implemented.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Performance Optimization"
+    },
+    {
+      "id": 11,
+      "text": "What experience do you have with GraphQL or WebSockets for real-time applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Advanced Technologies"
+    },
+    {
+      "id": 12,
+      "text": "How do you ensure pixel-perfect design accuracy in your frontend implementations?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "UI/UX Implementation"
+    },
+    {
+      "id": 13,
+      "text": "Describe your experience deploying cloud-native applications on AWS, GCP, or Azure.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cloud Deployment"
+    },
+    {
+      "id": 14,
+      "text": "How do you collaborate with product and design teams to translate designs into functional components?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Team Collaboration"
+    },
+    {
+      "id": 15,
+      "text": "What strategies do you use for writing clean, maintainable code in large-scale applications?",
+      "type": "Best Practices",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 16,
+      "text": "How do you handle state management in complex React applications? Compare Redux vs other solutions.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "State Management"
+    },
+    {
+      "id": 17,
+      "text": "Describe your experience with microservices architecture and how you integrate frontend and backend systems.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Architecture"
+    },
+    {
+      "id": 18,
+      "text": "Why are you interested in a senior full-stack developer role at Monks?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    },
+    {
+      "id": 19,
+      "text": "How do you stay updated with the latest trends in full-stack development and emerging technologies?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Professional Development"
+    }
+  ],
+  "senior-java-fullstack-engineer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a senior Java full-stack engineer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience with Java core concepts like OOP, Collections, Streams, and functional interfaces.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Java Fundamentals"
+    },
+    {
+      "id": 2,
+      "text": "How proficient are you with Spring Boot? Explain dependency injection and common annotations you use.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Spring Boot"
+    },
+    {
+      "id": 3,
+      "text": "Tell me about your experience designing and deploying microservices. What patterns do you use for inter-service communication?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Microservices"
+    },
+    {
+      "id": 4,
+      "text": "Describe your React experience, particularly with hooks. How do you manage state in complex applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "React Development"
+    },
+    {
+      "id": 5,
+      "text": "How do you implement and consume RESTful APIs in a full-stack application?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "API Development"
+    },
+    {
+      "id": 6,
+      "text": "What is your experience with SQL databases and ORM tools like Spring Data JPA or Hibernate?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Database Management"
+    },
+    {
+      "id": 7,
+      "text": "Describe your experience with cloud platforms like AWS, Azure, or GCP for deploying microservices.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cloud Services"
+    },
+    {
+      "id": 8,
+      "text": "How do you implement CI/CD pipelines and what tools have you used?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "CI/CD"
+    },
+    {
+      "id": 9,
+      "text": "Explain your experience with containerization using Docker and orchestration with Kubernetes.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Containerization"
+    },
+    {
+      "id": 10,
+      "text": "How do you troubleshoot and debug production issues in a microservices environment?",
+      "type": "Problem Solving",
+      "difficulty": "Hard",
+      "category": "Debugging"
+    },
+    {
+      "id": 11,
+      "text": "Describe your experience with asynchronous messaging and circuit breakers in microservices.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Microservices Patterns"
+    },
+    {
+      "id": 12,
+      "text": "How do you ensure release readiness, auditability, and traceability in your projects?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Release Management"
+    },
+    {
+      "id": 13,
+      "text": "What experience do you have mentoring junior developers and fostering a hands-on culture?",
+      "type": "Leadership",
+      "difficulty": "Medium",
+      "category": "Mentoring"
+    },
+    {
+      "id": 14,
+      "text": "How do you participate in architecture discussions and create technical design documents?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Architecture"
+    },
+    {
+      "id": 15,
+      "text": "Describe your experience with monitoring, logging, and debugging production systems.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Monitoring"
+    },
+    {
+      "id": 16,
+      "text": "What is your experience with NoSQL databases and when would you choose them over SQL?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "NoSQL Databases"
+    },
+    {
+      "id": 17,
+      "text": "How do you integrate frontend and backend systems in a full-stack application?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Full-Stack Integration"
+    },
+    {
+      "id": 18,
+      "text": "Why are you interested in a senior Java full-stack engineer role with microservices focus?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    },
+    {
+      "id": 19,
+      "text": "How do you stay updated with the latest trends in Java, Spring, React, and microservices?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Professional Development"
+    }
+  ],
+  "senior-software-engineer-azure": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a senior software engineer working on distributed systems.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience with large-scale distributed systems and concurrent programming. What challenges have you faced?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Distributed Systems"
+    },
+    {
+      "id": 2,
+      "text": "What programming languages are you most proficient in? Describe a project where you used C, C++, C#, Java, or Python at scale.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Programming Languages"
+    },
+    {
+      "id": 3,
+      "text": "How do you approach designing and implementing billing systems for cloud storage services?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Billing Systems"
+    },
+    {
+      "id": 4,
+      "text": "Describe your experience with monitoring and observability in distributed systems. What metrics and logs do you focus on?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Monitoring & Observability"
+    },
+    {
+      "id": 5,
+      "text": "How do you ensure durability, availability, and concurrency in a hyperscale storage system?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "System Reliability"
+    },
+    {
+      "id": 6,
+      "text": "Tell me about a time you optimized code for performance and scalability. What techniques did you use?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Performance Optimization"
+    },
+    {
+      "id": 7,
+      "text": "How do you handle debugging and refactoring in large, complex codebases?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Debugging & Refactoring"
+    },
+    {
+      "id": 8,
+      "text": "Describe your experience as a Designated Responsible Individual (DRI). How do you handle on-call responsibilities?",
+      "type": "Leadership",
+      "difficulty": "Medium",
+      "category": "Leadership"
+    },
+    {
+      "id": 9,
+      "text": "How do you collaborate with stakeholders to determine user requirements and develop design documents?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Requirements Gathering"
+    },
+    {
+      "id": 10,
+      "text": "What strategies do you use to maintain high availability and reliability in cloud storage systems?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "High Availability"
+    },
+    {
+      "id": 11,
+      "text": "How do you approach architecting new solutions for massive-scale products like Azure Storage?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Architecture"
+    },
+    {
+      "id": 12,
+      "text": "Describe your experience with cloud storage systems and data center operations.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cloud Storage"
+    },
+    {
+      "id": 13,
+      "text": "How do you ensure consistency in monitoring and operations at scale?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Operations"
+    },
+    {
+      "id": 14,
+      "text": "What experience do you have with project planning, release plans, and work item management?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Project Management"
+    },
+    {
+      "id": 15,
+      "text": "How do you proactively seek new knowledge and adapt to emerging technologies?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Continuous Learning"
+    },
+    {
+      "id": 16,
+      "text": "Describe a complex problem you solved in a distributed system. What was your approach?",
+      "type": "Problem Solving",
+      "difficulty": "Hard",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 17,
+      "text": "How do you balance innovation with reliability in large-scale systems?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Innovation vs Reliability"
+    },
+    {
+      "id": 18,
+      "text": "Why are you interested in working on Azure Storage and distributed cloud systems?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    },
+    {
+      "id": 19,
+      "text": "How do you contribute to a culture of inclusion and collaboration in engineering teams?",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Team Culture"
+    }
+  ],
+  "senior-backend-python-developer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a senior backend Python developer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience with Python and MySQL in building scalable backend applications.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Backend Development"
+    },
+    {
+      "id": 2,
+      "text": "How have you used AWS cloud services in your previous projects? Give specific examples.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cloud Services"
+    },
+    {
+      "id": 3,
+      "text": "Explain your approach to designing and maintaining APIs for web and mobile applications.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "API Design"
+    },
+    {
+      "id": 4,
+      "text": "How do you ensure code scalability and performance in a Python/MySQL backend?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Scalability"
+    },
+    {
+      "id": 5,
+      "text": "Describe your experience with CI/CD practices and version control in a backend development role.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "DevOps"
+    },
+    {
+      "id": 6,
+      "text": "How do you handle debugging and resolving performance bottlenecks in backend systems?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Debugging"
+    },
+    {
+      "id": 7,
+      "text": "Tell me about a time you collaborated with cross-functional teams to deliver an integrated solution.",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Teamwork"
+    },
+    {
+      "id": 8,
+      "text": "What experience do you have with building APIs or services to serve machine learning models?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Machine Learning"
+    },
+    {
+      "id": 9,
+      "text": "How do you approach writing clean, testable code following best practices?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 10,
+      "text": "Describe your understanding of the software development lifecycle (SDLC) and how you apply it.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "SDLC"
+    },
+    {
+      "id": 11,
+      "text": "How do you optimize MySQL databases for performance in high-traffic applications?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Database Optimization"
+    },
+    {
+      "id": 12,
+      "text": "What strategies do you use for troubleshooting and maintaining existing software applications?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Maintenance"
+    },
+    {
+      "id": 13,
+      "text": "How do you manage time and deliver in a fast-paced, global environment?",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Time Management"
+    },
+    {
+      "id": 14,
+      "text": "Explain your experience with single-page web apps and their backend integration.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Web Development"
+    },
+    {
+      "id": 15,
+      "text": "How do you ensure security and reliability in cloud-hosted backend applications?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Security"
+    },
+    {
+      "id": 16,
+      "text": "Describe a challenging backend project you worked on and what you learned from it.",
+      "type": "Experience",
+      "difficulty": "Medium",
+      "category": "Project Experience"
+    },
+    {
+      "id": 17,
+      "text": "How do you contribute to technical documentation and knowledge sharing in your team?",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Documentation"
+    },
+    {
+      "id": 18,
+      "text": "What analytical and problem-solving skills do you bring to backend development?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Analytical Skills"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in working at a fast-growing startup like Elife in the transportation industry?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "backend-engineer-java-python": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a backend engineer working with Java and Python.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience with Java Spring Boot and Python frameworks like FastAPI or Flask.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Backend Frameworks"
+    },
+    {
+      "id": 2,
+      "text": "How do you design and implement RESTful APIs and microservices?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "API Design"
+    },
+    {
+      "id": 3,
+      "text": "Explain your approach to building event-driven systems and asynchronous processing with tools like Kafka or SQS.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Event-Driven Systems"
+    },
+    {
+      "id": 4,
+      "text": "What experience do you have with Docker and Kubernetes for containerization and orchestration?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Containerization"
+    },
+    {
+      "id": 5,
+      "text": "How do you work with SQL databases like PostgreSQL or MySQL, and NoSQL databases like MongoDB or Redis?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Databases"
+    },
+    {
+      "id": 6,
+      "text": "Describe your experience deploying and monitoring services in cloud environments like AWS, GCP, or Azure.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cloud Deployment"
+    },
+    {
+      "id": 7,
+      "text": "How do you ensure scalability and performance in large-scale distributed systems?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Scalability"
+    },
+    {
+      "id": 8,
+      "text": "Tell me about a time you collaborated with AI, frontend, or platform teams to build integrated features.",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Team Collaboration"
+    },
+    {
+      "id": 9,
+      "text": "How do you approach writing clean, testable, and maintainable code?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 10,
+      "text": "What strategies do you use for debugging and optimizing backend performance?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Debugging"
+    },
+    {
+      "id": 11,
+      "text": "Describe your experience with architecture design reviews and technical strategy discussions.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Architecture"
+    },
+    {
+      "id": 12,
+      "text": "How do you handle asynchronous processing and message queues in backend systems?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Asynchronous Processing"
+    },
+    {
+      "id": 13,
+      "text": "What is your familiarity with observability tools and monitoring in distributed systems?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Observability"
+    },
+    {
+      "id": 14,
+      "text": "Have you worked with GraphQL APIs? If so, describe your experience.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "GraphQL"
+    },
+    {
+      "id": 15,
+      "text": "How do you integrate AI or automation-driven workflows into backend services?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "AI Integration"
+    },
+    {
+      "id": 16,
+      "text": "Describe a challenging backend problem you solved and the technologies you used.",
+      "type": "Problem Solving",
+      "difficulty": "Hard",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 17,
+      "text": "How do you ensure reliability and fault tolerance in microservices architectures?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Reliability"
+    },
+    {
+      "id": 18,
+      "text": "What experience do you have with open-source contributions or developer community projects?",
+      "type": "Experience",
+      "difficulty": "Easy",
+      "category": "Open Source"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in working on autonomous cloud operations and DevOps platforms?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "python-backend-developer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a Python backend developer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience with asynchronous programming and multithreading in Python.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Python Programming"
+    },
+    {
+      "id": 2,
+      "text": "How do you develop and consume HTTPS APIs? Explain your understanding of HTTP protocols.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "API Development"
+    },
+    {
+      "id": 3,
+      "text": "What experience do you have with Microsoft Graph APIs?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Microsoft Graph APIs"
+    },
+    {
+      "id": 4,
+      "text": "Explain OAuth flows and API security best practices you've implemented.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Security"
+    },
+    {
+      "id": 5,
+      "text": "Describe your work with Azure Function Apps, Application Gateway, API Management, and Azure Service Bus.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Azure Cloud Services"
+    },
+    {
+      "id": 6,
+      "text": "How do you handle multiple API integrations in a backend system?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "API Integrations"
+    },
+    {
+      "id": 7,
+      "text": "What is your experience with Jira Service Management automations and custom workflows?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Jira Service Management"
+    },
+    {
+      "id": 8,
+      "text": "How do you use Git, Azure DevOps, and CI/CD pipelines in your development process?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "DevOps Tools"
+    },
+    {
+      "id": 9,
+      "text": "Describe a challenging backend project involving Python and Azure that you worked on.",
+      "type": "Experience",
+      "difficulty": "Hard",
+      "category": "Project Experience"
+    },
+    {
+      "id": 10,
+      "text": "How do you ensure security in API development and integrations?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "API Security"
+    },
+    {
+      "id": 11,
+      "text": "Explain your approach to handling asynchronous tasks and concurrency in Python backends.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Concurrency"
+    },
+    {
+      "id": 12,
+      "text": "What strategies do you use for debugging and troubleshooting API issues?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Debugging"
+    },
+    {
+      "id": 13,
+      "text": "How do you optimize performance in Python backend applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Performance Optimization"
+    },
+    {
+      "id": 14,
+      "text": "Describe your experience with cloud-based backend architectures.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cloud Architecture"
+    },
+    {
+      "id": 15,
+      "text": "How do you handle version control and collaboration in a team using Git and Azure DevOps?",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Version Control"
+    },
+    {
+      "id": 16,
+      "text": "What is your approach to writing testable and maintainable Python code?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 17,
+      "text": "Explain how you would design a scalable backend system using Python and Azure services.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "System Design"
+    },
+    {
+      "id": 18,
+      "text": "How do you stay updated with best practices in Python backend development and Azure technologies?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Continuous Learning"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in working at Orion Innovation and what attracts you to this role?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "front-end-developer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a front-end developer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your proficiency with HTML, CSS, and JavaScript.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Core Technologies"
+    },
+    {
+      "id": 2,
+      "text": "What experience do you have with React and building user-facing features?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "React Development"
+    },
+    {
+      "id": 3,
+      "text": "How do you ensure responsive design across different devices?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Responsive Design"
+    },
+    {
+      "id": 4,
+      "text": "Explain your experience with version control systems like Git.",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Version Control"
+    },
+    {
+      "id": 5,
+      "text": "How do you integrate RESTful APIs in your front-end applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "API Integration"
+    },
+    {
+      "id": 6,
+      "text": "What strategies do you use for cross-browser compatibility?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cross-Browser Compatibility"
+    },
+    {
+      "id": 7,
+      "text": "Describe your familiarity with UX principles and tools like Figma.",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "UX Design"
+    },
+    {
+      "id": 8,
+      "text": "How do you approach front-end testing and what frameworks have you used?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Testing"
+    },
+    {
+      "id": 9,
+      "text": "Explain your experience deploying front-end assets to AWS.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Deployment"
+    },
+    {
+      "id": 10,
+      "text": "How do you translate UI/UX wireframes into functional components?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Wireframe to Code"
+    },
+    {
+      "id": 11,
+      "text": "What techniques do you use to optimize front-end performance?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Performance Optimization"
+    },
+    {
+      "id": 12,
+      "text": "Describe a project where you collaborated with back-end developers and designers.",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Team Collaboration"
+    },
+    {
+      "id": 13,
+      "text": "How do you write reusable and testable front-end code?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 14,
+      "text": "What experience do you have with React Native for mobile development?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Mobile Development"
+    },
+    {
+      "id": 15,
+      "text": "How do you handle state management in React applications?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "State Management"
+    },
+    {
+      "id": 16,
+      "text": "Explain your approach to debugging front-end issues.",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Debugging"
+    },
+    {
+      "id": 17,
+      "text": "How do you ensure accessibility in your front-end designs?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Accessibility"
+    },
+    {
+      "id": 18,
+      "text": "What problem-solving skills do you bring to front-end development?",
+      "type": "Problem Solving",
+      "difficulty": "Easy",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in this remote front-end developer role?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "mern-stack-developer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience with the MERN stack.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your proficiency with React.js and its core concepts.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "React Development"
+    },
+    {
+      "id": 2,
+      "text": "Explain your experience with Node.js and Express for backend development.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Node.js Development"
+    },
+    {
+      "id": 3,
+      "text": "How do you handle state management in React applications using Redux or RXJS?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "State Management"
+    },
+    {
+      "id": 4,
+      "text": "What is your experience with MongoDB and other NoSQL databases?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Database Management"
+    },
+    {
+      "id": 5,
+      "text": "Describe your knowledge of HTML5, CSS3, and preprocessors like SCSS or Less.",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Frontend Technologies"
+    },
+    {
+      "id": 6,
+      "text": "How do you integrate RESTful web services in your applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "API Integration"
+    },
+    {
+      "id": 7,
+      "text": "Explain your understanding of ES6/7/8 syntax and concepts.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "JavaScript"
+    },
+    {
+      "id": 8,
+      "text": "What experience do you have with microservice architecture and Kubernetes?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Microservices"
+    },
+    {
+      "id": 9,
+      "text": "How do you implement security in web applications, including patches and risk identification?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Security"
+    },
+    {
+      "id": 10,
+      "text": "Describe your experience with payment gateways and web sockets like socket.io.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Integrations"
+    },
+    {
+      "id": 11,
+      "text": "How do you manage Node.js processes and handle PUB-SUB concepts?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Process Management"
+    },
+    {
+      "id": 12,
+      "text": "What strategies do you use for producing high-quality, maintainable code?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 13,
+      "text": "Explain how you translate business requirements into technical requirements.",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Requirements Analysis"
+    },
+    {
+      "id": 14,
+      "text": "Describe a project where you used the MEAN or MERN stack.",
+      "type": "Experience",
+      "difficulty": "Medium",
+      "category": "Project Experience"
+    },
+    {
+      "id": 15,
+      "text": "How do you approach debugging and troubleshooting in full-stack applications?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Debugging"
+    },
+    {
+      "id": 16,
+      "text": "What is your experience with GraphQL in addition to RESTful APIs?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "GraphQL"
+    },
+    {
+      "id": 17,
+      "text": "How do you ensure scalability in your Node.js and MongoDB applications?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Scalability"
+    },
+    {
+      "id": 18,
+      "text": "What problem-solving skills do you bring to full-stack development?",
+      "type": "Problem Solving",
+      "difficulty": "Easy",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in a permanent WFH role with this tech stack?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "react-developer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a React developer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience with modern React patterns, including functional components and hooks.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "React Patterns"
+    },
+    {
+      "id": 2,
+      "text": "How do you handle state management in React applications using Redux?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "State Management"
+    },
+    {
+      "id": 3,
+      "text": "Explain your proficiency with TypeScript in React development.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "TypeScript"
+    },
+    {
+      "id": 4,
+      "text": "What strategies do you use for creating reusable and accessible React components?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Component Design"
+    },
+    {
+      "id": 5,
+      "text": "How do you integrate React components with RESTful APIs?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "API Integration"
+    },
+    {
+      "id": 6,
+      "text": "Describe your experience with HTML5 and CSS3 in building responsive designs.",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Frontend Technologies"
+    },
+    {
+      "id": 7,
+      "text": "How do you optimize React application performance, including bundle size and runtime behavior?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Performance Optimization"
+    },
+    {
+      "id": 8,
+      "text": "What testing frameworks and libraries do you use for React applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Testing"
+    },
+    {
+      "id": 9,
+      "text": "Explain your experience with Next.js for server-side rendering or static site generation.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Next.js"
+    },
+    {
+      "id": 10,
+      "text": "How do you use GraphQL in React applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "GraphQL"
+    },
+    {
+      "id": 11,
+      "text": "Describe your approach to code reviews and maintaining code quality.",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Code Reviews"
+    },
+    {
+      "id": 12,
+      "text": "How do you contribute to CI/CD pipelines and front-end build tooling?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "CI/CD"
+    },
+    {
+      "id": 13,
+      "text": "What experience do you have with Git for version control?",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Version Control"
+    },
+    {
+      "id": 14,
+      "text": "How do you ensure pixel-perfect implementation of UI/UX designs?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "UI/UX Implementation"
+    },
+    {
+      "id": 15,
+      "text": "Explain your experience working in remote, distributed teams.",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Remote Work"
+    },
+    {
+      "id": 16,
+      "text": "How do you handle error handling and data contracts with backend engineers?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Backend Integration"
+    },
+    {
+      "id": 17,
+      "text": "What is your approach to writing unit and integration tests for React components?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Testing Strategies"
+    },
+    {
+      "id": 18,
+      "text": "Describe a project where you built a single-page application with React.",
+      "type": "Experience",
+      "difficulty": "Medium",
+      "category": "Project Experience"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in this remote React developer role?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "machine-learning-engineer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a machine learning engineer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience with NLP and large language models (LLMs).",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "NLP & LLMs"
+    },
+    {
+      "id": 2,
+      "text": "How do you approach fine-tuning and adapting LLMs for specific tasks?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Model Fine-Tuning"
+    },
+    {
+      "id": 3,
+      "text": "What frameworks and libraries do you use for machine learning development?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "ML Frameworks"
+    },
+    {
+      "id": 4,
+      "text": "Explain your experience with distributed training and model optimization.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Distributed Training"
+    },
+    {
+      "id": 5,
+      "text": "How do you build and maintain ML pipelines for training and deployment?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "ML Pipelines"
+    },
+    {
+      "id": 6,
+      "text": "Describe your approach to evaluating and benchmarking language models.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Model Evaluation"
+    },
+    {
+      "id": 7,
+      "text": "What experience do you have with multilingual and cross-lingual model development?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Multilingual Models"
+    },
+    {
+      "id": 8,
+      "text": "How do you handle model deployment and inference at scale?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Deployment & Inference"
+    },
+    {
+      "id": 9,
+      "text": "Explain your familiarity with cloud infrastructure for ML workloads.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cloud Infrastructure"
+    },
+    {
+      "id": 10,
+      "text": "What strategies do you use for monitoring model performance and data drift?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Monitoring"
+    },
+    {
+      "id": 11,
+      "text": "How do you collaborate with research teams to implement state-of-the-art ML techniques?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Research Collaboration"
+    },
+    {
+      "id": 12,
+      "text": "Describe your experience with experiment tracking and versioning in ML projects.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Experiment Tracking"
+    },
+    {
+      "id": 13,
+      "text": "How do you ensure reproducibility in machine learning experiments?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Reproducibility"
+    },
+    {
+      "id": 14,
+      "text": "What is your approach to data quality and requirements for language model development?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Data Management"
+    },
+    {
+      "id": 15,
+      "text": "Explain your experience with containerization and orchestration for ML models.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Containerization"
+    },
+    {
+      "id": 16,
+      "text": "How do you document model architectures and training procedures?",
+      "type": "Technical",
+      "difficulty": "Easy",
+      "category": "Documentation"
+    },
+    {
+      "id": 17,
+      "text": "Describe a challenging ML project you worked on and what you learned.",
+      "type": "Experience",
+      "difficulty": "Hard",
+      "category": "Project Experience"
+    },
+    {
+      "id": 18,
+      "text": "What problem-solving skills do you bring to machine learning engineering?",
+      "type": "Problem Solving",
+      "difficulty": "Easy",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in building ML systems for education and research?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "ai-engineer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as an AI engineer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your experience building and deploying AI agents for real-world applications.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "AI Agents"
+    },
+    {
+      "id": 2,
+      "text": "How do you integrate and orchestrate Large Language Models (LLMs) using frameworks like LangChain or LangGraph?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "LLM Integration"
+    },
+    {
+      "id": 3,
+      "text": "Explain your approach to designing and implementing RAG pipelines with vector databases and embedding models.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "RAG Pipelines"
+    },
+    {
+      "id": 4,
+      "text": "What experience do you have with predictive modeling and machine learning algorithms like RNNs, LSTMs, and Transformers?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Predictive Modeling"
+    },
+    {
+      "id": 5,
+      "text": "How do you handle data pipeline engineering for real-time and historical data in AI applications?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Data Pipelines"
+    },
+    {
+      "id": 6,
+      "text": "Describe your proficiency with Python and libraries like Pandas and NumPy for AI development.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Python & Libraries"
+    },
+    {
+      "id": 7,
+      "text": "What is your experience with cloud platforms like AWS for model deployment and MLOps?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cloud & MLOps"
+    },
+    {
+      "id": 8,
+      "text": "How do you ensure code quality and scalability in a fast-paced startup environment?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 9,
+      "text": "Explain your approach to testing and optimizing machine learning models.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Model Optimization"
+    },
+    {
+      "id": 10,
+      "text": "What experience do you have with front-end development using React or Next.js?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Front-End Development"
+    },
+    {
+      "id": 11,
+      "text": "How do you collaborate with founders, CTOs, and design teams on product strategy?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Collaboration"
+    },
+    {
+      "id": 12,
+      "text": "Describe a project where you built an AI agent or integrated LLMs.",
+      "type": "Experience",
+      "difficulty": "Hard",
+      "category": "Project Experience"
+    },
+    {
+      "id": 13,
+      "text": "How do you handle complex reasoning and decision-making in AI agents?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "AI Reasoning"
+    },
+    {
+      "id": 14,
+      "text": "What strategies do you use for deploying AI models in production environments?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Deployment"
+    },
+    {
+      "id": 15,
+      "text": "Explain your experience with time-series data and prediction in AI applications.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Time-Series Analysis"
+    },
+    {
+      "id": 16,
+      "text": "How do you ensure data accuracy and real-time access in RAG pipelines?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Data Accuracy"
+    },
+    {
+      "id": 17,
+      "text": "What is your approach to ownership and agency in engineering projects?",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Ownership"
+    },
+    {
+      "id": 18,
+      "text": "Describe your problem-solving skills in AI and machine learning challenges.",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in working on AI for the sports betting industry?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "data-scientist-ai": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a data scientist working with AI and ML.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your proficiency with Python for data analysis and machine learning.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Python & Data Analysis"
+    },
+    {
+      "id": 2,
+      "text": "How do you approach building, training, and optimizing AI models?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Model Building"
+    },
+    {
+      "id": 3,
+      "text": "Explain your experience with evaluating and improving LLM outputs for accuracy and alignment.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "LLM Evaluation"
+    },
+    {
+      "id": 4,
+      "text": "What is your approach to designing Supervised Fine-Tuning (SFT) workflows?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "SFT Workflows"
+    },
+    {
+      "id": 5,
+      "text": "How do you implement RLHF (Reinforcement Learning from Human Feedback) in AI projects?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "RLHF"
+    },
+    {
+      "id": 6,
+      "text": "Describe your experience analyzing public datasets from sources like Kaggle, UN, or US Government.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Data Analysis"
+    },
+    {
+      "id": 7,
+      "text": "How do you collaborate with researchers and engineers on innovative AI projects?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Collaboration"
+    },
+    {
+      "id": 8,
+      "text": "What strategies do you use for generating key insights from large-scale datasets?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Insights Generation"
+    },
+    {
+      "id": 9,
+      "text": "Explain your process for writing clean, well-documented Python code.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 10,
+      "text": "How do you handle problem-solving in complex AI and ML challenges?",
+      "type": "Problem Solving",
+      "difficulty": "Hard",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 11,
+      "text": "Describe your analytical thinking and communication skills in AI projects.",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Communication"
+    },
+    {
+      "id": 12,
+      "text": "What experience do you have with fine-tuning LLMs for specific applications?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "LLM Fine-Tuning"
+    },
+    {
+      "id": 13,
+      "text": "How do you ensure model performance and alignment in AI systems?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Model Performance"
+    },
+    {
+      "id": 14,
+      "text": "Explain your approach to working with large-scale datasets and data preprocessing.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Data Preprocessing"
+    },
+    {
+      "id": 15,
+      "text": "What is your experience with remote collaboration in AI research and development?",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Remote Work"
+    },
+    {
+      "id": 16,
+      "text": "How do you turn data insights into real-world impact in AI applications?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Impact Analysis"
+    },
+    {
+      "id": 17,
+      "text": "Describe a challenging AI project you worked on and what you learned.",
+      "type": "Experience",
+      "difficulty": "Hard",
+      "category": "Project Experience"
+    },
+    {
+      "id": 18,
+      "text": "What analytical skills do you bring to data science and AI?",
+      "type": "Problem Solving",
+      "difficulty": "Easy",
+      "category": "Analytical Skills"
+    },
+    {
+      "id": 19,
+      "text": "Why are you passionate about advancing AI research and applications?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "ml-engineer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as a machine learning engineer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your proficiency with ML frameworks like TensorFlow and PyTorch.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "ML Frameworks"
+    },
+    {
+      "id": 2,
+      "text": "What experience do you have with NLP and Large Language Models (LLMs)?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "NLP & LLMs"
+    },
+    {
+      "id": 3,
+      "text": "Explain your understanding of generative models and their applications.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Generative Models"
+    },
+    {
+      "id": 4,
+      "text": "How do you approach API development and model integration?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "API Development"
+    },
+    {
+      "id": 5,
+      "text": "What programming languages do you use for ML projects, and why?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Programming Languages"
+    },
+    {
+      "id": 6,
+      "text": "Describe your experience with Docker and Kubernetes for ML deployments.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Containerization"
+    },
+    {
+      "id": 7,
+      "text": "How do you implement CI/CD pipelines for machine learning projects?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "CI/CD"
+    },
+    {
+      "id": 8,
+      "text": "What is your experience with databases like MongoDB and data lakes?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Databases"
+    },
+    {
+      "id": 9,
+      "text": "Explain your approach to real-time data processing in ML applications.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Real-Time Processing"
+    },
+    {
+      "id": 10,
+      "text": "How do you optimize ML models for performance and scalability?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Model Optimization"
+    },
+    {
+      "id": 11,
+      "text": "Describe a project where you worked with LLMs or generative models.",
+      "type": "Experience",
+      "difficulty": "Hard",
+      "category": "Project Experience"
+    },
+    {
+      "id": 12,
+      "text": "What strategies do you use for deploying ML models in production?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Deployment"
+    },
+    {
+      "id": 13,
+      "text": "How do you handle data preprocessing and feature engineering?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Data Preprocessing"
+    },
+    {
+      "id": 14,
+      "text": "Explain your experience with model evaluation and monitoring.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Model Evaluation"
+    },
+    {
+      "id": 15,
+      "text": "What is your approach to collaborating on ML projects with cross-functional teams?",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Collaboration"
+    },
+    {
+      "id": 16,
+      "text": "How do you ensure reproducibility in machine learning experiments?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Reproducibility"
+    },
+    {
+      "id": 17,
+      "text": "Describe your problem-solving skills in ML challenges.",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 18,
+      "text": "What experience do you have with remote work and distributed teams?",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Remote Work"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in this ML engineering role at BayOne?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "ai-data-engineer": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as an AI data engineer.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your proficiency with Python for AI data processing and evaluation.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Python Development"
+    },
+    {
+      "id": 2,
+      "text": "How do you approach writing clean and efficient Python code for AI training?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Code Quality"
+    },
+    {
+      "id": 3,
+      "text": "Explain your experience with evaluating and comparing model responses in RLHF.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "RLHF Evaluation"
+    },
+    {
+      "id": 4,
+      "text": "What is your approach to creating and refining datasets for Supervised Fine-Tuning (SFT)?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "SFT Datasets"
+    },
+    {
+      "id": 5,
+      "text": "How do you develop reasoning-based feedback to enhance model accuracy and alignment?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Feedback Development"
+    },
+    {
+      "id": 6,
+      "text": "Describe your understanding of testing and debugging in Python for AI applications.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Testing & Debugging"
+    },
+    {
+      "id": 7,
+      "text": "What experience do you have with async programming in Python?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Async Programming"
+    },
+    {
+      "id": 8,
+      "text": "How do you collaborate with cross-functional teams on AI data and evaluations?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Collaboration"
+    },
+    {
+      "id": 9,
+      "text": "Explain your process for generating high-quality data for LLM fine-tuning.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Data Generation"
+    },
+    {
+      "id": 10,
+      "text": "What strategies do you use for analyzing model outputs and providing detailed feedback?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Output Analysis"
+    },
+    {
+      "id": 11,
+      "text": "How do you ensure data quality and consistency in AI training datasets?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Data Quality"
+    },
+    {
+      "id": 12,
+      "text": "Describe your experience with benchmarking LLMs and model comparisons.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Benchmarking"
+    },
+    {
+      "id": 13,
+      "text": "What is your approach to maintaining software best practices in AI data engineering?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Best Practices"
+    },
+    {
+      "id": 14,
+      "text": "How do you handle remote collaboration and communication in AI projects?",
+      "type": "Collaboration",
+      "difficulty": "Easy",
+      "category": "Remote Work"
+    },
+    {
+      "id": 15,
+      "text": "Explain your experience with prompt design for AI model evaluation.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Prompt Design"
+    },
+    {
+      "id": 16,
+      "text": "What problem-solving skills do you bring to AI data engineering challenges?",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 17,
+      "text": "Describe a project where you worked on LLM data or evaluation.",
+      "type": "Experience",
+      "difficulty": "Hard",
+      "category": "Project Experience"
+    },
+    {
+      "id": 18,
+      "text": "How do you ensure alignment and accuracy in AI model feedback?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Model Alignment"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in contributing to the next generation of AI systems?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "azure-data-scientist": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as an Azure Data Scientist.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your DP-100 certification and how it has prepared you for Azure ML work.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Certification"
+    },
+    {
+      "id": 2,
+      "text": "How do you design and deliver end-to-end machine learning solutions using Azure ML?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "ML Solutions"
+    },
+    {
+      "id": 3,
+      "text": "Explain your experience with preparing and transforming datasets for modeling.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Data Preparation"
+    },
+    {
+      "id": 4,
+      "text": "What is your approach to building and evaluating models using AutoML and MLflow?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Model Building"
+    },
+    {
+      "id": 5,
+      "text": "How do you implement monitoring and retraining strategies for model drift?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Model Monitoring"
+    },
+    {
+      "id": 6,
+      "text": "Describe your understanding of responsible AI principles and how you apply them.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Responsible AI"
+    },
+    {
+      "id": 7,
+      "text": "What experience do you have with deploying models to REST endpoints and batch inference?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Deployment"
+    },
+    {
+      "id": 8,
+      "text": "How do you collaborate with stakeholders to translate business processes into ML opportunities?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Collaboration"
+    },
+    {
+      "id": 9,
+      "text": "Explain your proficiency with Python, pandas, and scikit-learn for ML tasks.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Python & Libraries"
+    },
+    {
+      "id": 10,
+      "text": "What is your experience with MLOps practices, including CI/CD and model registries?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "MLOps"
+    },
+    {
+      "id": 11,
+      "text": "How do you use Azure DevOps and GitHub Actions for ML pipelines?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Azure Tools"
+    },
+    {
+      "id": 12,
+      "text": "Describe your knowledge of Azure cloud services for ML workloads.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Azure Cloud"
+    },
+    {
+      "id": 13,
+      "text": "What strategies do you use for ensuring model scalability and maintainability?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Scalability"
+    },
+    {
+      "id": 14,
+      "text": "How do you integrate ML outputs into Power BI or Azure Fabric dashboards?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Integration"
+    },
+    {
+      "id": 15,
+      "text": "Explain your approach to problem-solving in ML challenges.",
+      "type": "Problem Solving",
+      "difficulty": "Medium",
+      "category": "Problem Solving"
+    },
+    {
+      "id": 16,
+      "text": "What experience do you have with generative AI and language model optimization?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Generative AI"
+    },
+    {
+      "id": 17,
+      "text": "How do you stay current with emerging Azure AI technologies?",
+      "type": "Learning",
+      "difficulty": "Easy",
+      "category": "Continuous Learning"
+    },
+    {
+      "id": 18,
+      "text": "Describe a project where you delivered production-grade ML solutions.",
+      "type": "Experience",
+      "difficulty": "Hard",
+      "category": "Project Experience"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in this Azure Data Scientist role at Smart Working?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ],
+  "mlops-engineer-databricks": [
+    {
+      "id": 0,
+      "text": "Tell me about yourself and your experience as an MLOps Engineer with Databricks.",
+      "type": "Introduction",
+      "difficulty": "Easy",
+      "category": "Introduction"
+    },
+    {
+      "id": 1,
+      "text": "Describe your hands-on experience with Databricks Workflows, Jobs, and Repos.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Databricks Platform"
+    },
+    {
+      "id": 2,
+      "text": "How do you use MLflow for model tracking, registry, and deployment?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "MLflow"
+    },
+    {
+      "id": 3,
+      "text": "Explain your approach to building scalable MLOps pipelines with PySpark and Delta Live Tables.",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "MLOps Pipelines"
+    },
+    {
+      "id": 4,
+      "text": "What is your experience with distributed training and inference using MLflow and PySpark?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Distributed Computing"
+    },
+    {
+      "id": 5,
+      "text": "How do you manage model versioning and promotion across environments?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Model Lifecycle"
+    },
+    {
+      "id": 6,
+      "text": "Describe your integration of ML pipelines with CI/CD tools like Azure DevOps or GitHub Actions.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "CI/CD Integration"
+    },
+    {
+      "id": 7,
+      "text": "What strategies do you use for feature engineering and Delta Lake pipelines?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Feature Engineering"
+    },
+    {
+      "id": 8,
+      "text": "How do you set up monitoring for model performance, drift, and data quality?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Monitoring"
+    },
+    {
+      "id": 9,
+      "text": "Explain your experience with governance using Unity Catalog and permissions.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Governance"
+    },
+    {
+      "id": 10,
+      "text": "What is your proficiency with Python and SQL for ML operations?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Programming"
+    },
+    {
+      "id": 11,
+      "text": "How do you collaborate with Data Scientists and Engineers on ML workflows?",
+      "type": "Collaboration",
+      "difficulty": "Medium",
+      "category": "Collaboration"
+    },
+    {
+      "id": 12,
+      "text": "Describe your knowledge of containerization with Docker and orchestration with Kubernetes.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Containerization"
+    },
+    {
+      "id": 13,
+      "text": "What experience do you have with cloud platforms like Azure or AWS for ML?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Cloud Platforms"
+    },
+    {
+      "id": 14,
+      "text": "How do you ensure reproducibility in ML workflows and pipelines?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Reproducibility"
+    },
+    {
+      "id": 15,
+      "text": "Explain your approach to automating testing and validation for ML artifacts.",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Automation"
+    },
+    {
+      "id": 16,
+      "text": "What is your experience with ML observability tools and metrics?",
+      "type": "Technical",
+      "difficulty": "Medium",
+      "category": "Observability"
+    },
+    {
+      "id": 17,
+      "text": "How do you handle model rollback and disaster recovery in production?",
+      "type": "Technical",
+      "difficulty": "Hard",
+      "category": "Disaster Recovery"
+    },
+    {
+      "id": 18,
+      "text": "Describe a challenging MLOps project you worked on with Databricks.",
+      "type": "Experience",
+      "difficulty": "Hard",
+      "category": "Project Experience"
+    },
+    {
+      "id": 19,
+      "text": "Why are you interested in this MLOps Engineer role with Databricks?",
+      "type": "Motivation",
+      "difficulty": "Easy",
+      "category": "Career Goals"
+    }
+  ]
+}

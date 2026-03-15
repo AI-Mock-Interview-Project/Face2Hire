@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Interview Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="AuthService.js"></script>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+/* Loading overlay animation */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Smooth transitions */
+.fixed {
+    transition: opacity 0.3s ease;
+}
+
+/* Auth error states */
+.auth-error {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+/* Success states */
+.auth-success {
+    border-color: #10b981;
+    background-color: #f0fdf4;
+}
+
+/* Smooth page transitions */
+.page-transition {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+body {
+    animation: fadeIn 0.3s ease-in;
+}
+
+        body { font-family: 'Inter', sans-serif; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .progress-ring { transform: rotate(-90deg); }
+        .progress-ring circle { transition: stroke-dashoffset 0.5s ease; }
+        .avatar-ring { border: 3px solid #3b82f6; }
+        .stat-card { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); }
+        .quick-action { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
+        .achievement-badge { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .interview-timeline { position: relative; }
+        .interview-timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: #e2e8f0; }
+        .timeline-item { position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: #3b82f6; border-radius: 50%; }
+        .scroll-reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+        .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform overflow-hidden">
+                        <img src="resources/logo.jpg" alt="Face2Hire Logo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xl font-bold text-slate-800 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Face2Hire</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="dashboard.html" class="text-blue-600 font-medium">Dashboard</a>
+                    <a href="interview-setup.html" class="text-slate-600 hover:text-blue-600 transition-colors">Interview</a>
+                
+                    <a href="profile.html" class="text-slate-600 hover:text-blue-600 transition-colors">Profile</a>
+                    <div class="flex items-center space-x-3">
+                        <div id="user-avatar" class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                            <span class="text-blue-600 font-semibold text-sm">U</span>
+                        </div>
+                        <span id="user-name" class="text-slate-700 font-medium">Loading...</span>
+                        <button onclick="AuthService.logout()" class="text-slate-500 hover:text-slate-700 transition-colors" title="Logout">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-slate-600 hover:text-blue-600" aria-label="Open main menu" aria-expanded="false" aria-controls="mobile-menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="dashboard.html" class="text-slate-600 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="interview-setup.html" class="text-slate-600 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">New Interview</a>
+                <a href="profile.html" class="text-slate-600 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">Profile</a>
+                <a href="index.html" class="text-slate-600 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-16">
+        <!-- Welcome Section -->
+        <section class="bg-gradient-to-r from-blue-600 to-purple-600 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between">
+                    <div class="text-white">
+                        <h1 class="text-3xl font-bold mb-2" id="welcome-message">Welcome!</h1>
+                        <p class="text-blue-100 text-lg" id="user-tagline">Loading your profile...</p>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-4" id="user-stats-header">
+                        <!-- Dynamic user stats will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Quick Actions -->
+            <section class="mb-12 scroll-reveal">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6">Quick Start</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="quick-action rounded-2xl p-6 text-white card-hover cursor-pointer" onclick="window.location.href='interview-setup.html'">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-sm bg-white/20 px-3 py-1 rounded-full">Popular</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Start Practice Interview</h3>
+                        <p class="text-blue-100 mb-4">Begin a new interview session with our AI avatar</p>
+                        <div class="flex items-center text-sm">
+                            <span>15-30 minutes</span>
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover cursor-pointer" onclick="window.location.href='interview-setup.html?mode=quick'">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-sm bg-green-100 text-green-600 px-3 py-1 rounded-full">Quick</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Quick Practice</h3>
+                        <p class="text-slate-600 mb-4">Short 5-minute practice session for busy schedules</p>
+                        <div class="flex items-center text-sm text-slate-600">
+                            <span>5 minutes</span>
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover cursor-pointer" onclick="window.location.href='interview-setup.html?mode=role'">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-sm bg-purple-100 text-purple-600 px-3 py-1 rounded-full">Targeted</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Role-Specific</h3>
+                        <p class="text-slate-600 mb-4">Practice interviews tailored to specific job roles</p>
+                        <div class="flex items-center text-sm text-slate-600">
+                            <span>20-45 minutes</span>
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Overview -->
+            <section class="mb-12 scroll-reveal">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6">Your Progress</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" id="user-stats-cards">
+                    <!-- Dynamic stats cards will be inserted here -->
+                    <div class="text-center py-12">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </div>
+                        <p class="text-slate-600">Loading your progress data...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Progress Chart and Recent Activity -->
+            <div class="grid lg:grid-cols-2 gap-8 mb-12">
+                <!-- Progress Chart -->
+                <section class="scroll-reveal">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6">Performance Trends</h2>
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200">
+                        <div id="progress-chart" style="height: 300px;">
+                            <div class="text-center py-16">
+                                <div class="w-12 h-12 mx-auto mb-4 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-blue-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-slate-600">Loading performance data...</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recent Activity -->
+                <section class="scroll-reveal">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6">Recent Activity</h2>
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200">
+                        <div id="recent-activity" class="space-y-4">
+                            <!-- Activity items will be populated by JavaScript -->
+                            <div class="text-center py-8">
+                                <div class="w-10 h-10 mx-auto mb-3 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-slate-600">Loading your recent activity...</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-200">
+                            <button class="w-full text-blue-600 hover:text-blue-700 font-medium text-sm" onclick="window.location.href='results.html'">
+                                View All Activity
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Achievements -->
+            <section class="mb-12 scroll-reveal">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-slate-800">Your Achievements</h2>
+                    <a href="profile.html" class="text-blue-600 hover:text-blue-700 font-medium text-sm">View All</a>
+                </div>
+                <div id="achievements" class="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <!-- Achievement badges will be populated by JavaScript -->
+                    <div class="text-center py-6">
+                        <div class="w-12 h-12 mx-auto mb-3 bg-blue-100 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-sm text-slate-600">Loading achievements...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recommended Practice Areas -->
+            <section class="scroll-reveal">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6">Recommended Practice Areas</h2>
+                <div id="recommended-practice" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Recommended areas will be populated dynamically -->
+                    <div class="text-center py-12">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-slate-600">Analyzing your performance...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">AI</span>
+                    </div>
+                    <span class="text-xl font-bold">Face2Hire</span>
+                </div>
+                <p class="text-slate-400 mb-6">
+                    Empowering job seekers with AI-powered interview preparation
+                </p>
+                <div class="text-sm text-slate-500">
+                    © 2025 Face2Hire. All rights reserved. Built with cutting-edge AI technology.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+       document.addEventListener('DOMContentLoaded', async function() {
+    console.log('Dashboard loading...');
+
+    // Show loading overlay
+    showLoadingOverlay();
+
+    try {
+        // Check if AuthService exists
+        if (typeof AuthService === 'undefined') {
+            console.error('AuthService is not defined');
+            hideLoadingOverlay();
+            showErrorState('Authentication service not available. Please refresh.');
+            return;
+        }
+
+        // Use AuthService to require authentication
+        const isAuthenticated = await AuthService.requireAuth();
+        if (!isAuthenticated) {
+            // AuthService.requireAuth() handles redirect, so we shouldn't reach here
+            return;
+        }
+
+        console.log('User authenticated, loading dashboard data...');
+
+        // Get user from AuthService immediately for UI
+        const user = AuthService.getUser();
+
+        if (!user) {
+            console.error('No user data found');
+            hideLoadingOverlay();
+            showErrorState('User data not found. Please sign in again.');
+            AuthService.logout();
+            return;
+        }
+
+        // Update UI immediately with basic user info
+        updateUserUI(user);
+
+        // Now fetch user dashboard data
+        await loadDashboardData();
+
+        // Hide loading overlay
+        hideLoadingOverlay();
+
+        // Initialize dashboard components
+        initDashboardComponents();
+
+    } catch (error) {
+        console.error('Dashboard initialization error:', error);
+        hideLoadingOverlay();
+
+        // Check if error is due to auth
+        if (error.message.includes('auth') || error.message.includes('token') || error.message.includes('401')) {
+            showErrorState('Session expired. Please sign in again.');
+            setTimeout(() => {
+                AuthService.logout();
+            }, 2000);
+        } else {
+            showErrorState('Failed to load dashboard. Please try again.');
+        }
+    }
+});
+function updateUserUI(user) {
+    // Update navigation with user profile
+    const userNameElement = document.getElementById('user-name');
+    const userAvatarElement = document.getElementById('user-avatar');
+
+    if (userNameElement) {
+        const firstName = user.firstName || user.name || user.email.split('@')[0];
+        const lastName = user.lastName || '';
+        const fullName = lastName ? `${firstName} ${lastName}` : firstName;
+        userNameElement.textContent = fullName;
+    }
+
+    if (userAvatarElement) {
+        const firstName = user.firstName || user.name || user.email.split('@')[0];
+        const lastName = user.lastName || '';
+        const initial = lastName ? `${firstName[0]}${lastName[0]}`.toUpperCase() : firstName[0].toUpperCase();
+        const avatarSpan = userAvatarElement.querySelector('span');
+        if (avatarSpan) {
+            avatarSpan.textContent = initial;
+        }
+    }
+
+    // Update welcome message
+    const welcomeMessage = document.getElementById('welcome-message');
+    const userTagline = document.getElementById('user-tagline');
+
+    if (welcomeMessage) {
+        const firstName = user.firstName || user.name || user.email.split('@')[0];
+        const lastName = user.lastName || '';
+        const displayName = lastName ? `${firstName} ${lastName}` : firstName;
+        welcomeMessage.textContent = `Welcome back, ${displayName}!`;
+    }
+    
+    if (userTagline) {
+        userTagline.textContent = 'Your interview analytics dashboard';
+    }
+    
+    // Update header stats (basic version)
+    const userStatsHeader = document.getElementById('user-stats-header');
+    if (userStatsHeader) {
+        userStatsHeader.innerHTML = `
+            <div class="text-right">
+                <div class="text-white font-medium">${user.email}</div>
+                <div class="text-blue-100 text-sm">Member since ${new Date().getFullYear()}</div>
+            </div>
+        `;
+    }
+}
+// Add these helper functions to dashboard.html
+function showLoadingOverlay() {
+    // Create loading overlay if it doesn't exist
+    if (!document.getElementById('loading-overlay')) {
+        const overlay = document.createElement('div');
+        overlay.id = 'loading-overlay';
+        overlay.className = 'fixed inset-0 bg-white z-50 flex items-center justify-center';
+        overlay.innerHTML = `
+            <div class="text-center">
+                <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p class="text-slate-600 font-medium">Loading your dashboard...</p>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    }
+}
+
+function hideLoadingOverlay() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.remove(), 300);
+    }
+}
+
+async function loadDashboardData() {
+    try {
+        const token = AuthService.getToken();
+        const user = AuthService.getUser();
+
+        console.log('Fetching dashboard data for user:', user.email);
+
+        // Update welcome message immediately
+        const welcomeMessage = document.getElementById('welcome-message');
+        const userTagline = document.getElementById('user-tagline');
+
+        if (welcomeMessage) {
+            welcomeMessage.textContent = `Welcome back, ${user.firstName || user.name || user.email.split('@')[0]}!`;
+        }
+
+        if (userTagline) {
+            userTagline.textContent = 'Loading your interview analytics...';
+        }
+
+        // Fetch dashboard data from API using AuthService
+        const dashboardResponse = await AuthService.getDashboardData();
+
+        if (dashboardResponse.success) {
+            // Populate dashboard with data
+            populateUserData(dashboardResponse, user);
+        } else {
+            throw new Error('Failed to load dashboard data');
+        }
+
+    } catch (error) {
+        console.error('Error loading dashboard data:', error);
+        // Fallback to using localStorage data
+        fallbackToLocalData();
+    }
+}
+
+function fallbackToLocalData() {
+    const user = AuthService.getUser();
+
+    if (user) {
+        const welcomeMessage = document.getElementById('welcome-message');
+        if (welcomeMessage) {
+            welcomeMessage.textContent = `Welcome back, ${user.firstName || user.name || 'User'}!`;
+        }
+
+        // Also populate navigation profile with logout button
+        const userNameElement = document.getElementById('user-name');
+        const userAvatarElement = document.getElementById('user-avatar');
+
+        if (userNameElement) {
+            const firstName = user.firstName || user.name || 'User';
+            const lastName = user.lastName || '';
+            const fullName = lastName ? `${firstName} ${lastName}` : firstName;
+            userNameElement.textContent = fullName;
+        }
+
+        if (userAvatarElement) {
+            const firstName = user.firstName || user.name || 'U';
+            const lastName = user.lastName || '';
+            const initial = lastName ? `${firstName[0]}${lastName[0]}`.toUpperCase() : firstName[0].toUpperCase();
+            const avatarSpan = userAvatarElement.querySelector('span');
+            if (avatarSpan) {
+                avatarSpan.textContent = initial;
+            }
+        }
+
+        // Show message about offline data
+        showNotification('Using cached data. Some features may be limited.', 'info');
+    }
+}
+
+function showErrorState(message) {
+    const mainContent = document.querySelector('main');
+    if (mainContent) {
+        mainContent.innerHTML = `
+            <div class="min-h-screen flex items-center justify-center">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.698-.833-2.464 0L4.342 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2">Unable to Load Dashboard</h3>
+                    <p class="text-slate-600 mb-4">${message || 'Please try again later.'}</p>
+                    <div class="space-x-3">
+                        <button onclick="window.location.reload()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                            Refresh Page
+                        </button>
+                        <button onclick="AuthService.logout()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg font-medium">
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
+function populateUserData(dashboardData, user) {
+    console.log('Populating dashboard with data:', dashboardData);
+    
+    // Extract data from response
+    const data = dashboardData.data || dashboardData;
+    
+    // If no data exists (new user), create empty structure
+    if (!data) {
+        console.log('No dashboard data found, initializing for new user');
+        initializeNewUserDashboard(user);
+        return;
+    }
+    
+    // Update navigation (already done in updateUserUI, but can update if more info is available)
+    if (data.user && data.user.firstName) {
+        updateUserUI(data.user);
+    }
+    
+    // Update stats cards - handle empty stats
+    const statsCards = document.getElementById('user-stats-cards');
+    if (statsCards) {
+        const stats = data.stats || {};
+        
+        if (Object.keys(stats).length === 0) {
+            // New user - show encouraging message
+            statsCards.innerHTML = `
+                <div class="stat-card rounded-2xl p-6 border border-slate-200 card-hover col-span-4 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2">Ready to Start?</h3>
+                    <p class="text-slate-600 mb-4">Complete your first interview to track your progress</p>
+                    <button onclick="window.location.href='interview-setup.html'" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                        Start First Interview
+                    </button>
+                </div>
+            `;
+        } else {
+            // User has stats - show them
+            statsCards.innerHTML = `
+                <div class="stat-card rounded-2xl p-6 border border-slate-200 card-hover">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-slate-800">${stats.totalInterviews || 0}</div>
+                            <div class="text-sm text-slate-600">Total Interviews</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card rounded-2xl p-6 border border-slate-200 card-hover">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-slate-800">${stats.averageScore || 0}%</div>
+                            <div class="text-sm text-slate-600">Average Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card rounded-2xl p-6 border border-slate-200 card-hover">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-slate-800">${stats.bestScore || 0}%</div>
+                            <div class="text-sm text-slate-600">Best Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card rounded-2xl p-6 border border-slate-200 card-hover">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-slate-800">${stats.totalTime ? Math.round(stats.totalTime / 60) : 0}m</div>
+                            <div class="text-sm text-slate-600">Total Time</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    
+    // Update tagline based on whether user has progress
+    const userTagline = document.getElementById('user-tagline');
+    if (userTagline && data.stats && data.stats.totalInterviews > 0) {
+        userTagline.textContent = 'Here\'s your interview progress overview';
+    } else if (userTagline) {
+        userTagline.textContent = 'Start your first interview to track your progress';
+    }
+    
+    // Update other sections (recent activity, achievements, etc.)
+    updateOtherDashboardSections(data);
+    
+    // Initialize chart if performance data exists
+    if (data.performanceData && window.echarts) {
+        initializeChart(data.performanceData);
+    } else if (data.performanceData === undefined || data.performanceData === null) {
+        // No performance data - show placeholder
+        const chartContainer = document.getElementById('progress-chart');
+        if (chartContainer) {
+            chartContainer.innerHTML = `
+                <div class="text-center py-16">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2">No Performance Data Yet</h3>
+                    <p class="text-slate-600 mb-4">Complete interviews to see your performance trends</p>
+                    <button onclick="window.location.href='interview-setup.html'" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                        Start First Interview
+                    </button>
+                </div>
+            `;
+        }
+    }
+}
+function initializeNewUserDashboard(user) {
+    console.log('Initializing dashboard for new user');
+    
+    // Update welcome section
+    const welcomeMessage = document.getElementById('welcome-message');
+    const userTagline = document.getElementById('user-tagline');
+    
+    if (welcomeMessage && user) {
+        const firstName = user.firstName || user.name || user.email.split('@')[0];
+        welcomeMessage.textContent = `Welcome, ${firstName}!`;
+    }
+    
+    if (userTagline) {
+        userTagline.textContent = 'Get started with your first practice interview';
+    }
+    
+    // Update all dashboard sections for new user
+    const sections = {
+        'user-stats-cards': `
+            <div class="stat-card rounded-2xl p-6 border border-slate-200 card-hover col-span-4 text-center">
+                <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-800 mb-2">Ready to Start?</h3>
+                <p class="text-slate-600 mb-4">Complete your first interview to track your progress</p>
+                <button onclick="window.location.href='interview-setup.html'" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                    Start First Interview
+                </button>
+            </div>
+        `,
+        
+        'progress-chart': `
+            <div class="text-center py-16">
+                <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-800 mb-2">No Performance Data Yet</h3>
+                <p class="text-slate-600 mb-4">Complete interviews to see your performance trends</p>
+                <button onclick="window.location.href='interview-setup.html'" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                    Start First Interview
+                </button>
+            </div>
+        `,
+        
+        'recent-activity': `
+            <div class="text-center py-8">
+                <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-800 mb-2">No Activity Yet</h3>
+                <p class="text-slate-600 mb-4">Your recent interviews will appear here</p>
+            </div>
+        `,
+        
+        'achievements': `
+            <div class="text-center py-6 col-span-full">
+                <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-800 mb-2">No Achievements Yet</h3>
+                <p class="text-slate-600 mb-4">Complete interviews to unlock achievements</p>
+            </div>
+        `,
+        
+        'recommended-practice': `
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover col-span-full text-center">
+                <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-800 mb-2">No Recommendations Yet</h3>
+                <p class="text-slate-600 mb-4">Complete your first interview to get personalized recommendations</p>
+                <button onclick="window.location.href='interview-setup.html'" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                    Get Started
+                </button>
+            </div>
+        `
+    };
+    
+    // Update each section
+    Object.keys(sections).forEach(sectionId => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.innerHTML = sections[sectionId];
+        }
+    });
+}
+function updateOtherDashboardSections(data) {
+    // Update recent activity
+    const recentActivity = document.getElementById('recent-activity');
+    if (recentActivity) {
+        if (data.recentActivity && data.recentActivity.length > 0) {
+            recentActivity.innerHTML = data.recentActivity.map(activity => `
+                <div class="flex items-start space-x-4 mb-4">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-medium text-slate-800">${activity.title || 'Interview'}</p>
+                        <p class="text-sm text-slate-600">${activity.role || 'General Interview'} • ${activity.time || 'Recently'}</p>
+                        ${activity.score ? `<p class="text-sm font-medium ${activity.score >= 70 ? 'text-green-600' : 'text-orange-600'}">Score: ${activity.score}%</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            recentActivity.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2">No Activity Yet</h3>
+                    <p class="text-slate-600 mb-4">Your recent interviews will appear here</p>
+                </div>
+            `;
+        }
+    }
+    
+    // Update achievements
+    const achievementsContainer = document.getElementById('achievements');
+    if (achievementsContainer) {
+        if (data.achievements && data.achievements.length > 0) {
+            achievementsContainer.innerHTML = data.achievements.map(achievement => `
+                <div class="text-center achievement-badge">
+                    <div class="w-16 h-16 mx-auto mb-2 ${achievement.colorClass || 'bg-yellow-100'} rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 ${achievement.iconColorClass || 'text-yellow-600'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-700">${achievement.name}</p>
+                    <p class="text-xs text-slate-500">${achievement.description}</p>
+                </div>
+            `).join('');
+        } else {
+            achievementsContainer.innerHTML = `
+                <div class="text-center py-6 col-span-full">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2">No Achievements Yet</h3>
+                    <p class="text-slate-600 mb-4">Complete interviews to unlock achievements</p>
+                </div>
+            `;
+        }
+    }
+    
+    // Update recommended practice
+    const recommendedPractice = document.getElementById('recommended-practice');
+    if (recommendedPractice) {
+        if (data.recommendedPractice && data.recommendedPractice.length > 0) {
+            recommendedPractice.innerHTML = data.recommendedPractice.map(area => `
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 ${area.iconBgColor || 'bg-red-100'} rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 ${area.iconColor || 'text-red-600'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm ${area.tagBgColor || 'bg-red-100'} ${area.tagTextColor || 'text-red-600'} px-3 py-1 rounded-full">${area.tag || 'Focus Area'}</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">${area.title || 'Practice Area'}</h3>
+                    <p class="text-slate-600 mb-4">${area.description || 'Your performance analysis will appear here.'}</p>
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-slate-600">
+                            <span class="font-semibold">Current: ${area.currentScore || 'N/A'}</span> ${area.targetScore ? `• Target: ${area.targetScore}` : ''}
+                        </div>
+                        <button onclick="window.location.href='interview-setup.html?focus=${area.focus || 'general'}'" class="${area.buttonColor || 'text-red-600'} hover:${area.buttonHoverColor || 'text-red-700'} font-medium text-sm">
+                            ${area.buttonText || 'Practice Now'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            recommendedPractice.innerHTML = `
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover col-span-full text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-2">No Recommendations Yet</h3>
+                    <p class="text-slate-600 mb-4">Complete your first interview to get personalized recommendations</p>
+                    <button onclick="window.location.href='interview-setup.html'" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                        Get Started
+                    </button>
+                </div>
+            `;
+        }
+    }
+}
+function showNotification(message, type = 'info') {
+    const colors = {
+        info: 'bg-blue-100 text-blue-800 border-blue-300',
+        success: 'bg-green-100 text-green-800 border-green-300',
+        warning: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+        error: 'bg-red-100 text-red-800 border-red-300'
+    };
+    
+    const notification = document.createElement('div');
+    notification.className = `fixed top-20 right-4 z-50 px-4 py-3 rounded-lg border ${colors[type]} shadow-lg max-w-md transition-all duration-300`;
+    notification.innerHTML = `
+        <div class="flex items-center">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" class="ml-auto text-gray-500 hover:text-gray-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.style.opacity = '0';
+            setTimeout(() => notification.remove(), 300);
+        }
+    }, 5000);
+}
+function initializeChart(performanceData) {
+            const chartDom = document.getElementById('progress-chart');
+            if (!chartDom) return;
+            
+            const myChart = echarts.init(chartDom);
+            
+            const option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['Technical', 'Behavioral', 'Communication', 'Overall'],
+                    textStyle: {
+                        color: '#64748b'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: performanceData.dates || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e2e8f0'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#64748b'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    max: 100,
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e2e8f0'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#64748b',
+                        formatter: '{value}%'
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#f1f5f9'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: 'Technical',
+                        type: 'line',
+                        data: performanceData.technical || [65, 70, 75, 72, 78, 80, 82],
+                        itemStyle: {
+                            color: '#ef4444'
+                        },
+                        lineStyle: {
+                            width: 3
+                        }
+                    },
+                    {
+                        name: 'Behavioral',
+                        type: 'line',
+                        data: performanceData.behavioral || [75, 78, 82, 85, 88, 90, 91],
+                        itemStyle: {
+                            color: '#10b981'
+                        },
+                        lineStyle: {
+                            width: 3
+                        }
+                    },
+                    {
+                        name: 'Communication',
+                        type: 'line',
+                        data: performanceData.communication || [70, 75, 78, 82, 85, 87, 88],
+                        itemStyle: {
+                            color: '#f59e0b'
+                        },
+                        lineStyle: {
+                            width: 3
+                        }
+                    },
+                    {
+                        name: 'Overall',
+                        type: 'line',
+                        data: performanceData.overall || [70, 74, 78, 80, 84, 86, 87],
+                        itemStyle: {
+                            color: '#3b82f6'
+                        },
+                        lineStyle: {
+                            width: 4
+                        }
+                    }
+                ]
+            };
+            
+            myChart.setOption(option);
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+
+        function showErrorState() {
+            const welcomeMessage = document.getElementById('welcome-message');
+            if (welcomeMessage) {
+                welcomeMessage.textContent = 'Welcome!';
+            }
+            
+            const userTagline = document.getElementById('user-tagline');
+            if (userTagline) {
+                userTagline.textContent = 'Sign in to access your personalized dashboard';
+            }
+            
+            const userStatsHeader = document.getElementById('user-stats-header');
+            if (userStatsHeader) {
+                userStatsHeader.innerHTML = '';
+            }
+            
+            const statsCards = document.getElementById('user-stats-cards');
+            if (statsCards) {
+                statsCards.innerHTML = `
+                    <div class="col-span-4 text-center py-12">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.698-.833-2.464 0L4.342 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-800 mb-2">Unable to Load Data</h3>
+                        <p class="text-slate-600 mb-4">Please sign in to view your progress</p>
+                        <button onclick="window.location.href='login.html'" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                            Sign In
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize dashboard components
+        function initDashboardComponents() {
+            // Handle scroll reveal animations
+            const revealElements = document.querySelectorAll('.scroll-reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            revealElements.forEach(element => {
+                observer.observe(element);
+            });
+
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                    mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Initialize any charts if data is available
+            const chartContainer = document.getElementById('progress-chart');
+            if (chartContainer && window.echarts) {
+                // Chart will be initialized when data is loaded
+                console.log('Chart container ready');
+            }
+        }
+
+        // Handle scroll reveal animations
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>

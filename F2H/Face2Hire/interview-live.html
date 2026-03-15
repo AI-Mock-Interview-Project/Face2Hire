@@ -1,0 +1,3564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Interview - Face2Hire AI Interview Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web-speech-cognitive-services/lib/speech.browser.sdk.min.js"></script>
+    <script src="AuthService.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --interviewer-personality: 'neutral';
+            --interview-intensity: 'normal';
+            --candidate-confidence: 0.5;
+            --stress-level: 0.3;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+        
+        /* Interview Container with Adaptive Layout */
+        .interview-container {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            height: 100vh;
+            padding: 20px;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .focus-mode {
+            filter: blur(0);
+        }
+        
+        .focus-mode .non-essential {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        /* Adaptive Header */
+        .interview-header {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 0;
+            padding: 12px 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 50;
+            overflow: hidden;
+            flex-wrap: nowrap;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-right: 20px;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 20px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .interview-context {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .interview-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.3;
+        }
+        
+        .interview-subtitle {
+            font-size: 14px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .status-live {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+        
+        .status-paused {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: pulse 2s infinite;
+        }
+        
+        .smart-timer {
+            font-family: 'Inter', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            padding: 8px 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .timer-adaptive {
+            position: relative;
+        }
+        
+        .timer-adaptive::after {
+            content: attr(data-hint);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #64748b;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .timer-adaptive:hover::after {
+            opacity: 1;
+        }
+        
+        /* Focus Mode Toggle */
+        .focus-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+        }
+        
+        .focus-toggle:hover {
+            background: #e2e8f0;
+        }
+        
+        .focus-toggle.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #2563eb;
+        }
+        
+        /* Main Interview Area */
+        .interview-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            min-height: 0;
+        }
+        
+        @media (max-width: 1200px) {
+            .interview-main {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+        }
+        
+        /* AI Interviewer Panel */
+        .interviewer-panel {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Personality-based styling */
+        .interviewer-panel[data-personality="friendly"] {
+            border-left: 4px solid #22c55e;
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+        }
+        
+        .interviewer-panel[data-personality="neutral"] {
+            border-left: 4px solid #3b82f6;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        }
+        
+        .interviewer-panel[data-personality="strict"] {
+            border-left: 4px solid #ef4444;
+            background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+        }
+        
+        .personality-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .personality-friendly {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+        
+        .personality-neutral {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+        
+        .personality-strict {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+        
+        /* Avatar with Micro-expressions */
+        .avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            margin-bottom: 16px;
+        }
+
+        .avatar-main {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+            object-fit: cover;
+            border: 4px solid;
+            transition: all 0.5s ease;
+            animation: subtleBreathing 3s infinite ease-in-out;
+        }
+        
+        .avatar-main[data-state="speaking"] {
+            border-color: #3b82f6;
+            animation: speakingGlow 2s infinite;
+        }
+        
+        .avatar-main[data-state="listening"] {
+            border-color: #22c55e;
+            animation: listeningFocus 2s infinite;
+        }
+        
+        .avatar-main[data-state="thinking"] {
+            border-color: #8b5cf6;
+            animation: thinkingPulse 3s infinite;
+        }
+        
+        .avatar-emotion {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        /* Micro-expression animations */
+        .micro-expression {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .micro-expression.active {
+            opacity: 1;
+            animation: fadeInOut 1s ease;
+        }
+        
+        .expression-nod {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: nod 2s ease-in-out;
+        }
+        
+        .expression-smile {
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: smile 1.5s ease;
+        }
+        
+        .expression-thinking {
+            top: 50%;
+            left: -20px;
+            transform: translateY(-50%);
+            animation: thinking 3s ease-in-out;
+        }
+        
+        .interviewer-info {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .interviewer-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .interviewer-role {
+            font-size: 14px;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        /* Question Display with Intelligence */
+        .question-display {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            position: relative;
+            border: 1px solid #bae6fd;
+            transition: all 0.3s ease;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .question-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .question-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .question-difficulty {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .question-timer {
+            font-size: 12px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #1e293b;
+            font-weight: 500;
+            margin-bottom: 20px;
+            min-height: 60px;
+            transition: all 0.3s;
+        }
+        
+        .expected-response {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 16px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .expected-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .expected-content {
+            font-size: 14px;
+            color: #1e293b;
+            line-height: 1.4;
+        }
+        
+        /* Adaptive Follow-up Section */
+        .follow-up-section {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid #fcd34d;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .follow-up-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .follow-up-text {
+            font-size: 14px;
+            color: #92400e;
+            line-height: 1.5;
+        }
+        
+        /* Interaction Signals */
+        .interaction-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+        
+        .interaction-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .interaction-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+            overflow-y: auto;
+            max-height: 200px;
+        }
+        
+        .interaction-message {
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .interaction-message::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+        }
+        
+        .message-cue {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 3px solid #0ea5e9;
+            color: #0369a1;
+        }
+        
+        .message-encouragement {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left: 3px solid #22c55e;
+            color: #166534;
+        }
+        
+        .message-clarification {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 3px solid #f59e0b;
+            color: #92400e;
+        }
+        
+        /* Response Panel */
+        .response-panel {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .response-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .response-mode-selector {
+            display: flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .mode-btn {
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .mode-btn.active {
+            background: white;
+            color: #3b82f6;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-btn.mic-btn.active {
+            background: #22c55e;
+            color: white;
+            border-color: #16a34a;
+        }
+        
+        /* Webcam Response Area */
+        .webcam-response-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 2px solid #cbd5e1;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .webcam-response-area.active {
+            background: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%);
+            border-color: #3b82f6;
+        }
+
+        .webcam-response-area.recording {
+            background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%);
+            border-color: #ef4444;
+            animation: recordingPulse 2s infinite;
+        }
+
+        .webcam-response-area.processing {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: #f59e0b;
+        }
+
+
+
+        .webcam-status {
+            text-align: center;
+        }
+
+        .webcam-status-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .webcam-instruction {
+            font-size: 14px;
+            color: #64748b;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        .webcam-preview {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            border-radius: 12px;
+            background: #000;
+            margin-bottom: 20px;
+            display: block;
+            object-fit: cover;
+            border: 2px solid #e2e8f0;
+        }
+        
+        /* Confidence Stabilizer Indicator */
+        .stabilizer-indicator {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            opacity: 0.7;
+        }
+        
+        .stabilizer-active {
+            opacity: 1;
+            background: rgba(34, 197, 94, 0.1);
+            border: 2px solid #22c55e;
+        }
+        
+        /* Text Response Area */
+        .text-response-area {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+        }
+        
+        .response-textarea {
+            width: 100%;
+            flex: 1;
+            min-height: 200px;
+            padding: 20px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            resize: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #1e293b;
+            background: #f8fafc;
+            transition: all 0.3s;
+        }
+        
+        .response-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .thought-structuring {
+            margin-top: 16px;
+            padding: 16px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 12px;
+            border: 1px solid #bae6fd;
+            display: none;
+        }
+        
+        .structuring-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0369a1;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .structuring-hint {
+            font-size: 13px;
+            color: #1e40af;
+            line-height: 1.4;
+        }
+        
+        /* Progress & Control Panel */
+        .progress-controls-panel {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .progress-section {
+            flex: 1;
+        }
+        
+        .phase-tracker {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .phase-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .phase-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            border: 2px solid white;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .phase-dot.active {
+            background: #3b82f6;
+            transform: scale(1.2);
+        }
+        
+        .phase-dot.completed {
+            background: #22c55e;
+        }
+        
+        .phase-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .progress-text {
+            font-size: 14px;
+            color: #475569;
+            font-weight: 500;
+        }
+        
+        .reassurance-message {
+            font-size: 13px;
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        /* Control Buttons */
+        .control-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .control-btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .control-btn-hint {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+        
+        .control-btn-hint:hover:not(:disabled) {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            transform: translateY(-1px);
+        }
+        
+        .control-btn-skip {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+        
+        .control-btn-skip:hover:not(:disabled) {
+            background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+        }
+        
+        .control-btn-end {
+            background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%);
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+        
+        .control-btn-end:hover:not(:disabled) {
+            background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
+        }
+        
+        /* Stress Monitoring Indicator (Subtle) */
+        .stress-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .stress-indicator.visible {
+            opacity: 1;
+        }
+        
+        .stress-level {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .stress-low { background: #22c55e; }
+        .stress-medium { background: #f59e0b; animation: stressPulse 2s infinite; }
+        .stress-high { background: #ef4444; animation: stressPulse 1s infinite; }
+        
+        /* End Interview Modal */
+        .end-interview-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        /* Clarification Modal */
+        .clarification-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: modalAppear 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .completion-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border: 3px solid #86efac;
+        }
+        
+        .modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+        
+        .modal-message {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .modal-btn {
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+        }
+        
+        .modal-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .modal-btn-secondary {
+            background: white;
+            color: #475569;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .modal-btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes subtleBreathing {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+        }
+        
+        @keyframes speakingGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.5); }
+        }
+        
+        @keyframes listeningFocus {
+            0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.5); }
+        }
+        
+        @keyframes thinkingPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
+        }
+        
+        @keyframes nod {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            25% { transform: translateX(-50%) rotate(-5deg); }
+            75% { transform: translateX(-50%) rotate(5deg); }
+        }
+        
+        @keyframes smile {
+            0% { transform: translateX(-50%) scale(0); opacity: 0; }
+            50% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+            100% { transform: translateX(-50%) scale(1); opacity: 1; }
+        }
+        
+        @keyframes thinking {
+            0%, 100% { transform: translateY(-50%) scale(1); opacity: 0.5; }
+            50% { transform: translateY(-50%) scale(1.2); opacity: 1; }
+        }
+        
+        @keyframes recordingPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.5); }
+        }
+        
+        @keyframes voiceWaves {
+            0% { transform: scale(1); opacity: 1; border-color: rgba(59, 130, 246, 0.5); }
+            100% { transform: scale(1.5); opacity: 0; border-color: rgba(59, 130, 246, 0); }
+        }
+        
+        @keyframes stressPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .interview-main {
+                grid-template-columns: 1fr;
+            }
+            
+            .progress-controls-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .interview-header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .control-buttons {
+                flex-direction: column;
+            }
+            
+            .phase-tracker {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- Stress Monitoring Indicator -->
+    <div class="stress-indicator" id="stress-indicator">
+        <div class="stress-level" id="stress-level"></div>
+    </div>
+
+    <!-- Main Interview Container -->
+    <main class="pt-20">
+        <div class="interview-container" id="interview-container">
+            <!-- Adaptive Header -->
+            <div class="interview-header">
+                <div class="header-logo">
+                    <a href="index.html" class="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer">
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform overflow-hidden">
+                            <img src="resources/logo.jpg" alt="Face2Hire Logo" class="w-full h-full object-cover">
+                        </div>
+                        <span class="text-xl font-bold text-slate-800 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Face2Hire</span>
+                    </a>
+                </div>
+                <div class="header-content">
+                    <div class="interview-context">
+                        <h1 class="interview-title" id="interview-title">Loading Interview...</h1>
+                        <div class="interview-subtitle">
+                            <span id="interview-role">Preparing your session...</span>
+                            <div class="status-indicator" id="status-indicator">
+                                <span class="live-dot"></span>
+                                <span id="status-text">INITIALIZING</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="smart-timer timer-adaptive" id="smart-timer" data-hint="Total interview duration">
+                    00:00
+                </div>
+
+                <div class="header-user">
+                    <div class="user-avatar">
+                        <span id="user-initials"></span>
+                    </div>
+                    <span class="text-slate-700 font-medium" id="user-name"></span>
+                </div>
+            </div>
+
+            <!-- Main Interview Area -->
+            <div class="interview-main">
+                <!-- AI Interviewer Panel -->
+                <div class="interviewer-panel" id="interviewer-panel" data-personality="neutral">
+                    <div class="personality-badge" id="personality-badge">Neutral</div>
+                    
+                    <div class="avatar-container">
+                        <div class="avatar-wrapper">
+                            <img src="resources/loading-avatar.png" alt="AI Interviewer" class="avatar-main" id="avatar-main" data-state="listening">
+                            <div class="avatar-emotion" id="avatar-emotion">Happy</div>
+
+                            <!-- Micro-expressions -->
+                            <div class="micro-expression expression-nod">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0 9c-1.657 0-3-4.03-3-9s1.343-9 3-9m0 9c1.657 0 3 4.03 3 9s-1.343 9-3 9m-9 9v-9m0 0v-9"></path>
+                                </svg>
+                            </div>
+                            <div class="micro-expression expression-smile">Smiling</div>
+                            <div class="micro-expression expression-thinking">Thinking</div>
+                        </div>
+                        
+                        <div class="interviewer-info">
+                            <h2 class="interviewer-name" id="interviewer-name">Interviewer</h2>
+                            <span class="interviewer-role" id="interviewer-role">AI Interview Coach</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Intelligent Question Display -->
+                    <div class="question-display" id="question-display">
+                        <div class="question-header">
+                            <div class="question-meta">
+                                <span class="question-category" id="question-category">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                    </svg>
+                                    <span id="question-type">Loading...</span>
+                                </span>
+                                <span class="question-difficulty" id="question-difficulty">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.536 5.879a1 1 0 001.415 0 3 3 0 014.242 0 1 1 0 001.415-1.415 5 5 0 00-7.072 0 1 1 0 000 1.415z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span id="difficulty-text">Medium</span>
+                                </span>
+                                <span class="question-timer" id="question-timer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span id="time-on-question">0s</span>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <p class="question-text" id="current-question">
+                            Preparing your first question...
+                        </p>
+                        
+                        <div class="expected-response" id="expected-response">
+                            <div class="expected-label">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                Expected Response Type
+                            </div>
+                            <div class="expected-content" id="expected-content">
+                                Clear, structured explanation with examples
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dynamic Follow-up Section -->
+                    <div class="follow-up-section" id="follow-up-section">
+                        <div class="follow-up-header">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            <span style="font-weight: 600; color: #92400e;">Follow-up Question</span>
+                        </div>
+                        <p class="follow-up-text" id="follow-up-text"></p>
+                    </div>
+                    
+                    <!-- Scenario Simulation -->
+                    <div class="scenario-section" id="scenario-section" style="display: none;">
+                        <div class="scenario-header">
+                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Scenario Challenge
+                        </div>
+                        <div class="scenario-content" id="scenario-content">
+                            <!-- Scenario content loaded dynamically -->
+                        </div>
+                    </div>
+                    
+                    <!-- Interaction Signals -->
+                    <div class="interaction-panel">
+                        <h3 class="interaction-header">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                            </svg>
+                            Live Interaction Signals
+                        </h3>
+                        <div class="interaction-messages" id="interaction-messages">
+                            <div class="interaction-message message-cue">
+                                Take your time to think. I'm listening carefully.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Response Panel -->
+                <div class="response-panel">
+                    <div class="response-header">
+                        <h3 class="response-title">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                            </svg>
+                            Your Response Zone
+                        </h3>
+                        <div class="response-mode-selector" id="response-mode-selector">
+                            <button class="mode-btn active" onclick="setResponseMode('webcam')" id="webcam-mode-btn">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                </svg>
+                                Voice Response
+                            </button>
+                            <button class="mode-btn mic-btn" onclick="toggleMicrophone()" id="mic-btn" title="Toggle Microphone">
+                                <svg class="w-4 h-4 mic-icon" id="mic-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                </svg>
+                                <span id="mic-text">Mic Off</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="response-input-area">
+                        <!-- Webcam Response Area -->
+                        <div class="webcam-response-area active" id="webcam-response-area" onclick="toggleWebcamRecording()">
+                            <video class="webcam-preview" id="webcam-preview" autoplay muted></video>
+
+                            <div class="webcam-status">
+                                <h4 class="webcam-status-title" id="webcam-status-title">Click to Start Webcam Recording</h4>
+                                <p class="webcam-instruction" id="webcam-instruction">
+                                    Look into the camera and speak naturally. Your video and voice will be analyzed for content and confidence.
+                                </p>
+                            </div>
+
+                            <div class="stabilizer-indicator" id="stabilizer-indicator" title="Confidence Stabilizer Active">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Text Response Area -->
+                        <div class="text-response-area" id="text-response-area">
+                            <textarea class="response-textarea" id="response-textarea" 
+                                      placeholder="Type your response here... Try to structure your thoughts clearly and provide specific examples." 
+                                      rows="8"></textarea>
+                            
+                            <div class="thought-structuring" id="thought-structuring">
+                                <div class="structuring-header">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                    </svg>
+                                    Thought Structuring Assistant
+                                </div>
+                                <p class="structuring-hint" id="structuring-hint">
+                                    Consider organizing your response: 1) Overview, 2) Key points, 3) Examples, 4) Conclusion
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button class="control-btn control-btn-primary mt-6" id="submit-response-btn" onclick="submitResponse()" disabled style="display: none;">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Submit Response
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress & Control Panel -->
+            <div class="progress-controls-panel">
+                <div class="progress-section">
+                    <div class="phase-tracker" id="phase-tracker">
+                        <!-- Phases loaded dynamically -->
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="progress-info">
+                        <span class="progress-text" id="progress-text">Question 0/0</span>
+                        <span class="reassurance-message" id="reassurance-message">
+                            You're doing well. Take your time.
+                        </span>
+                    </div>
+                </div>
+
+                <div class="control-buttons">
+                    <button class="control-btn control-btn-hint" onclick="requestClarification()" id="hint-btn">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Need Clarification?
+                    </button>
+                    <button class="control-btn control-btn-skip" onclick="skipQuestion()" id="skip-btn">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                        Skip Question
+                    </button>
+                    <button class="control-btn control-btn-end" onclick="endInterview()" id="end-btn">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        End Interview
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- End Interview Modal -->
+        <div class="end-interview-modal" id="end-interview-modal">
+            <div class="modal-content">
+                <div class="completion-icon">
+                    <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h2 class="modal-title">Interview Completed</h2>
+                <p class="modal-message" id="completion-message">
+                    Thank you for completing the interview. Your responses have been recorded and are being analyzed for personalized feedback.
+                </p>
+                <div class="modal-actions">
+                    <button onclick="viewDetailedResults()" class="modal-btn modal-btn-primary">
+                        View Detailed Results
+                    </button>
+                    <button onclick="returnToDashboard()" class="modal-btn modal-btn-secondary">
+                        Return to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clarification Panel -->
+        <div class="clarification-modal" id="clarification-modal">
+            <div class="modal-content">
+                <div class="clarification-icon">
+                    <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h2 class="modal-title">Question Clarification</h2>
+                <p class="modal-message" id="clarification-message">
+                    Loading clarification...
+                </p>
+                <div class="modal-actions">
+                    <button onclick="closeClarificationPanel()" class="modal-btn modal-btn-primary">
+                        Got it, thanks!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        const InterviewEngine = {
+            // Dynamic Messages System
+            messages: {
+                interviewerNames: {
+                    friendly: ['Sarah', 'Emma', 'Olivia', 'Sophia', 'Isabella'],
+                    neutral: ['Alex', 'Jordan', 'Taylor', 'Morgan', 'Casey'],
+                    strict: ['Michael', 'David', 'James', 'Robert', 'William']
+                },
+                greetings: [
+                    "Hello! I'm {name}, your AI interview coach. I'll be conducting your {type} interview for the {role} position today.",
+                    "Hi there! I'm {name}, and I'm excited to chat with you about the {role} role in this {type} interview.",
+                    "Welcome! I'm {name}, your interviewer for today's {type} session focused on {role} opportunities.",
+                    "Good day! I'm {name}, ready to explore your qualifications for the {role} position through this {type} interview."
+                ],
+                listeningCues: [
+                    "I'm listening carefully. Take your time to structure your answer.",
+                    "Go ahead, I'm all ears. Speak at your natural pace.",
+                    "I'm here to listen. Feel free to take a moment to gather your thoughts.",
+                    "Please share your thoughts. I'm paying close attention to your response."
+                ],
+                encouragements: [
+                    "You're doing well. Take your time.",
+                    "Great progress so far. Keep going.",
+                    "Your answers are insightful. Continue with confidence.",
+                    "This is good practice. Stay focused.",
+                    "You're handling this professionally.",
+                    "I appreciate your thoughtful approach.",
+                    "Your experience is showing through clearly."
+                ],
+                stressSupport: [
+                    "Take a deep breath. There's no rush. You're doing fine.",
+                    "Remember to breathe. You've got this.",
+                    "Pause if you need to. Quality over speed.",
+                    "You're capable. Let's work through this together."
+                ],
+                followUps: [
+                    "Could you elaborate on that? I'd like to understand your thought process better.",
+                    "That's a good start. Could you provide more details or an example?",
+                    "Interesting. How would you approach this differently based on what you've learned?",
+                    "Can you walk me through your reasoning step by step?",
+                    "What factors would you consider in making this decision?",
+                    "How has your experience shaped your approach to this?"
+                ],
+                clarifications: [
+                    "This question is about your technical approach. Focus on your thought process and methodology.",
+                    "Use the STAR method: Describe the Situation, your Task, the Action you took, and the Result.",
+                    "Think through this step-by-step. There's no single right answer—focus on your reasoning.",
+                    "Please provide a clear, structured response with specific examples if possible.",
+                    "Consider the broader context. How does this fit into the larger picture?"
+                ],
+                transitions: [
+                    "Thank you for your response. Let's move to the next question.",
+                    "Appreciate your answer. Ready for the next one?",
+                    "Good response. Let's continue with the next question.",
+                    "Thank you. Moving on to our next topic.",
+                    "Well answered. Let's proceed."
+                ],
+                difficultyAdaptations: {
+                    easier: [
+                        "Let's adjust the pace. Here's a more straightforward question.",
+                        "I'll ease up a bit. Let's try this question.",
+                        "Taking it down a notch. How about this one?"
+                    ],
+                    harder: [
+                        "You're handling this well. Let's challenge you a bit more.",
+                        "Impressive response. Let's see how you handle this.",
+                        "Good foundation. Now for something more complex."
+                    ]
+                },
+                personalitySwitches: {
+                    toFriendly: [
+                        "I sense you might need a bit more support. I'm here to help.",
+                        "Let's make this more comfortable. I'm switching to a supportive approach.",
+                        "I can tell this is challenging. Let me be more encouraging."
+                    ],
+                    toStrict: [
+                        "You're demonstrating strong capability. I'll increase the rigor.",
+                        "Your responses show readiness for more challenging questions.",
+                        "Let's raise the bar. You seem prepared for this."
+                    ]
+                }
+            },
+
+            // Core State
+            state: {
+                isInitialized: false,
+                isActive: false,
+                isPaused: false,
+                focusMode: false,
+                currentPhase: 'introduction',
+                currentQuestionIndex: 0,
+                totalQuestions: 0,
+                questions: [],
+                responses: [],
+                interviewData: null,
+                startTime: null,
+                totalElapsed: 0,
+                questionStartTime: null,
+                questionElapsed: 0,
+                timers: {},
+                isRecording: false,
+                responseMode: 'webcam',
+                webcamStream: null,
+                mediaRecorder: null,
+                recordedChunks: [],
+                currentTranscript: '',
+                isProcessingResponse: false,
+
+                // Intelligence Metrics
+                candidateConfidence: 0.5,
+                stressLevel: 0.3,
+                averageResponseTime: 0,
+                answerDepthScore: 0,
+                fillerWordCount: 0,
+                voiceStability: 0.8,
+
+                // Adaptive Settings
+                interviewerPersonality: 'neutral',
+                currentInterviewerName: null,
+                questionDifficulty: 'medium',
+                interactionIntensity: 'normal',
+                followUpDepth: 1,
+                supportLevel: 'normal',
+
+                // Stress Monitoring
+                stressIndicators: {
+                    longPauses: 0,
+                    voiceTremors: 0,
+                    repetitivePhrases: 0,
+                    speedChanges: 0,
+                    fillerWords: ['um', 'uh', 'like', 'you know', 'actually']
+                },
+
+                // Microphone State
+                microphoneEnabled: false,
+                microphoneStream: null,
+
+                // Personality Profiles
+                personalities: {
+                    friendly: {
+                        tone: 'warm',
+                        encouragementFrequency: 'high',
+                        followUpStyle: 'gentle',
+                        responseStyle: 'supportive',
+                        color: '#22c55e'
+                    },
+                    neutral: {
+                        tone: 'balanced',
+                        encouragementFrequency: 'medium',
+                        followUpStyle: 'direct',
+                        responseStyle: 'professional',
+                        color: '#3b82f6'
+                    },
+                    strict: {
+                        tone: 'firm',
+                        encouragementFrequency: 'low',
+                        followUpStyle: 'challenging',
+                        responseStyle: 'critical',
+                        color: '#ef4444'
+                    }
+                }
+            },
+            
+  // Load questions based on interview type
+            async loadQuestions() {
+                try {
+                    let questions = [];
+                    const interviewType = this.state.interviewData?.interviewType;
+                    const role = this.state.interviewData?.selectedRole || 'Software Engineer';
+                    const difficulty = this.state.interviewData?.interviewDifficulty || 'mid';
+                    const sessionLength = this.state.interviewData?.sessionLength || 5;
+                    
+                    if (interviewType === 'resume-based') {
+                        // Generate personalized questions from resume
+                        questions = this.generateResumeBasedQuestions();
+                    } else {
+                        // Generate role-based questions
+                        questions = this.generateRoleBasedQuestions(role, difficulty);
+                    }
+                    
+                    // Limit to session length
+                    this.state.questions = questions.slice(0, sessionLength);
+                    this.state.totalQuestions = this.state.questions.length;
+                    
+                    // Set initial difficulty
+                    this.state.questionDifficulty = difficulty;
+                    
+                } catch (error) {
+                    console.error('Error loading questions:', error);
+                    // Fallback to generic questions
+                    this.state.questions = this.generateFallbackQuestions();
+                    this.state.totalQuestions = this.state.questions.length;
+                }
+            },
+            
+            generateResumeBasedQuestions() {
+                const resumeData = this.state.interviewData?.extractedResumeData;
+                if (!resumeData) return this.generateFallbackQuestions();
+
+                const questions = [];
+                const difficulty = this.state.interviewData?.interviewDifficulty || 'mid';
+
+                // Skills-based questions
+                if (resumeData.skills && resumeData.skills.length > 0) {
+                    resumeData.skills.slice(0, 3).forEach(skill => {
+                        questions.push({
+                            text: `Tell me about your practical experience with ${skill}. Can you share a specific project where you applied this skill?`,
+                            type: 'technical',
+                            difficulty: difficulty,
+                            phase: 'core',
+                            expectedResponse: 'Detailed example with specific outcomes',
+                            skillFocus: skill
+                        });
+                    });
+                }
+
+                // Experience-based questions
+                if (resumeData.experience && resumeData.experience.length > 0) {
+                    resumeData.experience.slice(0, 2).forEach(exp => {
+                        questions.push({
+                            text: `During your time at ${exp.company}, what was your most significant achievement and what role did you play in it?`,
+                            type: 'behavioral',
+                            difficulty: difficulty,
+                            phase: 'core',
+                            expectedResponse: 'STAR method response with quantifiable results',
+                            context: exp.company
+                        });
+                    });
+                }
+
+                // Scenario-based questions
+                questions.push({
+                    text: "Based on your experience, how would you approach a situation where you need to learn a completely new technology under tight deadlines?",
+                    type: 'scenario',
+                    difficulty: difficulty === 'easy' ? 'medium' : difficulty,
+                    phase: 'scenario',
+                    expectedResponse: 'Structured approach with risk assessment',
+                    scenario: "You have 2 weeks to deliver a project using an unfamiliar technology stack."
+                });
+
+                return questions;
+            },
+
+            generateRoleBasedQuestions(role, difficulty) {
+                const questions = [];
+                const roleLower = role.toLowerCase();
+
+                // Define question templates for different roles
+                const questionTemplates = {
+                    'software engineer': {
+                        technical: [
+                            "Can you walk me through your approach to debugging a complex issue in your codebase?",
+                            "How do you ensure code quality and maintainability in your projects?",
+                            "Describe your experience with version control systems like Git.",
+                            "How do you handle code reviews and incorporate feedback?",
+                            "Tell me about a challenging technical problem you solved recently."
+                        ],
+                        behavioral: [
+                            "Describe a time when you had to learn a new technology quickly.",
+                            "How do you handle conflicting priorities and deadlines?",
+                            "Tell me about a successful collaboration with a difficult team member.",
+                            "How do you approach mentoring junior developers?",
+                            "Describe your process for estimating project timelines."
+                        ],
+                        scenario: [
+                            "Imagine you're tasked with refactoring a legacy codebase with no tests. How would you approach this?",
+                            "How would you handle a production outage caused by your recent deployment?",
+                            "You're asked to implement a feature with unclear requirements. What's your approach?"
+                        ]
+                    },
+                    'data scientist': {
+                        technical: [
+                            "Walk me through your process for cleaning and preparing data for analysis.",
+                            "How do you select and evaluate machine learning models?",
+                            "Describe your experience with statistical analysis and hypothesis testing.",
+                            "How do you handle imbalanced datasets in classification problems?",
+                            "Tell me about your experience with data visualization and storytelling."
+                        ],
+                        behavioral: [
+                            "Describe a time when you had to explain complex technical concepts to non-technical stakeholders.",
+                            "How do you validate and ensure the quality of your data science work?",
+                            "Tell me about a project where your analysis led to significant business impact.",
+                            "How do you stay current with developments in data science and machine learning?"
+                        ],
+                        scenario: [
+                            "You discover that your model's predictions are biased against a certain demographic. How do you address this?",
+                            "How would you approach building a recommendation system for a new product?",
+                            "You're asked to predict customer churn with limited historical data. What's your strategy?"
+                        ]
+                    },
+                    'product manager': {
+                        technical: [
+                            "How do you prioritize features in your product roadmap?",
+                            "Describe your experience with A/B testing and experimentation.",
+                            "How do you gather and incorporate user feedback into product decisions?",
+                            "Tell me about your approach to defining and measuring product metrics."
+                        ],
+                        behavioral: [
+                            "Describe a time when you had to say no to a feature request.",
+                            "How do you handle competing priorities from different stakeholders?",
+                            "Tell me about a product launch that didn't go as planned and what you learned.",
+                            "How do you foster collaboration between engineering, design, and business teams?"
+                        ],
+                        scenario: [
+                            "Your product is experiencing high churn. How would you investigate and address this?",
+                            "How would you approach launching a product in a new market?",
+                            "You're asked to cut 30% of features from your roadmap. How do you decide what stays?"
+                        ]
+                    },
+                    'designer': {
+                        technical: [
+                            "Walk me through your design process from concept to implementation.",
+                            "How do you ensure your designs are accessible and inclusive?",
+                            "Describe your experience with user research and usability testing.",
+                            "How do you balance aesthetic appeal with functional design?"
+                        ],
+                        behavioral: [
+                            "Tell me about a time when you had to defend your design decisions.",
+                            "How do you handle feedback and iteration on your designs?",
+                            "Describe a challenging design problem you solved.",
+                            "How do you collaborate with developers to ensure design fidelity?"
+                        ],
+                        scenario: [
+                            "You need to redesign a complex user flow that's causing high drop-off rates. How do you approach this?",
+                            "How would you design an interface for users with varying levels of technical expertise?",
+                            "You're asked to create a design system for a large, established product. What's your strategy?"
+                        ]
+                    }
+                };
+
+                // Get questions for the specific role, fallback to software engineer
+                const roleQuestions = questionTemplates[roleLower] || questionTemplates['software engineer'];
+
+                // Generate questions based on difficulty
+                const questionCount = this.state.interviewData?.sessionLength || 5;
+                const types = ['technical', 'behavioral', 'scenario'];
+
+                for (let i = 0; i < questionCount; i++) {
+                    const type = types[i % types.length];
+                    const typeQuestions = roleQuestions[type] || roleQuestions.technical;
+                    const questionText = typeQuestions[Math.floor(Math.random() * typeQuestions.length)];
+
+                    questions.push({
+                        text: questionText,
+                        type: type,
+                        difficulty: difficulty,
+                        phase: type === 'scenario' ? 'scenario' : 'core',
+                        expectedResponse: this.getExpectedResponseForType(type),
+                        roleFocus: role
+                    });
+                }
+
+                return questions;
+            },
+
+            generateFallbackQuestions() {
+                // Fallback questions when no specific data is available
+                return [
+                    {
+                        text: "Tell me about yourself and your background in your field.",
+                        type: 'behavioral',
+                        difficulty: 'medium',
+                        phase: 'introduction',
+                        expectedResponse: 'Professional summary highlighting key experiences and skills'
+                    },
+                    {
+                        text: "What interests you most about working in this field?",
+                        type: 'behavioral',
+                        difficulty: 'easy',
+                        phase: 'core',
+                        expectedResponse: 'Personal motivation and career goals'
+                    },
+                    {
+                        text: "Describe a challenging project you worked on and how you overcame the difficulties.",
+                        type: 'behavioral',
+                        difficulty: 'medium',
+                        phase: 'core',
+                        expectedResponse: 'STAR method response with specific challenges and solutions'
+                    },
+                    {
+                        text: "How do you approach problem-solving in your work?",
+                        type: 'technical',
+                        difficulty: 'medium',
+                        phase: 'core',
+                        expectedResponse: 'Structured approach with examples'
+                    },
+                    {
+                        text: "Where do you see yourself in 3-5 years professionally?",
+                        type: 'behavioral',
+                        difficulty: 'easy',
+                        phase: 'closing',
+                        expectedResponse: 'Career goals and professional development plans'
+                    }
+                ];
+            },
+
+            getExpectedResponseForType(type) {
+                const expectations = {
+                    technical: 'Clear explanation with specific examples and technical details',
+                    behavioral: 'STAR method response with specific situation, task, action, and result',
+                    scenario: 'Step-by-step approach with consideration of different factors and potential challenges'
+                };
+                return expectations[type] || 'Clear, structured response with examples';
+            },
+            
+           
+            
+           // Voice synthesis function with gender support
+           
+            setupInterviewerPersonality() {
+            const confidence = this.state.candidateConfidence;
+            const experienceLevel = this.state.interviewData?.experienceLevel || 'intermediate';
+            const selectedAvatar = this.state.selectedAvatar;
+            
+            // If user selected a specific avatar, use its associated personality
+            if (selectedAvatar) {
+                const avatarPersonalities = {
+                    'Sarah': 'friendly',
+                    'Michael': 'strict',
+                    'Alex': 'neutral'
+                };
+                this.state.interviewerPersonality = avatarPersonalities[selectedAvatar] || 'neutral';
+            } 
+            // Otherwise, use adaptive personality based on confidence and experience
+            else if (confidence < 0.4 || experienceLevel === 'junior') {
+                this.state.interviewerPersonality = 'friendly';
+                this.state.supportLevel = 'high';
+            } else if (confidence > 0.7 && experienceLevel === 'senior') {
+                this.state.interviewerPersonality = 'strict';
+                this.state.supportLevel = 'low';
+            } else {
+                this.state.interviewerPersonality = 'neutral';
+                this.state.supportLevel = 'normal';
+            }
+            
+            this.updateInterviewerUI();
+        },
+                    
+            // Update interviewer UI based on personality and selected avatar
+           // In the InterviewEngine object, find the updateInterviewerUI() function and replace it with:
+updateInterviewerUI() {
+    const personality = this.state.interviewerPersonality;
+    const selectedAvatar = localStorage.getItem('selectedAvatar') || 'Sarah'; // Get from localStorage
+    const panel = document.getElementById('interviewer-panel');
+    const badge = document.getElementById('personality-badge');
+
+    panel.setAttribute('data-personality', personality);
+    badge.className = `personality-badge personality-${personality}`;
+    badge.textContent = this.capitalizeFirstLetter(personality);
+
+    // Update interviewer name - use selected avatar or default
+    const interviewerName = selectedAvatar; // Use the selected avatar name
+    document.getElementById('interviewer-name').textContent = interviewerName;
+
+    // Update avatar image based on selected avatar
+    const avatarImages = {
+        'Sarah': 'resources/Sarah.png',
+        'Michael': 'resources/Michael.png',
+        'Alex': 'resources/Alex.png'
+    };
+
+    const avatar = document.getElementById('avatar-main');
+    if (avatarImages[interviewerName]) {
+        avatar.src = avatarImages[interviewerName];
+    } else {
+        // Fallback to personality-based avatar
+        const fallbackAvatars = {
+            'friendly': 'resources/Sarah.png',
+            'neutral': 'resources/Alex.png',
+            'strict': 'resources/Michael.png'
+        };
+        avatar.src = fallbackAvatars[personality] || 'resources/Alex.png';
+    }
+
+    // Update interviewer name in state for consistency
+    this.state.currentInterviewerName = interviewerName;
+},
+            
+            // Update header with dynamic information
+            updateHeader() {
+                const interviewData = this.state.interviewData;
+
+                // Use custom interview name if provided, otherwise use interview type
+                const interviewTitle = interviewData.interviewName ||
+                    `${this.capitalizeFirstLetter(interviewData.interviewType || 'Role-Based')} Interview`;
+
+                document.getElementById('interview-title').textContent = interviewTitle;
+
+                // Show role and type in subtitle
+                const roleText = interviewData.selectedRole || 'General Interview';
+                const typeText = this.capitalizeFirstLetter(interviewData.interviewType || 'role-based');
+                document.getElementById('interview-role').textContent = `${roleText} (${typeText})`;
+
+                // Update user information
+                this.updateUserInfo();
+            },
+
+            // Update user information in header
+            updateUserInfo() {
+    console.log('Updating user info...');
+
+    let userName = 'Guest';
+    let userInitials = 'G';
+
+    // First check AuthService (primary source)
+    if (window.AuthService && window.AuthService.isAuth()) {
+        const user = window.AuthService.getUser();
+        if (user) {
+            // Use fullName if available, otherwise construct from firstName and lastName
+            if (user.fullName) {
+                userName = user.fullName;
+            } else if (user.firstName && user.lastName) {
+                userName = `${user.firstName} ${user.lastName}`;
+            } else if (user.firstName) {
+                userName = user.firstName;
+            } else if (user.name) {
+                userName = user.name; // fallback for old data
+            }
+
+            // Extract initials
+            if (userName !== 'Guest') {
+                const nameParts = userName.trim().split(/\s+/);
+                if (nameParts.length > 1) {
+                    userInitials = (nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)).toUpperCase();
+                } else if (nameParts[0]) {
+                    userInitials = nameParts[0].charAt(0).toUpperCase();
+                }
+            }
+        }
+    } else {
+        // Fallback to localStorage if AuthService not available
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            try {
+                const userData = JSON.parse(storedUser);
+                // Use fullName if available, otherwise construct from firstName and lastName
+                if (userData.fullName) {
+                    userName = userData.fullName;
+                } else if (userData.firstName && userData.lastName) {
+                    userName = `${userData.firstName} ${userData.lastName}`;
+                } else if (userData.firstName) {
+                    userName = userData.firstName;
+                } else if (userData.name) {
+                    userName = userData.name; // fallback for old data
+                }
+
+                // Extract initials
+                if (userName !== 'Guest') {
+                    const nameParts = userName.trim().split(/\s+/);
+                    if (nameParts.length > 1) {
+                        userInitials = (nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)).toUpperCase();
+                    } else if (nameParts[0]) {
+                        userInitials = nameParts[0].charAt(0).toUpperCase();
+                    }
+                }
+            } catch (e) {
+                console.error('Error parsing user data from localStorage:', e);
+            }
+        }
+    }
+
+    // Update UI elements
+    const userNameElement = document.getElementById('user-name');
+    const userInitialsElement = document.getElementById('user-initials');
+
+    if (userNameElement) {
+        userNameElement.textContent = userName;
+    }
+    if (userInitialsElement) {
+        userInitialsElement.textContent = userInitials;
+    }
+
+    console.log('User info updated:', userName, userInitials);
+},
+
+            // Refresh user information from server (for dynamic updates)
+            async refreshUserInfo() {
+                try {
+                    if (window.AuthService && window.AuthService.isAuth()) {
+                        // Get fresh user data from server
+                        const result = await window.AuthService.getCurrentUser();
+                        if (result.success) {
+                            // Update local data and UI
+                            this.updateUserInfo();
+                            console.log('User info refreshed from server');
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Failed to refresh user info:', error);
+                    // Fall back to cached data
+                    this.updateUserInfo();
+                }
+            },
+
+            // Setup dynamic user info updates
+            setupDynamicUserUpdates() {
+                // Refresh user info every 5 minutes to keep it current
+                setInterval(() => {
+                    this.refreshUserInfo();
+                }, 5 * 60 * 1000); // 5 minutes
+
+                // Listen for storage changes (in case user data is updated in another tab)
+                window.addEventListener('storage', (e) => {
+                    if (e.key === 'user' || e.key === 'accessToken') {
+                        console.log('User data changed in storage, updating UI');
+                        this.updateUserInfo();
+                    }
+                });
+
+                // Listen for custom events (if other parts of the app update user data)
+                window.addEventListener('userDataUpdated', () => {
+                    console.log('User data updated event received, refreshing UI');
+                    this.updateUserInfo();
+                });
+            },
+
+            // Setup interview phases
+            setupPhases() {
+                const phases = ['introduction', 'core', 'scenario', 'closing'];
+                const container = document.getElementById('phase-tracker');
+                
+                phases.forEach((phase, index) => {
+                    const phaseItem = document.createElement('div');
+                    phaseItem.className = 'phase-item';
+                    
+                    const dot = document.createElement('div');
+                    dot.className = 'phase-dot';
+                    dot.id = `phase-${phase}`;
+                    
+                    const label = document.createElement('span');
+                    label.className = 'phase-label';
+                    label.textContent = this.capitalizeFirstLetter(phase);
+                    
+                    phaseItem.appendChild(dot);
+                    phaseItem.appendChild(label);
+                    container.appendChild(phaseItem);
+                });
+            },
+            
+            // Update progress display
+            updateProgress() {
+                const progress = ((this.state.currentQuestionIndex + 1) / this.state.totalQuestions) * 100;
+                document.getElementById('progress-fill').style.width = `${progress}%`;
+                document.getElementById('progress-text').textContent = 
+                    `Question ${this.state.currentQuestionIndex + 1}/${this.state.totalQuestions}`;
+                
+                // Update phase indicators
+                this.updatePhaseIndicators();
+                
+                // Update reassurance message
+                this.updateReassuranceMessage();
+            },
+            
+            updatePhaseIndicators() {
+                const currentPhase = this.state.currentPhase;
+                const phases = ['introduction', 'core', 'scenario', 'closing'];
+                
+                phases.forEach(phase => {
+                    const dot = document.getElementById(`phase-${phase}`);
+                    if (dot) {
+                        dot.classList.remove('active', 'completed');
+                        
+                        if (phase === currentPhase) {
+                            dot.classList.add('active');
+                        } else if (phases.indexOf(phase) < phases.indexOf(currentPhase)) {
+                            dot.classList.add('completed');
+                        }
+                    }
+                });
+            },
+            
+            updateReassuranceMessage() {
+                const randomIndex = Math.floor(Math.random() * this.messages.encouragements.length);
+                document.getElementById('reassurance-message').textContent = this.messages.encouragements[randomIndex];
+            },
+            // Add this method to InterviewEngine
+async initialize() {
+    try {
+        // Load interview data from sessionStorage
+        const interviewSetup = sessionStorage.getItem('interviewSetup');
+        if (interviewSetup) {
+            this.state.interviewData = JSON.parse(interviewSetup);
+        } else {
+            // Default data if none found
+            this.state.interviewData = {
+                interviewType: 'role-based',
+                selectedRole: 'Software Engineer',
+                interviewDifficulty: 'medium',
+                sessionLength: 5
+            };
+        }
+        
+        // Setup interviewer personality
+        this.setupInterviewerPersonality();
+        
+        // Load questions
+        await this.loadQuestions();
+        
+        // Setup phases
+        this.setupPhases();
+        
+        // Update header
+        this.updateHeader();
+        
+        // Update user info
+        this.updateUserInfo();
+        
+        // Initialize timers (but don't start them yet)
+        this.state.timers = {
+            total: null,
+            question: null
+        };
+        
+        this.state.isInitialized = true;
+        
+        // Set initial status
+        this.updateStatus('ready');
+        
+        // Update interviewer UI immediately
+        this.updateInterviewerUI();
+        
+        console.log('Interview engine initialized');
+        
+        // Auto-start interview after a brief delay
+        setTimeout(() => {
+            this.startInterview();
+        }, 1000);
+        
+    } catch (error) {
+        console.error('Error initializing interview:', error);
+        this.showError('Failed to initialize interview. Please refresh the page.');
+    }
+},
+            // Initialize webcam (called when switching to webcam mode)
+            async initializeWebcam() {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    try {
+                        this.state.webcamStream = await navigator.mediaDevices.getUserMedia({
+                            video: true,
+                            audio: true
+                        });
+
+                        // Show webcam preview immediately
+                        const videoElement = document.getElementById('webcam-preview');
+                        videoElement.srcObject = this.state.webcamStream;
+                        videoElement.muted = true; // Ensure muted for autoplay
+                        videoElement.style.display = 'block';
+
+                        // Start playing the video
+                        try {
+                            await videoElement.play();
+                            console.log('Webcam initialized and playing successfully');
+                        } catch (playError) {
+                            console.warn('Video play failed:', playError);
+                            // Fallback: try again after a short delay
+                            setTimeout(async () => {
+                                try {
+                                    await videoElement.play();
+                                    console.log('Video started playing on retry');
+                                } catch (retryError) {
+                                    console.error('Video play failed on retry:', retryError);
+                                    this.showError('Unable to start video playback. Please check your browser settings.');
+                                }
+                            }, 100);
+                        }
+
+                        // Update status to show camera is active
+                        document.getElementById('webcam-status-title').textContent = 'Camera Active - Click to Start Recording';
+                        document.getElementById('webcam-instruction').textContent = 'Your camera is ready. Click to begin recording your response.';
+
+                        console.log('Webcam initialized successfully');
+                    } catch (error) {
+                        console.error('Error accessing webcam:', error);
+                        this.showError('Unable to access webcam. Please check permissions and try again.');
+                        // Fallback to text mode
+                        this.setResponseMode('text');
+                    }
+                } else {
+                    console.warn('Webcam not supported');
+                    // Disable webcam mode if not supported
+                    document.getElementById('webcam-mode-btn').disabled = true;
+                    document.getElementById('webcam-mode-btn').textContent = 'Webcam (Not Supported)';
+                    this.setResponseMode('text');
+                }
+            },
+            
+            // Initialize timers
+            // In the InterviewEngine initialization section, add:
+initializeTimers() {
+    // Clear any existing timers
+    if (this.state.timers.total) clearInterval(this.state.timers.total);
+    if (this.state.timers.question) clearInterval(this.state.timers.question);
+    
+    // Total interview timer
+    this.state.timers.total = setInterval(() => {
+        if (this.state.isActive && !this.state.isPaused) {
+            this.state.totalElapsed++;
+            this.updateTotalTimer();
+        }
+    }, 1000);
+    
+    // Question timer
+    this.state.timers.question = setInterval(() => {
+        if (this.state.isActive && !this.state.isPaused && this.state.questionStartTime) {
+            this.state.questionElapsed++;
+            this.updateQuestionTimer();
+            
+            // Adaptive timing logic
+            this.analyzeResponseTiming();
+        }
+    }, 1000);
+},
+
+// Make sure timers start when interview starts
+startInterview() {
+    if (!this.state.isInitialized || this.state.isActive) return;
+
+    // Initialize timers first
+    this.initializeTimers();
+    
+    // Ensure user interaction is set for speech synthesis
+    if (window.AppState) {
+        window.AppState.userInteracted = true;
+    }
+
+    this.state.isActive = true;
+    this.updateStatus('live');
+
+    // Get interview details for introduction
+    const interviewData = this.state.interviewData;
+    const interviewType = this.capitalizeFirstLetter(interviewData?.interviewType || 'role-based');
+    const selectedRole = interviewData?.selectedRole || 'General';
+    const interviewerName = this.getInterviewerName();
+
+    // Select random greeting and personalize it
+    const greetingTemplate = this.messages.greetings[Math.floor(Math.random() * this.messages.greetings.length)];
+    const introductionMessage = greetingTemplate
+        .replace('{name}', interviewerName)
+        .replace('{type}', interviewType)
+        .replace('{role}', selectedRole);
+
+    // Show welcome interaction with full introduction
+    this.addInteractionMessage(introductionMessage, 'cue');
+
+    // Set avatar to speaking state and speak the introduction
+    this.setAvatarState('speaking');
+    this.speakQuestion(introductionMessage);
+
+    setTimeout(() => {
+        this.askQuestion();
+    }, 4000); // Increased delay to allow introduction to complete
+},
+            
+            updateTotalTimer() {
+                const minutes = Math.floor(this.state.totalElapsed / 60);
+                const seconds = this.state.totalElapsed % 60;
+                document.getElementById('smart-timer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Adaptive timer hints
+                if (this.state.totalElapsed > 600) { // 10 minutes
+                    document.getElementById('smart-timer').setAttribute('data-hint', 'Good pacing, keep going');
+                }
+            },
+            
+            updateQuestionTimer() {
+                document.getElementById('time-on-question').textContent = `${this.state.questionElapsed}s`;
+                
+                // Adaptive question timing
+                if (this.state.questionElapsed > 60) {
+                    // Candidate is taking a long time on this question
+                    this.triggerLongPauseSupport();
+                }
+            },
+            
+            // Analyze response timing for adaptation
+            analyzeResponseTiming() {
+                const avgResponseTime = this.calculateAverageResponseTime();
+                
+                // Update difficulty based on response time
+                if (this.state.questionElapsed > avgResponseTime * 1.5) {
+                    // Slower than average - might be struggling
+                    this.adaptDifficulty('easier');
+                } else if (this.state.questionElapsed < avgResponseTime * 0.7) {
+                    // Faster than average - might need more challenge
+                    this.adaptDifficulty('harder');
+                }
+            },
+            
+            calculateAverageResponseTime() {
+                if (this.state.responses.length === 0) return 30; // Default 30 seconds
+                
+                const totalTime = this.state.responses.reduce((sum, response) => {
+                    return sum + (response.responseTime || 30);
+                }, 0);
+                
+                return totalTime / this.state.responses.length;
+            },
+            
+            // Adaptive difficulty adjustment
+            adaptDifficulty(direction) {
+                const difficulties = ['easy', 'medium', 'hard'];
+                let currentIndex = difficulties.indexOf(this.state.questionDifficulty);
+
+                if (direction === 'easier' && currentIndex > 0) {
+                    currentIndex--;
+                    // Show difficulty adaptation message
+                    const adaptationMessage = this.messages.difficultyAdaptations.easier[Math.floor(Math.random() * this.messages.difficultyAdaptations.easier.length)];
+                    this.addInteractionMessage(adaptationMessage, 'cue');
+                } else if (direction === 'harder' && currentIndex < difficulties.length - 1) {
+                    currentIndex++;
+                    // Show difficulty adaptation message
+                    const adaptationMessage = this.messages.difficultyAdaptations.harder[Math.floor(Math.random() * this.messages.difficultyAdaptations.harder.length)];
+                    this.addInteractionMessage(adaptationMessage, 'cue');
+                }
+
+                this.state.questionDifficulty = difficulties[currentIndex];
+
+                // Update UI if needed
+                const question = this.state.questions[this.state.currentQuestionIndex];
+                if (question) {
+                    question.difficulty = this.state.questionDifficulty;
+                    this.updateQuestionDisplay(question);
+                }
+            },
+
+            // Dynamic personality switching
+            switchPersonality(newPersonality) {
+                if (this.state.interviewerPersonality === newPersonality) return;
+
+                const oldPersonality = this.state.interviewerPersonality;
+                this.state.interviewerPersonality = newPersonality;
+
+                // Generate a new name for the new personality
+                this.state.currentInterviewerName = null; // Reset to generate new name
+                const newName = this.generateDynamicInterviewerName();
+
+                // Show personality switch message
+                let switchMessage = '';
+                if (newPersonality === 'friendly') {
+                    switchMessage = this.messages.personalitySwitches.toFriendly[Math.floor(Math.random() * this.messages.personalitySwitches.toFriendly.length)];
+                } else if (newPersonality === 'strict') {
+                    switchMessage = this.messages.personalitySwitches.toStrict[Math.floor(Math.random() * this.messages.personalitySwitches.toStrict.length)];
+                }
+
+                if (switchMessage) {
+                    this.addInteractionMessage(switchMessage, 'cue');
+                }
+
+                // Update UI
+                this.updateInterviewerUI();
+            },
+            
+            // Start interview
+            startInterview() {
+                if (!this.state.isInitialized || this.state.isActive) return;
+
+                // Ensure user interaction is set for speech synthesis
+                if (window.AppState) {
+                    window.AppState.userInteracted = true;
+                }
+
+                this.state.isActive = true;
+                this.updateStatus('live');
+
+                // Get interview details for introduction
+                const interviewData = this.state.interviewData;
+                const interviewType = this.capitalizeFirstLetter(interviewData?.interviewType || 'role-based');
+                const selectedRole = interviewData?.selectedRole || 'General';
+                const interviewerName = this.getInterviewerName();
+
+                // Select random greeting and personalize it
+                const greetingTemplate = this.messages.greetings[Math.floor(Math.random() * this.messages.greetings.length)];
+                const introductionMessage = greetingTemplate
+                    .replace('{name}', interviewerName)
+                    .replace('{type}', interviewType)
+                    .replace('{role}', selectedRole);
+
+                // Show welcome interaction with full introduction
+                this.addInteractionMessage(introductionMessage, 'cue');
+
+                // Set avatar to speaking state and speak the introduction
+                this.setAvatarState('speaking');
+                this.speakQuestion(introductionMessage);
+
+                setTimeout(() => {
+                    this.askQuestion();
+                }, 4000); // Increased delay to allow introduction to complete
+            },
+            
+            // Ask current question
+            askQuestion() {
+                if (this.state.currentQuestionIndex >= this.state.totalQuestions) {
+                    this.endInterview();
+                    return;
+                }
+                
+                const question = this.state.questions[this.state.currentQuestionIndex];
+                this.state.currentPhase = question.phase || 'core';
+                
+                // Reset question timer
+                this.state.questionStartTime = new Date();
+                this.state.questionElapsed = 0;
+                
+                // Update UI
+                this.updateQuestionDisplay(question);
+                this.updateProgress();
+                this.setAvatarState('speaking');
+                
+                // Speak the question
+                this.speakQuestion(question.text);
+                
+                // Show interaction cue
+                setTimeout(() => {
+                    this.setAvatarState('listening');
+                    const listeningCue = this.messages.listeningCues[Math.floor(Math.random() * this.messages.listeningCues.length)];
+                    this.addInteractionMessage(listeningCue, 'cue');
+
+                    // Enable response
+                    this.enableResponse();
+                }, question.text.length * 50 + 1000);
+            },
+            
+            updateQuestionDisplay(question) {
+                document.getElementById('current-question').textContent = question.text;
+                document.getElementById('question-type').textContent = 
+                    this.capitalizeFirstLetter(question.type);
+                document.getElementById('difficulty-text').textContent = 
+                    this.capitalizeFirstLetter(question.difficulty);
+                document.getElementById('expected-content').textContent = 
+                    question.expectedResponse || 'Clear, structured explanation';
+                
+                // Update difficulty color
+                const difficultyElement = document.getElementById('question-difficulty');
+                difficultyElement.className = `question-difficulty difficulty-${question.difficulty}`;
+                
+                // Show/hide scenario section
+                const scenarioSection = document.getElementById('scenario-section');
+                if (question.scenario) {
+                    scenarioSection.style.display = 'block';
+                    document.getElementById('scenario-content').textContent = question.scenario;
+                } else {
+                    scenarioSection.style.display = 'none';
+                }
+            },
+            
+            // Speak question with personality-appropriate tone
+           // Speak question with personality-appropriate tone
+speakQuestion(text) {
+    if (window.speakText) {
+        // Get current interviewer name to determine gender
+        const interviewerName = this.getInterviewerName();
+        
+        // Set voice parameters based on interviewer
+        const voiceParams = {
+            'Sarah': { // Female voice for Sarah
+                rate: 0.9,
+                pitch: 1.2,  // Higher pitch for female voice
+                volume: 1.0,
+                voiceType: 'female'
+            },
+            
+            'Michael': { // Male voice for Michael
+                rate: 1.0,
+                pitch: 0.8,  // Lower pitch for male voice
+                volume: 1.0,
+                voiceType: 'male'
+            },
+
+            'Alex': { // Neutral/androgynous voice for Alex
+                rate: 1.0,
+                pitch: 1.0,
+                volume: 1.0,
+                voiceType: 'male'
+            }
+        };
+        
+        const params = voiceParams[interviewerName] || {
+            rate: 1.0,
+            pitch: 1.0,
+            volume: 1.0,
+            voiceType: 'neutral'
+        };
+        
+        // Adjust for personality if not overridden by specific avatar
+        const personality = this.state.interviewerPersonality;
+        if (personality === 'strict') {
+            params.rate = 1.1;
+            params.pitch = 0.85; // Slightly lower for authority
+        } else if (personality === 'friendly') {
+            params.rate = 0.9;
+            params.pitch = 1.1; // Slightly higher for warmth
+        }
+        
+        // Call the speak function with all parameters
+        window.speakText(text, params);
+    }
+},
+            
+            // Set response mode
+            setResponseMode(mode) {
+                this.state.responseMode = mode;
+
+                // Update UI - only handle existing elements
+                const webcamBtn = document.getElementById('webcam-mode-btn');
+                if (webcamBtn) {
+                    webcamBtn.classList.toggle('active', mode === 'webcam' || mode === 'voice');
+                }
+
+                const webcamArea = document.getElementById('webcam-response-area');
+                if (webcamArea) {
+                    webcamArea.classList.toggle('active', mode === 'webcam' || mode === 'voice');
+                }
+
+                const textArea = document.getElementById('text-response-area');
+                if (textArea) {
+                    textArea.style.display = mode === 'text' ? 'flex' : 'none';
+                }
+
+                // If switching from webcam/voice and recording, stop
+                if ((mode !== 'webcam' && mode !== 'voice') && this.state.isRecording) {
+                    this.stopWebcamRecording();
+                }
+
+                // Initialize text area if needed
+                if (mode === 'text') {
+                    this.initializeTextResponse();
+                }
+            },
+            
+            initializeTextResponse() {
+                const textarea = document.getElementById('response-textarea');
+                const structuring = document.getElementById('thought-structuring');
+                
+                textarea.addEventListener('input', () => {
+                    this.analyzeTextResponse(textarea.value);
+                    this.updateSubmitButtonState();
+                });
+                
+                // Show structuring assistant after delay
+                setTimeout(() => {
+                    structuring.style.display = 'block';
+                    this.updateStructuringHint();
+                }, 5000);
+            },
+            
+            updateStructuringHint() {
+                const question = this.state.questions[this.state.currentQuestionIndex];
+                let hint = '';
+                
+                switch (question.type) {
+                    case 'technical':
+                        hint = "Consider: 1) Technical approach, 2) Implementation details, 3) Challenges faced, 4) Results achieved";
+                        break;
+                    case 'behavioral':
+                        hint = "Use STAR method: Situation, Task, Action, Result. Be specific about your role.";
+                        break;
+                    case 'scenario':
+                        hint = "Think step-by-step: 1) Understanding the problem, 2) Analysis, 3) Solution approach, 4) Expected outcomes";
+                        break;
+                    default:
+                        hint = "Structure: 1) Overview, 2) Key points, 3) Examples, 4) Conclusion";
+                }
+                
+                document.getElementById('structuring-hint').textContent = hint;
+            },
+            
+            // Webcam recording functions
+            toggleWebcamRecording() {
+                if (this.state.responseMode !== 'webcam') return;
+
+                if (this.state.isRecording) {
+                    this.stopWebcamRecording();
+                } else {
+                    this.startWebcamRecording();
+                }
+            },
+
+            // Microphone toggle function
+            toggleMicrophone() {
+                this.state.microphoneEnabled = !this.state.microphoneEnabled;
+
+                const micBtn = document.getElementById('mic-btn');
+                const micIcon = document.getElementById('mic-icon');
+                const micText = document.getElementById('mic-text');
+
+                if (this.state.microphoneEnabled) {
+                    // Enable microphone
+                    micBtn.classList.add('active');
+                    micIcon.style.color = '#22c55e'; // Green color
+                    micText.textContent = 'Mic On';
+
+                    // Request microphone access
+                    this.requestMicrophoneAccess();
+                } else {
+                    // Disable microphone
+                    micBtn.classList.remove('active');
+                    micIcon.style.color = '#64748b'; // Default color
+                    micText.textContent = 'Mic Off';
+
+                    // Stop microphone stream
+                    this.stopMicrophoneStream();
+                }
+            },
+
+            async requestMicrophoneAccess() {
+                try {
+                    this.state.microphoneStream = await navigator.mediaDevices.getUserMedia({
+                        audio: true,
+                        video: false
+                    });
+
+                    console.log('Microphone access granted');
+                    this.addInteractionMessage('Microphone enabled. You can now speak during your responses.', 'cue');
+                } catch (error) {
+                    console.error('Error accessing microphone:', error);
+                    this.showError('Unable to access microphone. Please check permissions.');
+                    // Reset state
+                    this.state.microphoneEnabled = false;
+                    const micBtn = document.getElementById('mic-btn');
+                    const micIcon = document.getElementById('mic-icon');
+                    const micText = document.getElementById('mic-text');
+                    micBtn.classList.remove('active');
+                    micIcon.style.color = '#64748b';
+                    micText.textContent = 'Mic Off';
+                }
+            },
+
+            stopMicrophoneStream() {
+                if (this.state.microphoneStream) {
+                    this.state.microphoneStream.getTracks().forEach(track => track.stop());
+                    this.state.microphoneStream = null;
+                    console.log('Microphone stream stopped');
+                    this.addInteractionMessage('Microphone disabled.', 'cue');
+                }
+            },
+
+            async startWebcamRecording() {
+                try {
+                    // Request webcam access
+                    this.state.webcamStream = await navigator.mediaDevices.getUserMedia({
+                        video: true,
+                        audio: true
+                    });
+
+                    // Show webcam preview
+                    const videoElement = document.getElementById('webcam-preview');
+                    videoElement.srcObject = this.state.webcamStream;
+                    videoElement.muted = true; // Ensure muted for autoplay
+                    videoElement.style.display = 'block';
+
+                    // Start playing the video
+                    try {
+                        await videoElement.play();
+                        console.log('Video started playing successfully');
+                    } catch (playError) {
+                        console.warn('Video play failed:', playError);
+                        // Fallback: try again after a short delay
+                        setTimeout(async () => {
+                            try {
+                                await videoElement.play();
+                                console.log('Video started playing on retry');
+                            } catch (retryError) {
+                                console.error('Video play failed on retry:', retryError);
+                                this.showError('Unable to start video playback. Please check your browser settings.');
+                            }
+                        }, 100);
+                    }
+
+                    // Initialize MediaRecorder
+                    this.state.mediaRecorder = new MediaRecorder(this.state.webcamStream, {
+                        mimeType: 'video/webm;codecs=vp9,opus'
+                    });
+
+                    this.state.recordedChunks = [];
+                    this.state.mediaRecorder.ondataavailable = (event) => {
+                        if (event.data.size > 0) {
+                            this.state.recordedChunks.push(event.data);
+                        }
+                    };
+
+                    this.state.mediaRecorder.onstop = () => {
+                        this.processWebcamRecording();
+                    };
+
+                    // Start recording
+                    this.state.mediaRecorder.start();
+                    this.state.isRecording = true;
+                    this.setWebcamRecordingState(true);
+
+                    // Start stress monitoring for webcam
+                    this.startStressMonitoring();
+
+                } catch (error) {
+                    console.error('Error accessing webcam:', error);
+                    this.showError('Unable to access webcam. Please check permissions.');
+                }
+            },
+
+            stopWebcamRecording() {
+                if (this.state.mediaRecorder && this.state.isRecording) {
+                    this.state.mediaRecorder.stop();
+                    this.state.isRecording = false;
+                    this.setWebcamRecordingState(false);
+
+                    // Stop webcam stream
+                    if (this.state.webcamStream) {
+                        this.state.webcamStream.getTracks().forEach(track => track.stop());
+                    }
+
+                    // Stop stress monitoring
+                    this.stopStressMonitoring();
+                }
+            },
+
+            setWebcamRecordingState(isRecording) {
+                const webcamArea = document.getElementById('webcam-response-area');
+                const statusTitle = document.getElementById('webcam-status-title');
+                const instruction = document.getElementById('webcam-instruction');
+                const videoElement = document.getElementById('webcam-preview');
+
+                if (isRecording) {
+                    webcamArea.classList.add('recording');
+                    webcamArea.classList.remove('processing');
+                    statusTitle.textContent = 'Recording... Speak Now';
+                    instruction.textContent = 'Look into the camera and speak clearly. I\'m analyzing your response in real-time.';
+                } else {
+                    webcamArea.classList.remove('recording');
+                    // Keep video visible after recording stops
+                    if (this.state.webcamStream) {
+                        statusTitle.textContent = 'Click to Start Recording Again';
+                        instruction.textContent = 'Your camera is ready. Click to begin recording your response.';
+                        videoElement.style.display = 'block';
+                    } else {
+                        statusTitle.textContent = 'Click to Start Webcam Recording';
+                        instruction.textContent = 'Look into the camera and speak naturally. Your video and voice will be analyzed for content and confidence.';
+                        videoElement.style.display = 'none';
+                    }
+                }
+
+                this.updateSubmitButtonState();
+            },
+            
+            // Process webcam recording
+            processWebcamRecording() {
+                if (this.state.recordedChunks.length === 0) return;
+
+                // Create blob from recorded chunks
+                const blob = new Blob(this.state.recordedChunks, {
+                    type: 'video/webm'
+                });
+
+                // For now, we'll simulate transcript extraction
+                // In a real implementation, you would send this to a speech-to-text service
+                this.state.currentTranscript = "This is a simulated transcript from the webcam recording. In a real implementation, this would be extracted from the audio track of the video.";
+
+                // Process the response
+                this.processWebcamResponse(this.state.currentTranscript);
+            },
+            
+            // Analyze speech patterns for stress and confidence
+            analyzeSpeechPatterns(transcript) {
+                const words = transcript.toLowerCase().split(/\s+/);
+                
+                // Count filler words
+                const fillerCount = words.filter(word => 
+                    this.state.stressIndicators.fillerWords.includes(word)
+                ).length;
+                
+                this.state.stressIndicators.fillerWordsDetected = fillerCount;
+                
+                // Detect repetitive phrases
+                const wordFrequency = {};
+                words.forEach(word => {
+                    wordFrequency[word] = (wordFrequency[word] || 0) + 1;
+                });
+                
+                const repetitions = Object.values(wordFrequency).filter(count => count > 3).length;
+                this.state.stressIndicators.repetitivePhrases = repetitions;
+                
+                // Update stress level
+                this.updateStressLevel();
+                
+                // Activate confidence stabilizer if needed
+                if (fillerCount > 3 || repetitions > 2) {
+                    this.activateConfidenceStabilizer();
+                }
+            },
+            
+            // Stress monitoring
+            initializeStressMonitoring() {
+                // Monitor for long pauses
+                setInterval(() => {
+                    if (this.state.isRecording && !this.state.currentTranscript) {
+                        this.state.stressIndicators.longPauses++;
+                        this.updateStressLevel();
+                    }
+                }, 5000);
+            },
+            
+            startStressMonitoring() {
+                this.state.stressIndicators = {
+                    longPauses: 0,
+                    voiceTremors: 0,
+                    repetitivePhrases: 0,
+                    speedChanges: 0,
+                    fillerWords: ['um', 'uh', 'like', 'you know', 'actually']
+                };
+            },
+            
+            stopStressMonitoring() {
+                // Reset stress indicators
+                this.state.stressIndicators = {
+                    longPauses: 0,
+                    voiceTremors: 0,
+                    repetitivePhrases: 0,
+                    speedChanges: 0,
+                    fillerWords: ['um', 'uh', 'like', 'you know', 'actually']
+                };
+                this.updateStressLevel();
+            },
+            
+            updateStressLevel() {
+                let stressScore = 0;
+                
+                // Calculate stress based on indicators
+                if (this.state.stressIndicators.fillerWordsDetected > 5) stressScore += 0.3;
+                if (this.state.stressIndicators.longPauses > 2) stressScore += 0.2;
+                if (this.state.stressIndicators.repetitivePhrases > 2) stressScore += 0.2;
+                if (this.state.stressIndicators.voiceTremors > 0) stressScore += 0.3;
+                
+                this.state.stressLevel = Math.min(1, stressScore);
+                this.updateStressIndicator();
+                
+                // Adjust interviewer behavior based on stress
+                if (this.state.stressLevel > 0.6) {
+                    this.activateHighStressMode();
+                } else if (this.state.stressLevel > 0.3) {
+                    this.activateMediumStressMode();
+                }
+            },
+            
+            updateStressIndicator() {
+                const indicator = document.getElementById('stress-indicator');
+                const level = document.getElementById('stress-level');
+                
+                if (this.state.stressLevel > 0.5) {
+                    indicator.classList.add('visible');
+                    level.className = 'stress-level stress-high';
+                } else if (this.state.stressLevel > 0.3) {
+                    indicator.classList.add('visible');
+                    level.className = 'stress-level stress-medium';
+                } else {
+                    indicator.classList.remove('visible');
+                    level.className = 'stress-level stress-low';
+                }
+            },
+            
+            activateHighStressMode() {
+                // Switch to friendly personality
+                if (this.state.interviewerPersonality !== 'friendly') {
+                    this.state.interviewerPersonality = 'friendly';
+                    this.updateInterviewerUI();
+
+                    const stressMessage = this.messages.stressSupport[Math.floor(Math.random() * this.messages.stressSupport.length)];
+                    this.addInteractionMessage(stressMessage, 'encouragement');
+                }
+
+                // Reduce question difficulty
+                this.adaptDifficulty('easier');
+
+                // Increase support level
+                this.state.supportLevel = 'high';
+            },
+
+            activateMediumStressMode() {
+                // Provide extra encouragement
+                const stressMessage = this.messages.stressSupport[Math.floor(Math.random() * this.messages.stressSupport.length)];
+                this.addInteractionMessage(stressMessage, 'encouragement');
+
+                // Show confidence stabilizer
+                this.activateConfidenceStabilizer();
+            },
+            
+            activateConfidenceStabilizer() {
+                const stabilizer = document.getElementById('stabilizer-indicator');
+                stabilizer.classList.add('stabilizer-active');
+                
+                setTimeout(() => {
+                    stabilizer.classList.remove('stabilizer-active');
+                }, 3000);
+            },
+            
+            // Analyze text response
+            analyzeTextResponse(text) {
+                const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+                
+                // Check for structure
+                const hasStructure = 
+                    text.toLowerCase().includes('first') || 
+                    text.toLowerCase().includes('second') || 
+                    text.toLowerCase().includes('then') || 
+                    text.toLowerCase().includes('finally');
+                
+                // Update confidence based on response quality
+                if (wordCount > 50 && hasStructure) {
+                    this.state.candidateConfidence = Math.min(1, this.state.candidateConfidence + 0.1);
+                } else if (wordCount < 20) {
+                    this.state.candidateConfidence = Math.max(0, this.state.candidateConfidence - 0.1);
+                }
+                
+                // Update personality if confidence changes significantly
+                if (this.state.candidateConfidence < 0.4 && this.state.interviewerPersonality !== 'friendly') {
+                    this.switchPersonality('friendly');
+                } else if (this.state.candidateConfidence > 0.7 && this.state.interviewerPersonality !== 'strict') {
+                    this.switchPersonality('strict');
+                }
+            },
+            
+            // Process webcam response
+            processWebcamResponse(transcript) {
+                // Store response
+                const response = {
+                    questionIndex: this.state.currentQuestionIndex,
+                    question: this.state.questions[this.state.currentQuestionIndex].text,
+                    response: transcript,
+                    responseTime: this.state.questionElapsed,
+                    timestamp: new Date(),
+                    responseType: 'webcam',
+                    metrics: {
+                        wordCount: transcript.split(/\s+/).length,
+                        fillerWords: this.state.stressIndicators.fillerWordsDetected || 0,
+                        confidence: this.state.candidateConfidence,
+                        stressLevel: this.state.stressLevel
+                    }
+                };
+
+                this.state.responses.push(response);
+
+                // Analyze response depth
+                this.analyzeResponseDepth(transcript);
+
+                // Generate follow-up if needed
+                if (this.shouldGenerateFollowUp(transcript)) {
+                    this.generateFollowUpQuestion(transcript);
+                } else {
+                    this.proceedToNextQuestion();
+                }
+            },
+            
+            analyzeResponseDepth(transcript) {
+                const wordCount = transcript.split(/\s+/).length;
+                const sentenceCount = (transcript.match(/[.!?]+/g) || []).length;
+                const exampleCount = (transcript.match(/for example|for instance|such as/gi) || []).length;
+                
+                let depthScore = 0;
+                if (wordCount > 100) depthScore += 0.3;
+                if (sentenceCount > 5) depthScore += 0.3;
+                if (exampleCount > 1) depthScore += 0.4;
+                
+                this.state.answerDepthScore = depthScore;
+                
+                // Update difficulty based on depth
+                if (depthScore > 0.7) {
+                    this.adaptDifficulty('harder');
+                } else if (depthScore < 0.3) {
+                    this.adaptDifficulty('easier');
+                }
+            },
+            
+            shouldGenerateFollowUp(transcript) {
+                const wordCount = transcript.split(/\s+/).length;
+                const depthScore = this.state.answerDepthScore;
+                
+                // Generate follow-up for shallow answers or if we need more depth
+                if (wordCount < 50 || depthScore < 0.4) {
+                    return true;
+                }
+                
+                // Sometimes generate follow-up to test adaptability
+                if (Math.random() < 0.3 && this.state.followUpDepth < 2) {
+                    return true;
+                }
+                
+                return false;
+            },
+            
+            generateFollowUpQuestion(transcript) {
+                const currentQuestion = this.state.questions[this.state.currentQuestionIndex];
+                let followUp = '';
+                
+                if (this.state.answerDepthScore < 0.4) {
+                    followUp = "Could you elaborate on that? I'd like to understand your thought process better.";
+                } else if (transcript.length < 100) {
+                    followUp = "That's a good start. Could you provide more details or an example?";
+                } else {
+                    followUp = "Interesting. How would you approach this differently based on what you've learned?";
+                }
+                
+                // Show follow-up section
+                const followUpSection = document.getElementById('follow-up-section');
+                const followUpText = document.getElementById('follow-up-text');
+                
+                followUpText.textContent = followUp;
+                followUpSection.style.display = 'block';
+                
+                // Speak follow-up
+                this.speakQuestion(followUp);
+                
+                // Update state
+                this.state.followUpDepth++;
+                
+                // Reset response for follow-up
+                this.state.currentTranscript = '';
+                this.enableResponse();
+            },
+            
+            // Submit response
+            submitResponse() {
+                if (this.state.isProcessingResponse) return;
+                
+                this.state.isProcessingResponse = true;
+                this.showProcessingState(true);
+                
+                let responseText = '';
+                
+                if (this.state.responseMode === 'voice') {
+                    responseText = this.state.currentTranscript;
+                } else {
+                    responseText = document.getElementById('response-textarea').value;
+                }
+                
+                if (!responseText.trim()) {
+                    this.showError('Please provide a response');
+                    this.state.isProcessingResponse = false;
+                    this.showProcessingState(false);
+                    return;
+                }
+                
+                // Process response
+                if (this.state.responseMode === 'voice') {
+                    this.processVoiceResponse(responseText);
+                } else {
+                    this.processTextResponse(responseText);
+                }
+            },
+            
+            processTextResponse(text) {
+                const response = {
+                    questionIndex: this.state.currentQuestionIndex,
+                    question: this.state.questions[this.state.currentQuestionIndex].text,
+                    response: text,
+                    responseTime: this.state.questionElapsed,
+                    timestamp: new Date(),
+                    responseType: 'text',
+                    metrics: {
+                        wordCount: text.split(/\s+/).length,
+                        structureScore: this.analyzeTextStructure(text),
+                        confidence: this.state.candidateConfidence
+                    }
+                };
+                
+                this.state.responses.push(response);
+                this.proceedToNextQuestion();
+            },
+            
+            analyzeTextStructure(text) {
+                let score = 0;
+                const indicators = ['first', 'second', 'then', 'next', 'finally', 'in conclusion'];
+                
+                indicators.forEach(indicator => {
+                    if (text.toLowerCase().includes(indicator)) score += 0.15;
+                });
+                
+                return Math.min(1, score);
+            },
+            
+            proceedToNextQuestion() {
+                this.addInteractionMessage(
+                    "Thank you for your response. Let's move to the next question.",
+                    'cue'
+                );
+                
+                // Reset for next question
+                this.state.currentQuestionIndex++;
+                this.state.followUpDepth = 0;
+                this.state.currentTranscript = '';
+                this.state.isProcessingResponse = false;
+                
+                // Hide follow-up section
+                document.getElementById('follow-up-section').style.display = 'none';
+                
+                // Clear text area if in text mode
+                if (this.state.responseMode === 'text') {
+                    document.getElementById('response-textarea').value = '';
+                }
+                
+                // Disable submit button
+                this.showSubmitButton(false);
+                
+                // Show processing state briefly
+                this.showProcessingState(false);
+                
+                // Move to next question or end interview
+                if (this.state.currentQuestionIndex < this.state.totalQuestions) {
+                    setTimeout(() => {
+                        this.askQuestion();
+                    }, 2000);
+                } else {
+                    setTimeout(() => {
+                        this.endInterview();
+                    }, 1500);
+                }
+            },
+            
+            // Update submit button state
+            updateSubmitButtonState() {
+                const submitBtn = document.getElementById('submit-response-btn');
+                let shouldShow = false;
+                
+                if (this.state.responseMode === 'voice') {
+                    shouldShow = this.state.currentTranscript && this.state.currentTranscript.trim().length > 0;
+                } else {
+                    const text = document.getElementById('response-textarea').value.trim();
+                    shouldShow = text.length > 0;
+                }
+                
+                this.showSubmitButton(shouldShow && !this.state.isProcessingResponse);
+            },
+            
+            showSubmitButton(show) {
+                const submitBtn = document.getElementById('submit-response-btn');
+                submitBtn.style.display = show ? 'flex' : 'none';
+                submitBtn.disabled = !show || this.state.isProcessingResponse;
+            },
+            
+            showProcessingState(show) {
+                const webcamArea = document.getElementById('webcam-response-area');
+                const submitBtn = document.getElementById('submit-response-btn');
+
+                if (show) {
+                    webcamArea.classList.add('processing');
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Processing...';
+                } else {
+                    webcamArea.classList.remove('processing');
+                    submitBtn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Submit Response';
+                    this.updateSubmitButtonState();
+                }
+            },
+            
+            // Set avatar state
+            setAvatarState(state) {
+                const avatar = document.getElementById('avatar-main');
+                const emotion = document.getElementById('avatar-emotion');
+                
+                avatar.setAttribute('data-state', state);
+                
+                // Set emotion based on state and personality
+                let emotionIcon = '';
+                if (state === 'speaking') {
+                    emotionIcon = '<svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>';
+                } else if (state === 'listening') {
+                    emotionIcon = '<svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0 9c-1.657 0-3-4.03-3-9s1.343-9 3-9m0 9c1.657 0 3 4.03 3 9s-1.343 9-3 9m-9 9v-9m0 0v-9"></path></svg>';
+                } else if (state === 'thinking') {
+                    emotionIcon = '<svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>';
+                } else {
+                    emotionIcon = '<svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l.707.707A1 1 0 0012.414 11H15m-3 7.5A9.5 9.5 0 1121.5 12 9.5 9.5 0 0112 2.5z"></path></svg>';
+                }
+
+                emotion.innerHTML = emotionIcon;
+                
+                // Trigger micro-expressions randomly
+                if (Math.random() < 0.3) {
+                    this.triggerMicroExpression();
+                }
+            },
+            
+            triggerMicroExpression() {
+                const expressions = ['expression-nod', 'expression-smile', 'expression-thinking'];
+                const randomExpr = expressions[Math.floor(Math.random() * expressions.length)];
+                const element = document.querySelector(`.${randomExpr}`);
+                
+                if (element) {
+                    element.classList.add('active');
+                    setTimeout(() => {
+                        element.classList.remove('active');
+                    }, 1000);
+                }
+            },
+            
+            // Add interaction message
+            addInteractionMessage(text, type = 'cue') {
+                const container = document.getElementById('interaction-messages');
+                const message = document.createElement('div');
+                
+                message.className = `interaction-message message-${type}`;
+                message.textContent = text;
+                
+                container.appendChild(message);
+                
+                // Auto-scroll to bottom
+                container.scrollTop = container.scrollHeight;
+                
+                // Limit messages
+                if (container.children.length > 8) {
+                    container.removeChild(container.firstChild);
+                }
+            },
+            
+            // Enable response after question
+            enableResponse() {
+                this.showSubmitButton(false);
+
+                // Reset transcript
+                this.state.currentTranscript = '';
+
+                // Update instruction based on mode
+                if (this.state.responseMode === 'webcam') {
+                    document.getElementById('webcam-instruction').textContent =
+                        'Look into the camera and speak naturally. Your video and voice will be analyzed for content and confidence.';
+                }
+            },
+            
+            // Trigger long pause support
+            triggerLongPauseSupport() {
+                if (this.state.questionElapsed > 90 && Math.random() < 0.5) {
+                    this.addInteractionMessage(
+                        "Take your time. Would you like me to clarify the question?",
+                        'clarification'
+                    );
+                }
+            },
+            
+            // Request clarification
+            requestClarification() {
+                const currentQuestion = this.state.questions[this.state.currentQuestionIndex];
+                let clarification = '';
+
+                switch (currentQuestion.type) {
+                    case 'technical':
+                        clarification = this.messages.clarifications[Math.floor(Math.random() * this.messages.clarifications.length)];
+                        break;
+                    case 'behavioral':
+                        clarification = this.messages.clarifications[Math.floor(Math.random() * this.messages.clarifications.length)];
+                        break;
+                    case 'scenario':
+                        clarification = this.messages.clarifications[Math.floor(Math.random() * this.messages.clarifications.length)];
+                        break;
+                    default:
+                        clarification = this.messages.clarifications[Math.floor(Math.random() * this.messages.clarifications.length)];
+                }
+
+                // Open clarification panel instead of adding message
+                this.openClarificationPanel(clarification);
+            },
+
+            // Open clarification panel
+            openClarificationPanel(message) {
+                const modal = document.getElementById('clarification-modal');
+                const messageElement = document.getElementById('clarification-message');
+                messageElement.textContent = message;
+                modal.style.display = 'flex';
+            },
+
+            // Close clarification panel
+            closeClarificationPanel() {
+                const modal = document.getElementById('clarification-modal');
+                modal.style.display = 'none';
+            },
+            
+            // Skip question
+            skipQuestion() {
+                if (confirm('Are you sure you want to skip this question?')) {
+                    this.state.responses.push({
+                        questionIndex: this.state.currentQuestionIndex,
+                        question: this.state.questions[this.state.currentQuestionIndex].text,
+                        response: '[SKIPPED]',
+                        timestamp: new Date(),
+                        skipped: true
+                    });
+                    
+                    this.state.currentQuestionIndex++;
+                    
+                    if (this.state.currentQuestionIndex < this.state.totalQuestions) {
+                        this.askQuestion();
+                    } else {
+                        this.endInterview();
+                    }
+                }
+            },
+            
+            // End interview
+            endInterview() {
+                this.state.isActive = false;
+                clearInterval(this.state.timers.total);
+                clearInterval(this.state.timers.question);
+                
+                // Calculate final metrics
+                const totalDuration = this.state.totalElapsed;
+                const completedQuestions = this.state.responses.filter(r => !r.skipped).length;
+                
+                // Store results
+                const results = {
+                    interviewData: this.state.interviewData,
+                    responses: this.state.responses,
+                    questions: this.state.questions,
+                    totalQuestions: this.state.totalQuestions,
+                    completedQuestions: completedQuestions,
+                    skippedQuestions: this.state.responses.filter(r => r.skipped).length,
+                    totalDuration: totalDuration,
+                    endTime: new Date().toISOString(),
+                    metrics: {
+                        averageConfidence: this.state.candidateConfidence,
+                        averageStress: this.state.stressLevel,
+                        answerDepth: this.state.answerDepthScore
+                    }
+                };
+                
+                sessionStorage.setItem('interviewResults', JSON.stringify(results));
+                
+                // Show completion modal
+                document.getElementById('completion-message').textContent = 
+                    `You completed ${completedQuestions} of ${this.state.totalQuestions} questions in ${this.formatDuration(totalDuration)}. Your detailed feedback is being prepared.`;
+                document.getElementById('end-interview-modal').style.display = 'flex';
+            },
+            
+            // Helper functions
+            capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            },
+            
+            formatDuration(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                return `${minutes}m ${remainingSeconds}s`;
+            },
+            
+            getInterviewerName() {
+                // First, check if user selected a specific avatar
+                if (this.state.selectedAvatar) {
+                    return this.state.selectedAvatar;
+                }
+
+                // If we already have a dynamic name set, return it
+                if (this.state.currentInterviewerName) {
+                    return this.state.currentInterviewerName;
+                }
+
+                // Generate a new dynamic name based on personality
+                return this.generateDynamicInterviewerName();
+            },
+
+            generateDynamicInterviewerName() {
+                const personality = this.state.interviewerPersonality;
+                const namePool = this.messages.interviewerNames[personality] || this.messages.interviewerNames.neutral;
+                const randomName = namePool[Math.floor(Math.random() * namePool.length)];
+
+                // Store the selected name for consistency during this personality
+                this.state.currentInterviewerName = randomName;
+                return randomName;
+            },
+                        
+            updateStatus(status) {
+                const indicator = document.getElementById('status-indicator');
+                const statusText = document.getElementById('status-text');
+                
+                indicator.className = `status-indicator status-${status}`;
+                statusText.textContent = status.toUpperCase();
+            },
+            
+            showError(message) {
+                this.addInteractionMessage(`Warning: ${message}`, 'clarification');
+            }
+        };
+    
+        function toggleFocusMode() {
+            const toggle = document.getElementById('focus-toggle');
+            const container = document.getElementById('interview-container');
+            
+            InterviewEngine.state.focusMode = !InterviewEngine.state.focusMode;
+            
+            if (InterviewEngine.state.focusMode) {
+                toggle.classList.add('active');
+                container.classList.add('focus-mode');
+                toggle.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> Focus Mode';
+            } else {
+                toggle.classList.remove('active');
+                container.classList.remove('focus-mode');
+                toggle.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg> Focus Mode';
+            }
+        }
+        
+        // Set response mode
+        function setResponseMode(mode) {
+            InterviewEngine.setResponseMode(mode);
+        }
+        
+        // Toggle voice recording
+        function toggleVoiceRecording() {
+            InterviewEngine.toggleVoiceRecording();
+        }
+        
+        // Submit response
+        function submitResponse() {
+            InterviewEngine.submitResponse();
+        }
+        
+        // Request clarification
+        function requestClarification() {
+            InterviewEngine.requestClarification();
+        }
+        
+        // Skip question
+        function skipQuestion() {
+            InterviewEngine.skipQuestion();
+        }
+        
+        // End interview
+        function endInterview() {
+            InterviewEngine.endInterview();
+        }
+        
+        // View results
+        function viewDetailedResults() {
+            window.location.href = 'results.html';
+        }
+        
+        // Return to dashboard
+        function returnToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            await InterviewEngine.initialize();
+
+            // Update interviewer UI after initialization
+            InterviewEngine.updateInterviewerUI();
+
+            // Update user info after AuthService is loaded
+            setTimeout(() => {
+                InterviewEngine.updateUserInfo();
+            }, 100);
+
+            // Setup dynamic user info updates
+            InterviewEngine.setupDynamicUserUpdates();
+
+            // Expose functions to global scope
+            window.setResponseMode = setResponseMode;
+            window.toggleVoiceRecording = toggleVoiceRecording;
+            window.toggleWebcamRecording = () => InterviewEngine.toggleWebcamRecording();
+            window.toggleMicrophone = () => InterviewEngine.toggleMicrophone();
+            window.submitResponse = submitResponse;
+            window.requestClarification = requestClarification;
+            window.skipQuestion = skipQuestion;
+            window.endInterview = endInterview;
+            window.toggleFocusMode = toggleFocusMode;
+            window.viewDetailedResults = viewDetailedResults;
+            window.returnToDashboard = returnToDashboard;
+            window.closeClarificationPanel = () => InterviewEngine.closeClarificationPanel();
+        });
+    </script>
+</body>
+</html>
